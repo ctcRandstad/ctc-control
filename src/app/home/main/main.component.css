@@ -1,0 +1,128 @@
+.cascading-admin-card {
+    margin-top: 20px;
+}
+
+.cascading-admin-card .admin-up {
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-top: -20px;
+}
+
+.cascading-admin-card .admin-up mdb-icon {
+    padding: 1.7rem;
+    font-size: 2rem;
+    color: #fff;
+    text-align: left;
+    margin-right: 1rem;
+    border-radius: 3px;
+    box-shadow: 0 2px 9px 0 rgba(0, 0, 0, .2), 0 2px 13px 0 rgba(0, 0, 0, .19);
+}
+
+.cascading-admin-card .admin-up .data {
+    float: right;
+    margin-top: 2rem;
+    text-align: right;
+}
+
+.cascading-admin-card .admin-up .data p {
+    color: #999999;
+    font-size: 12px;
+}
+
+.classic-admin-card .card-body {
+    color: #fff;
+    margin-bottom: 0;
+    padding: 0.9rem;
+}
+
+.classic-admin-card .card-body p {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 0;
+}
+
+.classic-admin-card .card-body h4 {
+    margin-top: 10px;
+}
+
+.classic-admin-card .card-body .float-right .fa {
+    font-size: 3rem;
+    opacity: 0.5;
+}
+
+.classic-admin-card .progress {
+    margin: 0;
+    opacity: 0.7;
+}
+
+.cascading-admin-card .admin-up .fa {
+    -webkit-box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.2), 0 2px 13px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.2), 0 2px 13px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel {
+    border-left: 1px solid #999999;
+}
+
+.list-group-flush {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.bg-amarillo {
+    background: #FD8D14;
+    color: #fafafa!important;
+}
+
+.danger {
+    background: rgb(11, 234, 160);
+}
+
+.info {
+    background: #f34e17;
+}
+
+.contruccion {
+    background: #f11e92;
+}
+
+.topB{
+    margin-top: 30px;
+}
+
+.spanM{
+    background-color: hsl(343, 89%, 48%);
+    padding: 30px;
+    border-radius: 7px;
+}
+
+.spanM1{
+    background-color: #E55604;
+    padding: 30px;
+    border-radius: 7px;
+}
+
+.spanM2{
+    background-color: #5B0888;
+    padding: 30px;
+    border-radius: 7px;
+}
+
+.cascading-admin-card{
+
+  box-shadow: 10px 4px 8px 2px #3f3f3f33;
+  transition: 0.3s;
+  background: linear-gradient(-45deg, #fc00ff 0%, hsl(181, 94%, 57%) 100% );
+  transform: translate3d(0, 0, 0) scale(0.95);
+  color: #fafafa;
+}
+
+.cascading-admin-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+  .bg-warningM{
+    background-color: #2CD3E1;
+  }
+
+  
+  

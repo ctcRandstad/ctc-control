@@ -1,0 +1,49 @@
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{'conceptos' | translate}}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <form #action="ngForm" (ngSubmit)="bajaBobina(action)">
+
+  <div class="modal-body">
+   
+     <mdb-form-control>
+        <mdb-select [formControl]="selectedValue" (valueChange)="idConceptos($event)">
+          <mdb-option *ngFor="let option of data" [value]="option.idConcepto">
+            {{option.desConceptos}}</mdb-option>
+        </mdb-select>
+        <label mdbLabel class="form-label">{{'conceptos' | translate}}</label>
+      </mdb-form-control>
+    
+
+      <input type="hidden" [(ngModel)]="idBobina" name="idBobinadora" required>
+      <input type="hidden" [(ngModel)]="estado" name="estado" required>
+      <input type="hidden" [(ngModel)]="idConcepto" name="idConcepto" required>
+      <input type="hidden" [(ngModel)]="email" name="user" required>
+     <br>
+      <mdb-form-control>
+        <input mdbInput type="text" id="form1" class="form-control" name="comentario" ngModel >
+        <label mdbLabel class="form-label" for="form1">{{'obs' | translate}}</label>
+      </mdb-form-control>
+          
+  </div>
+  <div class="modal-footer">
+    <button  type="button" class="btn btn-secondary" (click)="modalRef.close()">
+      {{'cerrar' | translate}}
+    </button>
+    <button *ngIf="!btn"  [disabled]="action.invalid" type="submit" class="btn btn-primary">{{'aceptar' | translate}}</button>
+    <button *ngIf="btn" class="btn btn-primary" type="button" disabled>
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        <span class="visually-hidden">Loading...</span>
+      </button>
+</div>
+</form>

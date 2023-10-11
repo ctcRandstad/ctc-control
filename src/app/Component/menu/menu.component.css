@@ -1,0 +1,104 @@
+.text {
+   color: #00695c!important;
+}
+
+.tops1 {
+   margin-top: 8px;
+}
+
+.activo {
+   background: hsl(24, 94%, 51%)!important;
+   color: #ffffff;
+}
+
+.texto {
+   color: #cabed8!important;
+}
+
+
+.dropleft1 {
+   margin-left: -400px;
+   width: 400px;
+   height: 80px;
+}
+
+.doc {
+   font-size: 13px;
+}
+
+.texto:hover {
+   -webkit-transform: scale(1.25);
+   -moz-transform: scale(1.25);
+   -ms-transform: scale(1.25);
+   -o-transform: scale(1.25);
+   transform: scale(1.25);
+}
+
+.topmenu {
+   margin-top: 300px;
+}
+
+.word {
+   word-spacing: 3000px;
+}
+
+.actives1 {
+  background-color:  hsl(303, 89%, 63%);
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+}
+
+.alert-danger {
+   padding: 1px;
+   padding-left: 10px;
+   padding-right: 10px;
+   border-radius: 5px;
+   background: #bdbdbd;
+   color: #ffffff;
+}
+
+.alert-danger:hover {
+   color: rgb(245, 101, 44);
+   background: #ffffff;
+}
+
+.li {
+   margin-left: 10px!important;
+}
+
+.nav-item {
+   margin-left: 20px!important;
+}
+
+.modal1 {
+   background-color: rgba(0, 0, 0, .8);
+   position: fixed;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   opacity: 0;
+   pointer-events: none;
+}
+
+#miModal:target {
+   opacity: 1;
+   pointer-events: auto;
+}
+
+.green{
+   background-color: hwb(135 17% 24%);
+   color: #ffffff!important;
+}
+
+.dropdown-menu{
+   margin-left: -20%;
+}
+
+.dropleft {
+ 
+   width: 400px;
+   height: 330px;
+   overflow: auto;
+}

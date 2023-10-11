@@ -1,0 +1,187 @@
+
+
+<!-- Navbar-->
+<nav class="navbar navbar-expand-lg {{setColor}}">
+  <div class="container-fluid justify-content-between">
+    <!-- Left elements -->
+    <div class="d-flex">
+      <!-- Brand -->
+      <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
+        <img src="assets/img/logo-white.png" alt="" width="60">
+      </a>
+
+      <!-- Search form -->
+     
+    </div>
+    <!-- Left elements -->
+
+    <!-- Center elements -->
+    <ul class="navbar-nav flex-row d-none d-md-flex">
+      <li class="nav-item ">
+        <a [routerLink]="['../../Main']" class="nav-link waves-light" mdbWavesEffect>
+            <i class="fab fa-app-store-ios text-white"></i> &nbsp; <span class="clearfix d-none d-sm-inline-block text-uppercase text-white"> CTC-CONTROL</span></a>
+    </li>
+    <li class="nav-item ">
+        <a [routerLink]="['../../Main']" class="nav-link waves-light border-start" mdbWavesEffect>
+          <i class="fas fa-house-damage text-white"></i> &nbsp; <span class="clearfix d-none d-sm-inline-block text-uppercase text-white">{{servicio}}</span></a>
+    </li>
+    </ul>
+    <!-- Center elements -->
+
+    <!-- Right elements -->
+    <ul class="navbar-nav flex-row">
+      <li class="nav-item">
+        <a routerLinkActive="actives1" [routerLink]="['../../Fichajes']" class="nav-link waves-light text-white" mdbWavesEffect>
+          <i class="fas fa-fingerprint"></i>
+       </a> 
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="actives1" [routerLink]="['../../Config']" class="nav-link waves-light text-white" mdbWavesEffect>
+          <i class="far fa-envelope"></i>
+       </a> 
+      </li>
+      <li class="nav-item">
+        <a routerLinkActive="actives1" [routerLink]="['../../Mensajes']" class="nav-link waves-light text-white" mdbWavesEffect>
+        <i class="fas fa-cogs"></i>
+       </a> 
+      </li>
+
+      <li mdbDropdown class="nav-item dropdown me-3 me-lg-1 ">
+        <a
+          class="nav-link dropdown-toggle hidden-arrow"
+       
+          id="navbarDropdownMenuLink"
+          role="button"
+          mdbDropdownToggle
+          aria-expanded="false"
+        >
+          <i class="fas fa-bell fa-lg text-white"></i>
+          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad && tipoUsuario != 'A2020'">{{cantidad }}</span>
+          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad + canti > 0 && tipoUsuario == 'A2020'">{{cantidad + canti}}</span>
+        </a>
+        <ul
+          mdbDropdownMenu
+          class="dropdown-menu dropleft"
+          aria-labelledby="navbarDropdownMenuLink"
+        >
+        <div class="list-group list-group-flush text-muted border-bottom " *ngFor="let item of cant">
+          <a [routerLink]="['../../Empleados']" class="list-group-item list-group-item-action flex-column align-items-start ">
+              <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1 text-uppercase text-primary">{{ item.apellidos}} {{item.nombre}}</h6>
+                  <small class="text-warning">{{item.caducidad | date: 'dd/MM/yyyy'}}</small>
+              </div>
+              <p class="text-muted doc">{{item.nombreDocumento}}
+              </p>
+              <small class="mb-1 text-uppercase text-danger">{{item.titulo}}</small>
+              <small class="mb-1 text-uppercase text-danger">{{item.dif}}</small>
+          </a>
+         
+      </div>
+     
+      <span *ngIf="tipoUsuario == 'A2020'">
+        <div class="list-group list-group-flush" *ngFor="let item of canty">
+            <a class="list-group-item list-group-item-action flex-column align-items-start ">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1 text-uppercase text-primary">{{ item.apellidos}} {{item.nombre}}</h6>
+                    <small class="text-warning"> dias de mas {{item.diasAsignados  - item.diasVacaciones}}</small>
+                 </div>
+                 <small class="mb-1 text-uppercase text-infos">Vacaciones asiganadas: {{item.diasAsignados}}</small>
+                 <br>
+                 <small class="mb-1 text-uppercase text-infos">Vacaciones por calendario: {{item.diasVacaciones}}</small>
+                 <p class="text-muted doc"><button (click)="alarma(item)"  class="btn" style="background-color: hsl(293, 81%, 51%); color:#fff;" size="sm" mdbWavesEffect>ELIMINAR AVISO</button>
+                 </p>
+             </a>
+         </div>
+     </span>
+        </ul>
+      </li>
+
+      <div class="container-fluid ">
+        <ul class="navbar-nav ">
+          <!-- Avatar -->
+          <li mdbDropdown class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle d-flex align-items-center text-white"
+             
+              id="navbarDropdownMenuLink"
+              role="button"
+              mdbDropdownToggle
+              aria-expanded="false"
+            >
+              <img
+              src="https://mdbootstrap.com/img/new/avatars/1.webp"
+                class="rounded-circle"
+                height="22"
+                alt=""
+                loading="lazy"
+              />
+              <strong class="d-none d-sm-block ms-1 text-capitalize">{{usuario}}</strong>
+            </a>
+            <ul mdbDropdownMenu class="dropdown-menu dropdown-menu1" aria-labelledby="navbarDropdownMenuLink">
+              <li>
+                <a class="dropdown-item cursor" [routerLink]="['informes']"><i class="far fa-file-alt"></i> Informes</a>
+                <a *ngIf="tipoUsuario == 'A2020'" class="dropdown-item cursor" [routerLink]="['../control-horas-anterior']"><i class="far fa-folder-open"></i> Consultas</a>
+                <a *ngIf="tipoUsuario == 'A2020'" class="dropdown-item cursor" (click)="salir()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </ul>
+    <!-- Right elements -->
+  </div>
+</nav>
+<!-- Navbar -->
+<hr>
+
+<!-- nav rutas -->
+<!-- nav rutas -->
+<!-- nav rutas -->
+<!-- nav rutas -->
+
+<div class="row margin ">
+  <div class="col-md-9">
+      <ul class="nav text-center">
+
+          <li class="nav-item" routerLinkActive="actives1" [ngClass]="{'actives1': clase == true}">
+              <a class="nav-link btn btn-outline-success" routerLinkActive="actives1"  [routerLink]="['../../Empleados']">EMPLEADOS</a>
+          </li>
+
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'E2020'">
+              <a mdbBtn class="nav-link btn btn-outline-success"  [routerLink]="['control-horas']">CONTROL HORARIO</a>
+          </li>
+          <!-- &nbsp; &nbsp; -->
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'E2020'">
+              <a mdbBtn class="nav-link btn btn-outline-success text-uppercase"  [routerLink]="['../../empleados-anterior']">Consultas años anteriores</a>
+          </li>
+          <!-- &nbsp; &nbsp; -->
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'A2020'">
+              <a class="nav-link btn btn-outline-success" routerLinkActive="actives1"  [routerLink]="['../../Horas/Control-horas-total']">CONTROL HORARIO </a>
+          </li>
+          <!-- &nbsp; &nbsp; -->
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'A2020' || tipoUsuario == 'J2020'">
+              <a class="nav-link btn btn-outline-success" routerLinkActive="actives1"  [routerLink]="['../../Horas/Control-Programacion']">PROGRAMACIÓN</a>
+          </li>
+          <!-- &nbsp; &nbsp; -->
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'A2020'">
+              <a class="nav-link btn btn-outline-success" routerLinkActive="actives1"  [routerLink]="['../../Horas/Alertas']">ALERTAS
+                      <mdb-badge pill="true" color="red" class="alerta animated fadeIn infinite" *ngIf="aler">
+                      <mdb-icon fas icon="bell"></mdb-icon>
+                    </mdb-badge></a>
+          </li>
+
+      </ul>
+
+  </div>
+  <div class="col-md-3 text-center">
+      <ul class="navbar-nav ml-auto nav-flex-icons">
+          <li class="nav-item  alert-danger">
+              <a class="nav-link text-uppercase">
+                      {{ fechaHoy | date: 'longDate' }} -  {{horaImprimible}}  
+                  </a>
+          </li>
+      </ul>
+  </div>
+
+</div>
+

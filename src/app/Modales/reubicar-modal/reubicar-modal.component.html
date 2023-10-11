@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel"></h5>
+  </div>
+  <div class="modal-body" >
+    ¿Reubicar en otra ubicación?
+          
+  </div>
+
+  <div class="modal-body" *ngIf="ubicaciones">
+    {{'ubi' | translate}}
+    <br>
+    <div class="btn-group">
+      <input (click)="getUbi(3)" mdbRadio type="radio" class="btn-check" name="options" id="option3" autocomplete="off"/>
+      <label class="btn btn-secondary" for="option3">{{'ubi' | translate}}</label>
+      <input (click)="getUbi(2)" mdbRadio  type="radio"  class="btn-check"  name="options"  id="option2"  autocomplete="off"  />
+      <label class="btn btn-secondary" for="option2">{{'maquina' | translate}}</label>
+      <input (click)="getUbi(1)" mdbRadio type="radio" class="btn-check"  name="options"  id="option1" autocomplete="off"/>
+      <label class="btn btn-secondary" for="option1">{{'todasU' | translate}}</label>
+    </div>
+    <br>
+    <br>
+  <form #enviar="ngForm" (ngSubmit)="a(enviar)" *ngIf="select">
+      <mdb-form-control >
+        <mdb-select name="idUbicacion" ngModel required="">
+          <mdb-option *ngFor="let option of data" [value]="option.idUbicacion" >
+            {{option.nombreUbicacion}}</mdb-option>
+          </mdb-select>
+          <label mdbLabel class="form-label">{{'ubi' | translate}}</label>
+        </mdb-form-control>
+
+        <div class="form-check form-switch">
+          <input (change)="todasB()"
+            mdbCheckbox
+            class="form-check-input"
+            type="checkbox"
+            [checked]="mostrarInput"
+            id="flexSwitchCheckDefault"
+
+          />
+          <label class="form-check-label" for="flexSwitchCheckDefault">{{'todas' | translate}}</label>
+        </div>
+        Cantidad
+        <input type="number" name="cantidad" required ngModel class="form-control" *ngIf="!mostrarInput">
+
+        <input type="hidden" [(ngModel)]="item.of" name="of">
+        <input type="hidden" [(ngModel)]="item.anch_real" name="anch_real">
+        <input type="hidden" [(ngModel)]="item.origen" name="origen">
+        <input type="hidden" [(ngModel)]="item.total" name="total">
+        <input type="hidden" [(ngModel)]="user" name="user">
+        <br>
+        <button *ngIf="ubicaciones && !action" [disabled]="enviar.invalid"   type="submit" class="btn btn-success">OK</button>
+  </form>
+  </div>
+  <div class="modal-footer" *ngIf="!action">
+    <button *ngIf="!ubicaciones"   type="submit" class="btn btn-success">OK</button>
+    <button  class="btn btn-danger" type="button" (click)="no()">NO </button>
+</div>
+
+<div class="modal-footer" *ngIf="action">
+  <button class="btn btn-primary" type="button" disabled>
+    <span
+      class="spinner-border spinner-border-sm"
+      role="status"
+      aria-hidden="true"
+    ></span>
+    UBICANDO...
+  </button>
+</div>
+
+ 

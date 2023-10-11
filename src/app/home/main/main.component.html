@@ -1,0 +1,217 @@
+<app-menu></app-menu>
+<section class="top animated fadeIn ">
+
+    <section class="mt-lg-5 container-fluid" *ngIf="tipoUsuario== 'A2020'">
+
+        <div class="row">
+            <div class="col-xl-4 col-md-6 mb-r">
+                <div cascade="true" class="cascading-admin-card card">
+                    <div class="admin-up ">
+                       <span class=" spanM"> <i class="fas fa-ambulance fa-2x   text-white"></i></span> 
+                        <div class="data">
+                            <p class="text-uppercase text-white">Empleados de baja</p>
+                            <h4>
+                                <strong *ngIf="dataTotal > 0">{{dataTotal}}</strong>
+                                <strong *ngIf="!dataTotal">0</strong>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" [style.width.%]="baja" aria-valuenow="{{baja}}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                        <p class="card-text">Pocentaje total de baja ({{baja | number : '1.1-2' }}%)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!--Grid column-->
+            <div class="col-xl-4 col-md-6 mb-r">
+                <div cascade="true" class="cascading-admin-card card">
+                    <div class="admin-up">
+                        <span class=" spanM1"> <i class="far fa-clock fa-2x   text-white"></i></span> 
+                        <div class="data">
+                            <p class="text-white">HORA EXTRAS-MES EN CURSO</p>
+                            <h4>
+                                <strong *ngIf="totalHExtras > 0">{{totalHExtras}}</strong>
+                                <strong *ngIf="!totalHExtras">0</strong>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress">
+                            <div class="progress-bar  info darken-2" role="progressbar" [style.width.%]="porcentaje" aria-valuenow="{{porcentaje}}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="card-text">Pocentaje sobre hora trabajadas ({{porcentaje | number : '1.1-2' }}%)</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Grid column-->
+            <div class="col-xl-4 col-md-6 mb-r">
+
+                <!--Card-->
+                <div cascade="true" class="cascading-admin-card card">
+
+                    <!--Card Data-->
+                    <div class="admin-up">
+                        <span class="spanM2"> <i class="far fa-calendar-alt fa-2x   text-white"></i></span> 
+                        <div class="data">
+                            <p>HORA EXTRAS-ANUAL</p>
+                            <h4>
+                                <strong *ngIf="totalHExtrasA > 0">{{totalHExtrasA}}</strong>
+                            </h4>
+                            <strong *ngIf="!totalHExtrasA">Los datos se mostrarán al finalizar el mes</strong>
+                        </div>
+                    </div>
+                    <!--/.Card Data-->
+
+                    <!--Card content-->
+                    <div class="card-body">
+                        <div class="progress">
+                            <div class="progress-bar danger" role="progressbar" [style.width.%]="porcentajeA" aria-valuenow="{{porcentajeA}}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <!--Text-->
+                        <p class="card-text">Pocentaje sobre hora trabajadas ({{porcentajeA | number : '1.1-2' }}%)</p>
+                    </div>
+                    <!--/.Card content-->
+
+                </div>
+                <!--/.Card-->
+
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+           
+            <!--Grid column-->
+
+        </div>
+        <hr>
+        <div class="row animated fadeIn">
+            <div class="col-md-4  top border-end">
+                <form #data="ngForm" (ngSubmit)="searchTurno(data, demoBasic)" class="form-inline">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        <input type="date" name="today" ngModel class="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
+                        
+                        <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                      </div>
+                 
+                    <div class="input-group col topB">
+                        <button [disabled]="data.invalid"  type="submit" class="btn btn-primary" >VISTA RÁPIDA DEL CALENDARIO DE TRABAJO</button>
+                    </div>
+                </form>
+                <div class="col topB">
+                    <span *ngIf="viewPanel" class="text-capitalize alert alert-secondary text-center top"> {{daySearch | date : 'fullDate'}}</span>
+                </div>
+            </div>
+            <div class="col-md-8 top panel" *ngIf="viewPanel">
+
+                <div class="row">
+                    <div class="col-md-3 text-capitalize" *ngFor="let item of dataTurno">
+                        <mdb-card class="text-white mb-3 text-center card bg-amarillo"  style="max-width: 17rem" *ngIf="item.horario== 'M'">
+                            <mdb-card-header> {{item.horario}}</mdb-card-header>
+                            <mdb-card-body>
+                                <mdb-card-title>
+                                    <h5> {{item.descripcion}}</h5>
+                                </mdb-card-title>
+                            </mdb-card-body>
+                        </mdb-card>
+                        <mdb-card class="text-white mb-3 text-center card bg-primary"  style="max-width: 17rem" *ngIf="item.horario== 'T'">
+                            <mdb-card-header> {{item.horario}}</mdb-card-header>
+                            <mdb-card-body>
+                                <mdb-card-title>
+                                    <h5> {{item.descripcion}}</h5>
+                                </mdb-card-title>
+                            </mdb-card-body>
+                        </mdb-card>
+                        <mdb-card class="text-white mb-3 text-center card bg-warningM"  style="max-width: 17rem" *ngIf="item.horario== 'P'">
+                            <mdb-card-header> {{item.horario}}</mdb-card-header>
+                            <mdb-card-body>
+                                <mdb-card-title>
+                                    <h5> {{item.descripcion}}</h5>
+                                </mdb-card-title>
+                            </mdb-card-body>
+                        </mdb-card>
+                        <mdb-card class="text-white mb-3 text-center card bg-secondary "  style="max-width: 17rem" *ngIf="item.horario== 'N'">
+                            <mdb-card-header> {{item.horario}}</mdb-card-header>
+                            <mdb-card-body>
+                                <mdb-card-title>
+                                    <h5> {{item.descripcion}}</h5>
+                                </mdb-card-title>
+                            </mdb-card-body>
+                        </mdb-card>
+                        <mdb-card class="text-white mb-3 text-center card bg-success"  style="max-width: 17rem" *ngIf="item.horario== 'F'">
+                            <mdb-card-header> {{item.horario}}</mdb-card-header>
+                            <mdb-card-body>
+                                <mdb-card-title>
+                                    <h5> {{item.descripcion}}</h5>
+                                </mdb-card-title>
+                            </mdb-card-body>
+                        </mdb-card>
+                        <mdb-card class="text-white mb-3 text-center card bg-success"  style="max-width: 17rem" *ngIf="item.horario== 'V'">
+                            <mdb-card-header> {{item.horario}}</mdb-card-header>
+                            <mdb-card-body>
+                                <mdb-card-title>
+                                    <h5> {{item.descripcion}}</h5>
+                                </mdb-card-title>
+                            </mdb-card-body>
+                        </mdb-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="container" *ngIf="tipoUsuario == 'E2020'">
+
+        <div class="jumbotron text-center hoverable p-4">
+            <div class="row">
+                <div class="col-md-4 offset-md-1 mx-3 my-3">
+
+                    <div class="view overlay waves-light top zoom" mdbWavesEffect>
+                        <img src="https://intranet.grupounoctc.com/portal/assets/img/logoc.svg?2" class="img-fluid img-thumbnail" alt="Sample image for first version of blog listing">
+                        <a>
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="col-md-7 text-md-left ml-3 mt-3">
+                    <a href="#!" class="green-text">
+                        <h6 class="h6 pb-1">
+                            <mdb-icon fas icon="desktop" class="pr-1"></mdb-icon> CTC</h6>
+                    </a>
+
+                    <h4 class="h4 mb-4">LÍDERES EN EXTERNALIZACIÓN</h4>
+
+                    <p class="font-weight-normal">En Grupo CTC trabajamos en procesos de mejora continua y estamos comprometidos con la calidad total. Puedes consultar las sociedades y alcances certificados <a href="https://grupoctc.com/certificaciones-y-reconocimientos/" target="_blank">aquí.</a>                        </p>
+                    <p class="font-weight-normal">Plaza de Europa, 30-32 <a><strong> 08902 – Hospitalet de Llobregat</strong></a> <a href="tel: +34 93 289 76 90">,Tel. +34 93 289 76 90</a></p>
+
+                    <a href="https://grupoctc.com/" target="_blank" mdbBtn color="success" mdbWavesEffect>Web</a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</section>
+
+<div mdbModal #demoBasic="" class="modal" id="basicExample" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered animated fadeIn" role="document">
+        <div class="row">
+            <div class="col">
+                <img class="margen animetd fadeIn" src="assets/img/807.gif" alt="CTC">
+            </div>
+            <div class="col">
+                <div class="h4 text-white salto">Cargando información... </div>
+            </div>
+        </div>
+
+    </div>

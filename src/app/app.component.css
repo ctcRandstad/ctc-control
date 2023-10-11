@@ -1,0 +1,32 @@
+.actives1{
+    color: #a249f5!important;
+    border-bottom: 1px solid hwb(271 25% 14%);
+ }
+ .email{
+    margin-top: 12px;
+    color: hsl(0, 0%, 53%);
+   
+ }
+ 
+ .flags{
+    margin-top: 5px;
+    color: hsl(0, 0%, 53%);
+ }
+ 
+ 
+ .img{
+    margin-left: 10px;
+    margin-right: 10px;
+ }
+ 
+ .btn-router{
+  margin-left: 10px; 
+  background: hsl(0, 0%, 79%);
+ }
+ 
+ 
+ @media only screen and (max-width: 1000px) {
+    .navbar {
+      width: 100%!important;
+    }
+  }

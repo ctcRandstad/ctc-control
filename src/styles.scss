@@ -1,0 +1,226 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+ 
+@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
+
+
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    overflow-x: hidden;
+   
+    
+}
+
+mdb-breadcrumb {
+    &.dark {
+        background: hsl(0, 0%, 19%)!important;
+    }
+}
+
+.top {
+    margin-top: 30px;
+    body.dark & {
+        background: hsl(0, 0%, 19%)!important;
+    }
+}
+
+.table {
+    body.dark & {
+        background: #FFF!important;
+    }
+}
+
+.margin {
+    margin-right: 5px;
+    margin-top: 7px;
+}
+
+.nav {
+    body.dark & {
+        background: hsl(0, 0%, 19%)!important;
+    }
+}
+
+.list-group-item {
+    body.dark & {
+        color: rgb(80, 80, 80)!important;
+    }
+}
+
+.topMenu {
+    margin-top: 85px;
+}
+
+.topMenu1 {
+    margin-top: 230px;
+}
+
+.alert-darks {
+    background: rgb(241, 240, 240);
+}
+
+.alert-warnings {
+    background: #f1f8e9
+}
+
+.tops {
+    margin-top: -4px;
+}
+
+#toast-container>mdb-toast-component,
+#toast-container>mdb-toast-component>div {
+    opacity: 1 !important;
+}
+
+.let td {
+    text-transform: lowercase;
+}
+
+.let td:first-letter {
+    text-transform: uppercase;
+}
+
+.actives {
+    border-bottom: 2px solid #ff8725;
+}
+
+.containers {
+    margin-left: 15px;
+}
+
+.card1 {
+    border-right: 2pt dashed rgb(64, 224, 64) !important;
+}
+
+.scrollbar-deep-purple::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.scrollbar-deep-purple::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.scrollbar-deep-purple::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #512da8;
+}
+
+.scrollbar-cyan::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.scrollbar-cyan::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.scrollbar-cyan::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: hsl(357, 100%, 42%);
+}
+
+.scrollbar-dusty-grass::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.alert-warning,
+.alert-dark {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+}
+
+
+/* .alert-danger {
+    background: hsl(0, 88%, 50%);
+    color: #ffff;
+} */
+
+.bajo {
+    font-size: 11px!important;
+}
+
+.scrollbar-dusty-grass::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.scrollbar-dusty-grass::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-linear-gradient(330deg, #d4fc79 0%, #96e6a1 100%);
+    background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+}
+
+.scrollbar-ripe-malinka::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.scrollbar-ripe-malinka::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.scrollbar-ripe-malinka::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-linear-gradient(330deg, #f093fb 0%, #f5576c 100%);
+    background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+}
+
+.bordered-deep-purple::-webkit-scrollbar-track {
+    border: 1px solid #512da8;
+}
+
+.bordered-cyan::-webkit-scrollbar-track {
+    border: 1px solid #00bcd4;
+}
+
+.square::-webkit-scrollbar-track {
+    border-radius: 0 !important;
+}
+
+.square::-webkit-scrollbar-thumb {
+    border-radius: 0 !important;
+}
+
+.thin::-webkit-scrollbar {
+    width: 6px;
+}
+
+.example-1 {
+    position: relative;
+    overflow-y: scroll;
+    height: 200px;
+}
+
+.main {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.margen {
+    margin-left: 30%;
+    background: transparent;
+}
+
+.salto {
+    display: block;
+    white-space: pre;
+}
+
+
+.text-infos{
+    color: #DA0C81;
+}

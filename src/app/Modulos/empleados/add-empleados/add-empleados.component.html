@@ -1,0 +1,134 @@
+
+<app-menu></app-menu>
+<br>
+<nav aria-label="breadcrumb ">
+    <ol class="alert alert-secondary">
+        <div class="breadcrumb-item active text-center" aria-current="page">Formulario de adhesión de personal</div>
+    </ol>
+</nav>
+<div class="top container ">
+
+    <form #action="ngForm" (ngSubmit)="addPersonal(action)">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="inputEmail4">Nombre</label>
+                <input type="text" placeholder="Nombre" ngModel name="nombre" required class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="inputEmail4">Apellidos</label>
+                <input type="text" placeholder="Apellidos" ngModel name="apellidos" required class="form-control">
+
+            </div>
+            <div class="col-md-3">
+                <label for="inputEmail4">Nro. Empleado <span class="text-danger"> ({{ numeroE}})</span></label>
+                <input (keyup)="consultaEmpleado(nEmplea)" #nEmplea type="number" autocomplete="off" placeholder="Nro. Empleado" ngModel name="nEmpleado" class="form-control" required>
+
+            </div>
+            <div class="alert alert-danger" *ngIf="error">
+                <p>Número de Empleado ya existe</p>
+            </div>
+            <div class="col-md-3">
+                <label for="inputEmail4">DNI/NIF</label>
+                <input type="text" placeholder="DNI/NIF" ngModel name="dni" class="form-control" required>
+
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="col-md-3">
+                <label for="inputEmail4">Fecha Inicio</label>
+                <input type="date" name="fechaInicio" class="form-control" ngModel required>
+            </div>
+            <div class="col-md-3">
+                <label for="inputEmail4">Fecha Nacimiento</label>
+                <input type="date" name="fechaNacimiento" class="form-control" ngModel required>
+
+            </div>
+
+            <div class="col-md-3 tops">
+                <mdb-form-control>
+                <mdb-select (change)="cambioContrato($event)">
+                    <mdb-option class="text-uppercase" [value]="item.idContrato"  *ngFor="let item of contratos">{{ item.nombre}}</mdb-option>
+                  </mdb-select>
+                  <label mdbLabel class="form-label">Seleccione un contrato</label>
+                </mdb-form-control>
+            </div>
+            <div class="col-md-3">
+                <label for="inputEmail4">Teléfono</label>
+                <input type="text" placeholder="Teléfono" ngModel name="telefono1" required class="form-control">
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="col-md-3">
+                <label for="inputEmail4">Teléfono opional</label>
+                <input type="text" placeholder="Teléfono opcional" ngModel name="telefono2" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <label for="inputEmail4">Email opional</label>
+                <input type="text" placeholder="Email opcional" ngModel name="email" class="form-control">
+            </div>
+
+            <div class="col-md-3 tops">
+                <mdb-form-control>
+                <mdb-select (change)="cambio($event)">
+                    <mdb-option class="text-uppercase" [value]="item.turno"  *ngFor="let item of turnos">{{ item.idTurno }} - {{ item.descripcion}}</mdb-option>
+                  </mdb-select>
+                  <label mdbLabel class="form-label">Seleccione un Turno</label>
+                </mdb-form-control>
+            </div>
+
+            <div class="col-md-3 tops">
+                <mdb-form-control>
+                <mdb-select (change)="cambioPuesto($event)">
+                    <mdb-option class="text-uppercase" [value]="item.idPuesto"  *ngFor="let item of puestos">{{ item.idPuesto}} - {{ item.descripcionPuesto}}</mdb-option>
+                  </mdb-select>
+                  <label mdbLabel class="form-label">Seleccione un Puestos</label>
+                </mdb-form-control>
+            </div>
+
+            <div class="col-md-3 tops">
+                <mdb-form-control>
+                <mdb-select (change)="cambioPuesto($event)">
+                    <mdb-option class="text-uppercase" [value]="item.idConvenio"  *ngFor="let item of convenios">{{ item.idConvenio}} - CONVENIO {{ item.idConvenio}}</mdb-option>
+                  </mdb-select>
+                  <label mdbLabel class="form-label">Seleccione un Convenios</label>
+                </mdb-form-control>
+            </div>
+            <div class="col-md-3 tops" *ngIf="!bot && !error">
+                <mdb-form-control>
+                <mdb-select (change)="bocadi($event)">
+                    <mdb-option class="text-uppercase">SI</mdb-option>
+                    <mdb-option class="text-uppercase">NO</mdb-option>
+                  </mdb-select>
+                  <label mdbLabel class="form-label">Seleccione Plus</label>
+                </mdb-form-control>
+            </div>
+        
+            <div class="col-md-3">
+                <label for="inputEmail4">Categoría <span class="text-danger">(opcional)</span></label>
+                <input type="text" placeholder="Categoría" ngModel name="categoriaE" class="form-control">
+            </div>
+            <div class="col-md-3 tops " *ngIf="!bot && !error">
+                <button [disabled]="action.invalid" type="submit" class="btn btn-outline-primary " mdbRipple><i class="fas fa-check-circle"></i> Agregar</button>
+            </div>
+            <div class="col-md-6 t " *ngIf="bot">
+                <div mdbBtn color="primary" type="div" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> GENERANDO PLANTILLA ANUAL, ESTE PROCESO TARDARÁ UNOS SEGUNDOS.
+                </div>
+            </div>
+
+        </div>
+
+        <input type="hidden" [(ngModel)]="turno" name="turno" required>
+        <input type="hidden" [(ngModel)]="puesto" name="puesto" required>
+        <input type="hidden" [(ngModel)]="contrato" name="contrato" required>
+        <input type="hidden" [(ngModel)]="convenio" name="convenio" required>
+        <input type="hidden" [(ngModel)]="bocadillo" name="bocadillo" required>
+        <input type="hidden" [(ngModel)]="idServicio" name="idServicio" required>
+
+    </form>
+    <br>
+
+</div>

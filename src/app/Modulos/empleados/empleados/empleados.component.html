@@ -1,3 +1,114 @@
 <app-menu></app-menu>
 
-<p>empleados works!</p>
+
+<section class="top" id="arriba">
+
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" *ngIf="!verEmpleado && tipoUsuario == 'A2020'">
+
+       
+        <a class="btn text-white btn-lg btn-floating" routerLink="../Add-Empleados" style="background-color: #ac2bac;" href="#!" role="button"  mdbRipple>
+            <i class="fas fa-folder-plus"></i>
+          </a>
+    </div>
+
+    <div class="main" *ngIf="!verEmpleado">
+        <div class="row">
+            <div class="col-md-5 tops" *ngIf="tipoUsuario == 'A2020'">
+                <app-menu-s></app-menu-s>
+            </div>
+            <div class="col-md-2 tops">
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text " id="search-addon"><i class="fas fa-search"></i></span>
+                    <input autocomplete="off" (keyup)="search($event)" [(ngModel)]="filterQuery" type="search" class="form-control rounded" placeholder="Buscar empleado" aria-label="Search"
+                      aria-describedby="search-addon" />
+                  </div>
+
+            </div>
+
+            <div class="col-md-2 tops" *ngIf="tipoUsuario == 'A2020'">
+                <button (click)="exportAsXLSX('admin')" class="btn btn-outline-success" mdbRipple rippleColor="dark">
+                    DESCARGAR LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
+                 </button>
+            </div>
+            <div class="col-md-2 tops" *ngIf="tipoUsuario == 'E2020'">
+                <button (click)="excelencar(encar)" class="btn btn-outline-success" mdbRipple rippleColor="dark">
+                    DESCARGAR LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
+                 </button>
+            </div>
+            <div class="col-md-3 tops" *ngIf="tipoUsuario == 'A2020'">
+                <a href="{{url}}calendario/documentosO.php?idServicio={{idServicio}}&ruta=Qtryuuidsdd458" target="_blank" class="btn btn-outline-secondary" mdbRipple rippleColor="dark">
+                DOCUMENTOS   <i class="fas fa-search"></i>
+                </a>
+                &nbsp;
+                <a href="{{url}}calendario/puestosO.php?idServicio={{idServicio}}&ruta=Qtryuuidsdd459" target="_blank" class="btn btn-outline-secondary" mdbRipple rippleColor="dark">
+                    PUESTOS   <i class="fas fa-search"></i>
+                </a>
+            </div>
+           
+            <div class="col-md-12 text-center top">
+                <div class="alert alert-secondary">
+                    Empleados registrados: {{dataTotal}}
+
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="row animated fadeIn tb1">
+        <table class="table datatable-table table-sm"
+            mdbTable
+            mdbTableSort
+            #table="mdbTable"
+            #sort="mdbTableSort"
+            [dataSource]="dataSource"
+            [sort]="sort"
+            [pagination]="pagination">
+      
+            <thead class="grey lighten-1  text-white">
+                <tr>
+                    <th>N° Empleado</th>
+                    <th>Contrato</th>
+                    <th>DNI</th>
+                    <th>Nombre </th>
+                    <th>Apellidos </th>
+                    <th>Info</th>
+                    <th *ngIf="tipoUsuario == 'A2020'">Baja</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody *ngIf="dataTotal > 0">
+                <tr *ngFor="let item of table.data">
+                    <td>{{item.nEmpleado}}</td>
+                    <td class="text-uppercase">{{item.empresa}}</td>
+                    <td class="text-uppercase">{{item.dni}}</td>
+                    <td class="text-uppercase">{{item.nombre}}</td>
+                    <td class="text-uppercase">{{item.apellidos}} &nbsp; <span *ngIf="item.fechaBaja" class="text-danger">LA BAJA SERÁ EL  : {{item.fechaBaja | date: 'mediumDate'}}</span></td>
+                    <td  class=" cursor q">
+                        <i class="fas fa-info-circle fa-lg"></i>
+                    </td>
+                    <td *ngIf="tipoUsuario == 'A2020'"  class=" cursor q text-danger">
+                        <i class="fas fa-trash-alt fa-lg"></i>
+                    </td>
+                    <td>
+                        <button  class="btn text-white btn-sm" style="background-color: #ec4a89;" mdbWavesEffect>Resetear</button>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="dataTotal == 0">
+                <tr>
+                    <td colspan="7">
+                        <p class="text-center text-warning h3">No hay empleados registrados</p>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</section>

@@ -224,3 +224,24 @@ mdb-breadcrumb {
 .text-infos{
     color: #DA0C81;
 }
+$dark: #091e42;
+$lightblue: rgb(241, 241, 241);
+$blue: #1f3bd8;
+$light: #e5ecf2;
+
+.nav-tabs{
+    border: none;
+    outline: none;
+    background: $lightblue;
+    color: $light;
+    padding: 10px 20px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 1.3rem;
+    transition: 200ms linear;
+    border-radius: 5px;
+}
+
+.grey{
+    background-color: #9E9FA5;
+}

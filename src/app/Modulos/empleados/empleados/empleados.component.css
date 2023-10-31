@@ -1,0 +1,22 @@
+.tb1 {
+    margin-top: 15px;
+}
+
+.table{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.q{
+    transform: scale(var(--escala, 1));
+  transition: transform 0.25s;
+}
+
+.q:hover {
+    text-align: center;
+    background: hwb(30 72% 27%);
+    color: #ffffff!important;
+    --escala: 1.1;
+    border-radius: 10px;
+}
+

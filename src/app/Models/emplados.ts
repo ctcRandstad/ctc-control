@@ -1,13 +1,13 @@
-export class Empleado{
-    nEmpleado:number | undefined;
-    idJustificacion:number | undefined;
-    activo:number | undefined;
-    nombre:string | undefined;
-    apellidos!: string;
-    dni!: string;
-    contrato:string | undefined;
-    empresa:string | undefined;
-    foto:string | undefined;
+export interface Empleado{
+    nEmpleado:number;
+    idJustificacion:number;
+    activo:number;
+    nombre:string;
+    apellidos:string;
+    dni:string;
+    contrato:string;
+    empresa:string;
+    foto:string;
     telefono1:any;
     telefono2:any;
     email:any;
@@ -19,12 +19,12 @@ export class Empleado{
     fechaReincorporacion:any;
     fechaBaja:any;
     categoriaE:any;
-    id:number | undefined;
-    puesto_id!: number;
-    contrato_id!: number;
-    idPlantilla!: number;
-    bocadillo!: string;
-    comentario!: string;
-    idTurno!: number;
-    idServicio!: number;
+    id:number;
+    puesto_id:number;
+    contrato_id:number;
+    idPlantilla:number;
+    bocadillo:string;
+    comentario:string;
+    idTurno:number;
+    idServicio:number;
  }

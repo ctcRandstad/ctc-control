@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div class="row animated fadeIn tb1">
+      <div class="row animated fadeIn tb1" *ngIf="!verEmpleado">
         <table class="table datatable-table table-sm"
             mdbTable
             mdbTableSort
@@ -84,14 +84,14 @@
                     <td class="text-uppercase">{{item.dni}}</td>
                     <td class="text-uppercase">{{item.nombre}}</td>
                     <td class="text-uppercase">{{item.apellidos}} &nbsp; <span *ngIf="item.fechaBaja" class="text-danger">LA BAJA SERÁ EL  : {{item.fechaBaja | date: 'mediumDate'}}</span></td>
-                    <td  class=" cursor q">
+                    <td  class=" cursor q" (click)="empleado(item)">
                         <i class="fas fa-info-circle fa-lg"></i>
                     </td>
-                    <td *ngIf="tipoUsuario == 'A2020'"  class=" cursor q text-danger">
+                    <td *ngIf="tipoUsuario == 'A2020'" (click)="modal(item)"  class=" cursor q text-danger">
                         <i class="fas fa-trash-alt fa-lg"></i>
                     </td>
                     <td>
-                        <button  class="btn text-white btn-sm" style="background-color: #ec4a89;" mdbWavesEffect>Resetear</button>
+                        <button (click)="reset(item.nEmpleado)"  class="btn text-white btn-sm" style="background-color: #ec4a89;" mdbWavesEffect>Resetear</button>
                     </td>
                 </tr>
             </tbody>
@@ -111,4 +111,377 @@
             </tfoot>
         </table>
     </div>
+
+
+        <!-- Operario y foto -->
+        <div class="" *ngIf="verEmpleado && !editar">
+            <div class="row">
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <div *ngIf="controlB" class="col-md-1 cursor" (click)="print('v-pills-profile' , employees.apellidos)">
+                    <img [src]="employees.foto" alt="avatar" width="100">
+                </div>
+                <div class="col-md-1" *ngIf="!controlB">
+                    <img [src]="employees.foto" alt="avatar" width="100">
+                </div>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                <div class="col-md-3 top">
+                    <i ngClass="fas fa-edit fa-2x" *ngIf="tipoUsuario == 'A2020'" (click)="edit()"   class="text-warning cursor"></i>
+                    <!-- <mdb-icon *ngIf="tipoUsuario != 'A2020'" fas icon="edit" size="2x" class="text-warning cursor"></mdb-icon> -->
+                    <strong class="text">&nbsp; {{ employees.nombre }} {{ employees.apellidos }}</strong>
+                    <br>
+                    <small *ngIf="tipoUsuario == 'A2020'" class="bajo">DNI/NIF: {{employees.dni}}</small>
+                    <small *ngIf="tipoUsuario != 'A2020'">DNI/NIF: {{employees.dni}}</small>
+                    <br>
+                    <small class="text" *ngIf="employees.activo == 1">Trabajador  activo</small>
+                    <br>
+                    <small class="text-danger" *ngIf="employees.categoriaE">Categoría: {{employees.categoriaE}}  </small>
+                    <small class="text-danger" *ngIf="!employees.categoriaE">Categoría: ---  </small>
+                    <br>
+                    <small class="text-success" *ngIf="employees.bocadillo == 'B'">Plus incluido  </small>
+                    <!-- <small class="text-danger" *ngIf="!employees.categoriaE">{{employees.categoriaE}}  </small> -->
+    
+                </div>
+                <div class="col-md-4" [ngClass]="{'h4 text-danger ':coment}">
+                    <span class="padding text-uppercase" [ngClass]="{'border border-danger':coment}">{{coment}}</span>
+                </div>
+    
+                <div class="col-md-2 top">
+                    <!-- <button type="button" mdbBtn outline="true" color="warning" size="sm" class="waves-effect"> Nueva consulta</button> -->
+                    <a routerLink="../empleados" class="btn btn-outline-success" role="button" (click)="salir()">
+                        <i class="fas fa-arrow-circle-left"></i> Nueva consulta</a>
+                </div>
+            </div>
+            <br>
+            <!-- Menu vertical -->
+            <div class="row">
+                <div class=" ">
+                    <mdb-tabs [pills]="true" [vertical]="true" class="margin">
+                        <mdb-tab class="home"> <ng-template mdbTabTitle><span><i class="fas fa-chalkboard-teacher"></i> Perfil</span></ng-template>
+                            <div class="" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                <table class="table table-borderless">
+                                    <thead class="grey lighten-1  text-white">
+                                        <tr>
+                                            <th scope="col">Puesto</th>
+                                            <th scope="col">Turno</th>
+                                            <th scope="col">Teléfono</th>
+                                            <th scope="col">Tel. Opcional</th>
+                                            <th scope="col">Email Opcional</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ employees.descripcionPuesto}}</td>
+                                            <td>{{ employees.descripcion}}</td>
+                                            <td>{{ employees.telefono1}}</td>
+                                            <td *ngIf="employees.telefono2 == null">------------</td>
+                                            <td *ngIf="employees.telefono2 != null">{{ employees.telefono2}}</td>
+                                            <td *ngIf="employees.email == null">------------</td>
+                                            <td *ngIf="employees.email != null">{{ employees.email}}</td>
+                                        </tr>
+                                    </tbody>
+                                    <hr class="hr">
+        
+                                    <thead class="grey lighten-1  text-white">
+                                        <tr>
+                                            <th scope="col">Antiguedad</th>
+                                            <th scope="col">Contrato</th>
+                                            <th scope="col">Nacimiento</th>
+                                            <th scope="col">Nro. Empleado</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <span class="text-primary italic" *ngIf="employees.fechaReincorporacion">Primera entrada:</span> {{ employees.fechaInicio | date : 'mediumDate'}}
+                                                <br *ngIf="employees.fechaReincorporacion">
+                                                <span class="text-primary italic" *ngIf="employees.fechaReincorporacion">Reincorporación:</span> {{ employees.fechaReincorporacion | date : 'mediumDate'}} <br>
+                                                <span class="text-danger"> ({{ (hoy | number)}}) Años</span>
+                                            </td>
+                                            <td class="text-uppercase">{{ employees.empresa}}</td>
+                                            <td>{{ employees.fechaNacimiento | date : 'mediumDate'}}
+                                                <br>
+                                                <span class="text-danger"> ({{ edad }} años)</span>
+                                            </td>
+                                            <td>{{ employees.nEmpleado}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+        
+                                <tfoot>
+                                    <div class="chip" *ngFor="let item of puestosAsignados">
+                                        <div class="chip-content" *ngIf="item.descripcionPuesto">{{item.descripcionPuesto}}</div>
+                                        <i class="fas fa-times cursor fa-2x chip-svg" *ngIf="tipoUsuario == 'A2020'"  (click)="borrarAsignacion(item.idEPuesto,item.nEmpleado)"></i>
+                                    </div>
+        
+                                    <div class="chip" *ngIf="puestosAsignados == null">
+                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg" alt="Contact Person"> <span>El trabajador no tiene puestos asignados.</span>
+                                    </div>
+                                </tfoot>
+                            </div>
+                        </mdb-tab>
+                        <mdb-tab title="Profile"><ng-template mdbTabTitle><span><i class="fas fa-stopwatch"></i> Horas</span></ng-template>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="border alert k padding">Días de vacaciones disfrutados: <span class="text-primary"> {{vaciones}}</span></h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="border alert k padding">Días de vacaciones asignadas: <span class="text-primary"> {{vacionesT}}</span></h5>
+                                </div>
+                            </div>
+
+                            <!-- tabla -->
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr class="grey lighten-1  text-white">
+                                                <td class="">Mes</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of meses">
+                                                <td class="text-uppercase ">{{item}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+    
+                                <div class="col-md-3 tabl">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr class="grey lighten-1  text-white">
+                                                <td class="text-center">Horas trabajadas</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let item of mesTra">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesFe">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesMar">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesAbr">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesMay">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesJun">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesJul">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesAgo">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesSet">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesOct">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesNov">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesDic">
+                                            <td class="text-center" *ngIf="item.mesHora">{{item.mesHora}}</td>
+                                            <td class="text-center" *ngIf="!item.mesHora">-----</td>
+                                        </tr>
+    
+                                    </tbody>
+                                        <tfoot>
+                                            <td class="text-center text-primary h4">{{ totalHTrabajadas }}</td>
+                                        </tfoot>
+    
+                                    </table>
+                                </div>
+    
+                                <!-- Horas teoricas -->
+    
+    
+                                <div class="col-md-3 tabl">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr class="grey lighten-1  text-white">
+                                                <td class="text-center">Horas teóricas</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let item of mesTra1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesTraB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesTraB">0</td>
+                                            <td class="text-center" *ngIf="mesTraB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesFe1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesFeB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesFeB">0</td>
+                                            <td class="text-center" *ngIf="mesFeB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesMar1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesMarB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesMarB">0</td>
+                                            <td class="text-center" *ngIf="mesMarB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesAbr1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesAbrB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesAbrB">0</td>
+                                            <td class="text-center" *ngIf="mesAbrB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesMay1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesMayB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesMayB">0</td>
+                                            <td class="text-center" *ngIf="mesMayB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesJun1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesJulB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesJulB">0</td>
+                                            <td class="text-center" *ngIf="mesJulB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesJul1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesJulB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesJulB">0</td>
+                                            <td class="text-center" *ngIf="mesJulB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesAgo1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesAgoB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesAgoB">0</td>
+                                            <td class="text-center" *ngIf="mesAgoB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesSet1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesSetB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesSetB">0</td>
+                                            <td class="text-center" *ngIf="mesSetB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesOct1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesOctB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesOctB">0</td>
+                                            <td class="text-center" *ngIf="mesOctB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesNov1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesNovB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesNovB">0</td>
+                                            <td class="text-center" *ngIf="mesNovB">------</td>
+                                        </tr>
+                                        <tr *ngFor="let item of mesDic1">
+                                            <td class="text-center text-danger" *ngIf="item.horasTeoricas && !mesDicB">{{item.horasTeoricas}}</td>
+                                            <td class="text-center" *ngIf="!item.horasTeoricas && !mesDicB">0</td>
+                                            <td class="text-center" *ngIf="mesDicB">------</td>
+                                        </tr>
+                                    </tbody>
+                                        <tfoot>
+                                            <td class="text-center text-primary h4">{{ totalHTeoricas }}</td>
+                                        </tfoot>
+                                    </table>
+                                </div>
+    
+    
+                                <div class="col-md-5 tabl" *ngIf="bolsaHabilitado">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr class="grey lighten-1  text-white">
+                                                <td class="text-center">Bolsa horas</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of mesTraBolsa">
+                                                <td class="text-center" *ngIf="item.mesBolsa">{{item.mesBolsa}}</td>
+                                                <td class="text-center" *ngIf="!item.mesBolsa">0</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <td class="text-center text-primary h4">{{ totalHTeoricas - horaConvenios + totalHTrabajadasBolsa}}</td>
+                                            <!-- <td class="text-center text-primary h4">{{ totalHTeoricas}}</td>
+                                            <td class="text-center text-primary h4">{{ horaConvenios }}</td> -->
+                                            <tr>
+    
+                                                <blockquote class="blockquote">
+                                                    <p class="mb-0">{{texto}}</p>
+                                                </blockquote>
+                                                <!-- <cite>BOLSA HORAS = HORAS TEÓRICAS - HORAS CONVENIO + BOLSA DE HORAS</cite> -->
+    
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 " *ngIf="!pri">
+                                    <button class="btn btn-outline-success" (click)="descarga()"> <mdb-icon fas icon="file-excel"></mdb-icon> Excel</button>
+                                </div>
+                            </div>
+                        </mdb-tab>
+                        <mdb-tab  title="Messages"> <ng-template mdbTabTitle > <span (click)="getDocu(employees.nEmpleado)"><i class="fas fa-file-invoice" > </i> Documentos</span></ng-template>
+                                <span *ngFor="let titul of tit">
+                                        <td colspan="3" *ngIf="tipoUsuario == 'A2020'">
+                                            <h6 class="text-warning cursor text-uppercase" (click)="cargarPdf(pdf,employees.nEmpleado , titul.idDocumento ,titul.caducidadD)">
+                                                <i class="fas fa-upload"></i> {{titul.titulo}} &nbsp;&nbsp;&nbsp;
+                                            </h6>    
+                                         </td>
+                                </span>
+        
+                                <hr>
+                                <table class="table table-sm">
+                                    <thead class="grey lighten-1  text-white">
+                                        <tr>
+        
+                                            <th>Título </th>
+                                            <th>Nombre </th>
+                                            <th> Fecha de carga</th>
+                                            <th> Fecha de Caducidad</th>
+                                            <th> Días restantes</th>
+                                            <th *ngIf="tipoUsuario == 'A2020'">Descargar</th>
+                                            <th *ngIf="tipoUsuario == 'A2020'">Borrar</th>
+        
+        
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="!getDocus">
+                                        <tr *ngFor="let item of data">
+        
+                                            <td class="text-uppercase">{{item.titulo}}</td>
+                                            <td>{{item.nombreDocumento}}</td>
+                                            <td>{{item.fechaSubido | date: 'fullDate'}}</td>
+                                            <td *ngIf="item.caducidad">{{item.caducidad | date: 'fullDate'}}</td>
+                                            <td class="text-primary" *ngIf="!item.caducidad">Sin caducidad</td>
+                                            <td class="" *ngIf="item.dif >= 60">{{item.dif }} Días</td>
+                                            <td class=" text-danger" *ngIf="item.dif < 60 && item.caducidad">{{item.dif }} Días</td>
+                                            <td class=" text-danger" *ngIf="item.dif < 60  && !item.caducidad">--------</td>
+                                            <td class="a cursor" *ngIf="tipoUsuario == 'A2020'">
+                                                <a class="a" [href]="item.ruta" target="_blank" rel="noopener noreferrer">
+                                                    <i class="fas fa-cloud-download-alt"></i> Descargar
+                                                </a>
+                                            </td>
+                                            <td class="a cursor" (click)="borrar(item)" *ngIf="tipoUsuario == 'A2020'">
+                                                <i class="fas fa-trash-restore-alt"></i> Borrar
+                                            </td>
+        
+        
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="getDocus">
+                                        <tr>
+                                            <td colspan="6" class="h4 text-warning text-center">Sin documentos adjuntos.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                        </mdb-tab>
+                        <mdb-tab title="Messages"><ng-template mdbTabTitle><span><i class="fas fa-vote-yea"></i> Asignar puestos</span></ng-template></mdb-tab>
+                      </mdb-tabs>
+                </div>
+            </div>
+        </div>
 </section>

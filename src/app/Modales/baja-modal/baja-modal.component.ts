@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { Conceptos } from 'src/app/Models/conceptos';
+import { Empleado } from 'src/app/Models/emplados';
+import { EmpleadosService } from 'src/app/Services/empleados.service';
+import { NotificacionService } from 'src/app/Services/notificacion.service';
 import { PageService } from 'src/app/Services/page.service';
 
 @Component({
@@ -15,58 +18,92 @@ export class BajaModalComponent implements OnInit {
   constructor(
     public modalRef: MdbModalRef<BajaModalComponent>,
     private services:PageService,
-    private ruta:Router
-
+    private ruta:Router,
+    private _empleados:EmpleadosService,
+    private _alerta:NotificacionService,
+    private modalService: MdbModalService,
     ) {
     }
     
-    param: string | null = null;
-    idBobina: string | null = null;
-    estado: string | null = null;
-    datas:any=[]
-    email:any;
+    nombre: string | null = null;
+    apellidos: string | null = null;
+    nEmpleado: any | null = null;
+  
     ngOnInit(): void {
-      this.email = localStorage.getItem('operario');
-      this.datas = this.param;
-      this.getConceptos('DESC' , 'estadoConcepto');
-      this.idBobina = this.datas.idBobinadora;
-      this.estado = this.datas.estado;
+  
   }
 
-  data:any;
-  selectedValue = new FormControl('8');
-  getConceptos(orden:any , columna:any){
-    this.services.getConceptos(orden, columna,1)
-    .subscribe(data=>{ 
-    this.data = data;
-    for (let i = 0; i < this.data.length; i++) {
-      if(this.data[i].defecto == 1){
-        const a:any  = this.data[i].idConcepto
-        this.selectedValue = new FormControl(a);
-        this.idConcepto = this.data[i].idConcepto;
-      }
-      
-    }
-    });
+fechaHoy:any;
+anio:any;
+fecha(){
+  var f = new Date();
+//  this.fechaHoy =  f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
+ this.fechaHoy =  f.getFullYear() + '/' + (f.getMonth() +1) + "/" +  f.getDate() ;
+  this.anio =f.getFullYear();
   }
 
-  idConcepto:any;
-  idConceptos(option:any){
-   this.idConcepto=option;
+  
+  errorFecha:boolean=false;
+ fechaBajaF(fechaBaja:any){
+  this.fecha();
+  let  fechaHoy = new Date(this.fechaHoy);
+  let fechados = new Date(fechaBaja.value);
 
-  }
-  btn:boolean=false;
-  bajaBobina(action:any){
-    this.btn=true;
-    this.services.bajaBobinas(action.value)
-    .subscribe(data=>{ 
-      
-      if (data == 'success') {
-      this.modalRef.close('success');
-    }else{
-      alert('ERROR...')
-    }
-   });
+
+ if (fechaHoy.getTime() <= fechados.getTime()) {
+   this.errorFecha= false;
    
+ } else {
+  this.errorFecha= true;
+
+   
+ }
+   
+     
   }
+  aceptarB:boolean=false;
+  estado(){
+   
+     if (this.aceptarB) {
+       this.aceptarB = false;
+     } else {
+      this.aceptarB=true;
+     }
+  }
+
+
+  aceptar:any;
+  fechaBajas:any;
+  baja(bajaOp:any ){
+    let confirmar = confirm('¿ Aceptar?')
+    if (confirmar) {
+       this._empleados.bajaEmpleados(bajaOp.value)
+       .subscribe(data=>{         
+         if (data == 'success') {
+         
+           this.errorFecha = false;
+           this._alerta.openToast1('Baja de' + this.nombre + ' ' + this.apellidos + ' fue exitosa ' , 'bg-success text-white' ,'Baja de operario');
+           this.aceptar=null;
+           setTimeout(()=>{
+            location.reload();
+           },1500)
+          
+         } else {
+           alert('Error a dar de baja el operario' + this.nombre + ' ' + this.apellidos);
+   
+         }
+       })
+      
+    }else{
+      this.aceptar=null;
+      this.estado();
+      this.fechaBajas='';
+      this.errorFecha = false;
+    }
+  }
+
+
+
+
+
 }

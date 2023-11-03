@@ -57,6 +57,9 @@ export class NotificacionService {
           } ,
           position: 'top-center'
         });
+        setTimeout(()=>{
+          this.notificationRef?.close();
+        },3000)
     
     }
 }

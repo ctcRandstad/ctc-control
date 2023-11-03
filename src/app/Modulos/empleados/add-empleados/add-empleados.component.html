@@ -47,7 +47,7 @@
 
             <div class="col-md-3 tops">
                 <mdb-form-control>
-                <mdb-select (change)="cambioContrato($event)">
+                <mdb-select (valueChange)="cambioContrato($event)">
                     <mdb-option class="text-uppercase" [value]="item.idContrato"  *ngFor="let item of contratos">{{ item.nombre}}</mdb-option>
                   </mdb-select>
                   <label mdbLabel class="form-label">Seleccione un contrato</label>
@@ -72,7 +72,7 @@
 
             <div class="col-md-3 tops">
                 <mdb-form-control>
-                <mdb-select (change)="cambio($event)">
+                <mdb-select (valueChange)="cambio($event)">
                     <mdb-option class="text-uppercase" [value]="item.turno"  *ngFor="let item of turnos">{{ item.idTurno }} - {{ item.descripcion}}</mdb-option>
                   </mdb-select>
                   <label mdbLabel class="form-label">Seleccione un Turno</label>
@@ -81,7 +81,7 @@
 
             <div class="col-md-3 tops">
                 <mdb-form-control>
-                <mdb-select (change)="cambioPuesto($event)">
+                <mdb-select (valueChange)="cambioPuesto($event)">
                     <mdb-option class="text-uppercase" [value]="item.idPuesto"  *ngFor="let item of puestos">{{ item.idPuesto}} - {{ item.descripcionPuesto}}</mdb-option>
                   </mdb-select>
                   <label mdbLabel class="form-label">Seleccione un Puestos</label>
@@ -90,7 +90,7 @@
 
             <div class="col-md-3 tops">
                 <mdb-form-control>
-                <mdb-select (change)="cambioPuesto($event)">
+                <mdb-select (valueChange)="cambioConvenio($event)">
                     <mdb-option class="text-uppercase" [value]="item.idConvenio"  *ngFor="let item of convenios">{{ item.idConvenio}} - CONVENIO {{ item.idConvenio}}</mdb-option>
                   </mdb-select>
                   <label mdbLabel class="form-label">Seleccione un Convenios</label>
@@ -98,9 +98,9 @@
             </div>
             <div class="col-md-3 tops" *ngIf="!bot && !error">
                 <mdb-form-control>
-                <mdb-select (change)="bocadi($event)">
-                    <mdb-option class="text-uppercase">SI</mdb-option>
-                    <mdb-option class="text-uppercase">NO</mdb-option>
+                <mdb-select (valueChange)="bocadi($event)">
+                    <mdb-option value="B" class="text-uppercase">SI</mdb-option>
+                    <mdb-option value="N" class="text-uppercase">NO</mdb-option>
                   </mdb-select>
                   <label mdbLabel class="form-label">Seleccione Plus</label>
                 </mdb-form-control>

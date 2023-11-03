@@ -70,7 +70,6 @@ export class AddEmpleadosComponent implements OnInit {
     this.bot=true;
     this.agregarEmpleado = action.value
     this._empleados.addEmpleados(this.agregarEmpleado).subscribe(res=>{
-   console.log(res);
    
       if (res == 'success') {
         this._empleados.addEmpleadosCalendarioNuevo(this.agregarEmpleado)
@@ -81,7 +80,7 @@ export class AddEmpleadosComponent implements OnInit {
         // this.alerta.success('Empleado agregado con exitos');
         setTimeout(()=>{
 
-          this.ruta.navigate(['../principal/empleados'])
+          this.ruta.navigate(['../Empleados/Empleados'])
         },1500)
       } else {
         //  this.alerta.error('Error al ingresar empleado nuevo');
@@ -112,8 +111,10 @@ export class AddEmpleadosComponent implements OnInit {
 
   turno:any
   cambio(event:any){
+    console.log(event);
     
-    this.turno = event.target.value;
+    
+    this.turno = event;
   }
   puesto:any
   cambioPuesto(event:any){

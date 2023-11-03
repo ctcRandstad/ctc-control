@@ -1,6 +1,6 @@
 
-<div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">{{'conceptos' | translate}}</h5>
+<div class="modal-header bg-danger text-white">
+    <h5 class="modal-title  text-uppercase" id="exampleModalLabel">{{nombre}} {{apellidos}} </h5>
     <button
       type="button"
       class="btn-close"
@@ -8,42 +8,47 @@
       (click)="modalRef.close()"
     ></button>
   </div>
-  <form #action="ngForm" (ngSubmit)="bajaBobina(action)">
+
 
   <div class="modal-body">
    
-     <mdb-form-control>
-        <mdb-select [formControl]="selectedValue" (valueChange)="idConceptos($event)">
-          <mdb-option *ngFor="let option of data" [value]="option.idConcepto">
-            {{option.desConceptos}}</mdb-option>
-        </mdb-select>
-        <label mdbLabel class="form-label">{{'conceptos' | translate}}</label>
-      </mdb-form-control>
-    
+    <div class="row">
+      <div class="col-3">
+          <p></p>
+          <p class="text-center">
+            <i class="far fa-address-book fa-3x text-danger"></i>
+          </p>
+      </div>
 
-      <input type="hidden" [(ngModel)]="idBobina" name="idBobinadora" required>
-      <input type="hidden" [(ngModel)]="estado" name="estado" required>
-      <input type="hidden" [(ngModel)]="idConcepto" name="idConcepto" required>
-      <input type="hidden" [(ngModel)]="email" name="user" required>
-     <br>
-      <mdb-form-control>
-        <input mdbInput type="text" id="form1" class="form-control" name="comentario" ngModel >
-        <label mdbLabel class="form-label" for="form1">{{'obs' | translate}}</label>
-      </mdb-form-control>
+      <div class="col-9">
+          <p>¿Está seguro de dar de baja a <strong class="text-uppercase">{{ nombre }} {{ apellidos }} </strong> ?.</p>
+          <h5 class="text-danger"><strong>Se borrará toda la plantilla desde el día seleccionado en adelante.</strong></h5>
+
+      </div>
+
+      
+      <form #bajaOp="ngForm" class="container" (ngSubmit)="baja(bajaOp)">
+        <input type="text" name="comentario" ngModel class="form-control" placeholder="Comentario opcional">
+        <br>
+        <input (change)="fechaBajaF(fechaBaja)" #fechaBaja required type="date" name="fechaBaja" [(ngModel)]="fechaBajas" class="form-control" placeholder="Comentario opcional">
+        <input type="hidden" name="id" class="form-control" [(ngModel)]="nEmpleado">
+        <br>
+        <input   mdbCheckbox id="inlineCheckbox1" class="form-check-input"  type="checkbox" (click)="estado()" name="aceptar" [(ngModel)]="aceptar" required>
+        <label class="form-check-label" for="inlineCheckbox1">Aceptar baja</label> &nbsp;&nbsp;&nbsp;
+      
+        <button [disabled]="bajaOp.invalid" *ngIf="aceptarB" type="submit" class="btn btn-outline-primary"><mdb-icon fas icon="check"></mdb-icon> Si, dar de baja 
+          </button>
+    </form>
+    <div class="alert alert-danger" *ngIf="errorFecha">
+        ATENCIÓN, has seleccionado una fecha anterior a hoy. Si pulsas aceptar, BORRARAS EL HORARIO DEL TRABAJADOR DESDE LA FECHA SELECCIONADA EN ADELANTE.
+
+    </div>
+  </div>
           
   </div>
   <div class="modal-footer">
     <button  type="button" class="btn btn-secondary" (click)="modalRef.close()">
-      {{'cerrar' | translate}}
+     NO, GRACIAS
     </button>
-    <button *ngIf="!btn"  [disabled]="action.invalid" type="submit" class="btn btn-primary">{{'aceptar' | translate}}</button>
-    <button *ngIf="btn" class="btn btn-primary" type="button" disabled>
-        <span
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        <span class="visually-hidden">Loading...</span>
-      </button>
 </div>
-</form>
+

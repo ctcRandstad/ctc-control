@@ -13,7 +13,7 @@ import { MenuSComponent } from './menu-s/menu-s.component';
 import { AddEmpleadosComponent } from './add-empleados/add-empleados.component';
 import { MdbTableModule } from 'mdb-angular-ui-kit/table';
 import { MdbSelectModule } from 'mdb-angular-ui-kit/select';
-
+import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 
 @NgModule({
     declarations: [
@@ -33,7 +33,8 @@ import { MdbSelectModule } from 'mdb-angular-ui-kit/select';
         MenuModule,
         MdbTableModule,
         MdbSelectModule, 
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MdbTabsModule
     ]
 })
 export class EmpleadosModule { }

@@ -12,3 +12,20 @@
     </div>
     <button (click)="no()" type="reset" class="btn btn-outline-primary">OK</button>
   </div>
+
+
+
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel"></h5>
+  </div>
+  <div class="modal-body text-uppercase" >
+    <div class="alert alert-warning" role="alert">
+        {{'btnB' | translate}} ELIMINADA <br>
+        OF: {{item.o_f}}
+        <br>
+        {{'ancho' | translate}}: {{item.anch_real}}
+        <br>
+        {{'maquina1' | translate}}: {{item.maquina}}
+    </div>
+    <button (click)="no()" type="reset" class="btn btn-outline-primary">OK</button>
+  </div>

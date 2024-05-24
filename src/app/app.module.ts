@@ -10,7 +10,7 @@ import { MdbChartModule } from 'mdb-angular-ui-kit/charts';
 import { MdbCheckboxChange, MdbCheckboxModule } from 'mdb-angular-ui-kit/checkbox';
 import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
 import { MdbDatepickerModule } from 'mdb-angular-ui-kit/datepicker';
-import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+
 import { MdbInfiniteScrollModule } from 'mdb-angular-ui-kit/infinite-scroll';
 import { MdbLazyLoadingModule } from 'mdb-angular-ui-kit/lazy-loading';
 import { MdbLightboxModule } from 'mdb-angular-ui-kit/lightbox';
@@ -47,11 +47,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { PefilModalComponent } from './Modales/pefil-modal/pefil-modal.component';
 import { UbicarModalComponent } from './Modales/ubicar-modal/ubicar-modal.component';
-import { MenuModule } from './Component/menu/menu.module';
 import { ReubicarModalComponent } from './Modales/reubicar-modal/reubicar-modal.component';
 import { BajaModalComponent } from './Modales/baja-modal/baja-modal.component';
 import { EliminarModalComponent } from './Modales/eliminar-modal/eliminar-modal.component';
-
+import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 
 
 
@@ -109,6 +108,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MdbValidationModule,
     BrowserAnimationsModule,
     MdbTableModule,
+   
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

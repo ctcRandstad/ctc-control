@@ -8,15 +8,15 @@
 }
 
 .q{
-    transform: scale(var(--escala, 1));
+  transform: scale(var(--escala, 0.8));
   transition: transform 0.25s;
 }
 
 .q:hover {
     text-align: center;
-    background: hwb(30 72% 27%);
+    background: #850F8D;
     color: #ffffff!important;
-    --escala: 1.1;
+    --escala: 1;
     border-radius: 10px;
 }
 
@@ -78,6 +78,7 @@
 }
 .margin{
     margin-left: 20px;
+    
 }
 
 .tabl {
@@ -109,4 +110,24 @@
 .a:active {
     color: #FFB6C1;
 }
+
+.bg-propio{
+    text-align: center;
+    background-color: #75A47F;
+    color: #FFF;
+    border-radius: 5px;
+}
+
+.bg-propio1{
+    text-align: center;
+    background-color: #FFB1B1;
+    color: #FFF;
+    border-radius: 5px;
+}
+
+
+.t{
+    margin-top: 25px;
+}
+
 

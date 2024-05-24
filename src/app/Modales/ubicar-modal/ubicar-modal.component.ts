@@ -3,6 +3,7 @@ import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { NotificacionService } from 'src/app/Services/notificacion.service';
 import { PageService } from 'src/app/Services/page.service';
 import { PefilModalComponent } from '../pefil-modal/pefil-modal.component';
+import { EmpleadosService } from 'src/app/Services/empleados.service';
 
 @Component({
   selector: 'app-ubicar-modal',
@@ -12,113 +13,117 @@ import { PefilModalComponent } from '../pefil-modal/pefil-modal.component';
 export class UbicarModalComponent implements OnInit {
  
   constructor(
-    public modalRef: MdbModalRef<PefilModalComponent>,
-    private services:PageService,
+    public modalRef: MdbModalRef<UbicarModalComponent>,
     private _noti:NotificacionService,
+    private _empleados:EmpleadosService,
 
     ) {}
+
+    
+    archivo = {
+      nombre: null,
+      nombreArchivo: null,
+      base64textString: '',
+       fechaSubido:'',
+       caducidad:'',
+       idDocumento:null,
+       idServicio:null,
+    }
+
  
-    item: any | null = null;
-    ubi: any | null = null;
+    idDocumento: any | null = null;
+    nEmpleado: any | null = null;
+    idServicio: any | null = null;
+    caduDocu: any | null = null;
   
-    ubicaciones:boolean=false;
-    user:any='';
+    
+        
     ngOnInit(): void {
-    this.activeLang =  localStorage.getItem('idioma' )
-    this.user =  localStorage.getItem('operario')
-     if (this.ubi == 0) {
-      this.ubicaciones = false;
-     } else {
-      this.ubicaciones = true;
-      this.getUbicacione(3);
-     }
-  }
-
-  select:boolean= false;
-  getUbi(param:number){
-    this.getUbicacione(param)
-
-  }
-
-  data:any;
-  getUbicacione(param:number){
-    this.select = true;
-  this.services.getUbicacionesParam(param)
-  .subscribe(data=>{ 
-  this.data = data;
-  });
+      this.archivo.idDocumento =this.idDocumento;
+      this.archivo.idServicio =this.idServicio;
+      this.archivo.nombre =this.nEmpleado;
+  
   }
 
 
-  no(){
-    // location.reload();
-    // console.log('salir');
+
+  out(){
+      this.archivo.base64textString='';
+      this.archivo.nombreArchivo=null;
+      this.archivo.nombre=null;
+      this.archivo.idDocumento=null;
+      this.archivo.fechaSubido='';
+      this.archivo.caducidad='';  
     this.modalRef.close();
     
   }
 
-  action:boolean=false;
-  public activeLang:any;
-    si(){
-      this.action=true;
-      this.services.ubicarBobinas(this.item.of, this.item.anch_real, this.item.idUbicacion,this.item.instruccion,this.user)
-      .subscribe(data=>{ 
-     
-      if (data == 'error') {
-            this.action = false;
-            let a ='';
-            if( this.activeLang == 'es'){
-              a = 'Error of y ancho no encontrada.'
-          }else{
-              a = "Error of i ample no trobada.";
-          }
-        
-          this._noti.openToast(a, 'bg-danger' , 'ERROR');
-          setTimeout(()=>{
-            // location.reload();
-          },2500);
-      }else if(data == 'error1'){
-          this.action = false;
-          let a ='';
-          if( this.activeLang == 'es'){
-            a = 'Bobinas no insertadas en la ubicación.'
-        }else{
-            a = "Bobines no inserides a la ubicació.";
-        }
+cargar:boolean=false;
+  upload() {
+  
+    if (this.archivo.nombreArchivo == null || this.archivo.nombreArchivo == undefined) {
+      alert ('Archivo vacio.');
+    } else {
 
-          this._noti.openToast(a, 'bg-danger' , 'ERROR');
-          setTimeout(()=>{
-            // location.reload();
-          },2500);
-      }else{
-        // OK....
-        // this.modalRef.close();
-        let a ='';
-        if( this.activeLang == 'ca'){
-            a = 'BOBINA COLOCADA EN LA UBICACIÓ PROPUESTA.'
-        }else{
-            a = "BOBINA COLOCADA EN LA UBICACIÓN PROPUESTA.";
+      if(this.archivo.caducidad < this.archivo.fechaSubido){
+          return  alert ('Error de fechas.');
+      }
+
+      this._empleados.uploadFile(this.archivo)
+      .subscribe(res=> {
+        
+        if (res == 'success') {
+          this.cargar = true;
+          // this.getDocu(this.archivo.nombre);
+          this.archivo.base64textString='';
+          this.archivo.nombreArchivo=null;
+          this.archivo.nombre=null;
+          this.archivo.idDocumento=null;
+          this.archivo.fechaSubido='';
+          this.archivo.caducidad='';
+          this.cargar = false;
+         
+          this._noti.openToast1('Documento cargado correctamente.' ,'bg-success text-white' ,'Documento');
+          this.modalRef.close('success');
+        } else if(res == 'repe') {
+          this._noti.openToast1('Este documento, ya fue cargado. Si quiere  volver a cargar un documento nuevo, por favor elimine el antiguo.','bg-danger text-white' ,'ERROR');
+         this.out();
+        } else if(res == 'errorSubir') {
+          this._noti.openToast1('Este documento, no se ha podido subir.','bg-danger text-white' ,'ERROR');
+         this.out();
         }
        
-        this._noti.openToast(a, 'bg-success' , 'OK');
-        setTimeout(()=>{
-          this.no();
-        },800);
-      }
-    
-    });
-   
-    // this.modalRef.close();
+      });
+    }
+      // location.reload();
   }
 
+
+  seleccionarArchivo(event:any) {
+    var files = event.target.files;
+    var file = files[0];
   
-
-  a(event:any){
-   this.item = event.value;
- 
-   this.si();
-   
-   
+  // return console.log(file.type);
+  
+    if (!file.type ) {
+      alert('Solo se adminten archivos con extensión .PDF');
+      location.reload();
+    }else{
+      this.archivo.nombreArchivo = file.name;
+  
+      if(files && file) {
+        var reader = new FileReader();
+        reader.onload = this._handleReaderLoaded.bind(this);
+        reader.readAsBinaryString(file);
+      }
+  
+    }
+  
   }
+      _handleReaderLoaded(readerEvent:any) {
+        var binaryString = readerEvent.target.result;
+        this.archivo.base64textString = btoa(binaryString);
+      }
+  
 
 }

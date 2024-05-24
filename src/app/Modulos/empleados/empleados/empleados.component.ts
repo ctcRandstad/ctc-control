@@ -3,6 +3,7 @@ import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { MdbTableDirective } from 'mdb-angular-ui-kit/table';
 import { Observable } from 'rxjs';
 import { BajaModalComponent } from 'src/app/Modales/baja-modal/baja-modal.component';
+import { UbicarModalComponent } from 'src/app/Modales/ubicar-modal/ubicar-modal.component';
 import { Contratos } from 'src/app/Models/contratos';
 import { Empleado } from 'src/app/Models/emplados';
 import { Puestos } from 'src/app/Models/puestos';
@@ -22,6 +23,8 @@ export class EmpleadosComponent implements OnInit {
 
   @ViewChild('table') table!: MdbTableDirective<any>;
   modalRef: MdbModalRef<BajaModalComponent> | null = null;
+
+  ubicar : MdbModalRef<UbicarModalComponent> | null = null;
 
   constructor( 
     private _empleados:EmpleadosService,
@@ -50,6 +53,8 @@ verEmpleado:boolean=false;
     // this.files = [];
     this.bajaTotal();
     this.getTexto();
+    this.getDocu1();
+    
    
   }
 
@@ -103,8 +108,7 @@ url:any;
     if (a) {
       this._empleados.reset(nEmpleado)
       .subscribe(data=>{ 
-      console.log(data);
-      
+   
         if (data == 'success') {
           this._alerta.openToast1('Contraseña reseteada a:  "1234" ' , 'bg-success text-white' ,'Reseteo de contraseña');
           // this.getPuestosAsignados(nEmpleado);
@@ -117,9 +121,7 @@ url:any;
 
 
   async modal( item:any){
-    
-   console.log(item);
-   
+ 
     this.modalRef = await new Promise((resolve)=>{
       this.modalService.open(BajaModalComponent, {
         containerClass: 'right',
@@ -167,10 +169,10 @@ url:any;
     coment:string='';
     empleado(item:any){
      this.emp_numero = item.nEmpleado;
+     this.getDocu(this.emp_numero);
      this.ape = item.apellidos;
      this._empleados.antiguedad(item.nEmpleado) 
      .subscribe(data=>{ 
-    
           this.hoy = data.meses / 12 ;
           this._empleados.getDiasVacaciones(item.nEmpleado) 
            .subscribe(resp=>{ 
@@ -181,16 +183,12 @@ url:any;
             } else {
               this.vaciones = 0;
             }
-                
-           
-          
-           }); 
-          
+           });  
      }); 
       
-      this.verEmpleado=true;
-      this.employees = item;
-      
+  this.verEmpleado=true;
+  this.employees = item;
+  
       this._empleados.consultaEmpleadoHoras(this.employees.nEmpleado)
       .subscribe(data=>{ 
       this.horasInicio = data.horasTeoricas ;
@@ -241,7 +239,7 @@ url:any;
     
   
     
-    turnos!:Turnos;
+    turnos!:any;
     getTurnos(){
       this._empleados.getTurnos(this.idServicio)
       .subscribe(data=>{
@@ -254,10 +252,12 @@ url:any;
         
       })
     }
-    puestos!:Puestos;
+    puestos!:any;
     getPuesto(){
-      this._empleados.getPuestos(this.idServicio)
+      this._empleados.getPuestos1(this.idServicio)
       .subscribe(data=>{
+        console.log(data);
+        
         if (data != 'error') {
           this.puestos = data;
         } else {
@@ -304,11 +304,11 @@ url:any;
 
   
     eP1:boolean = false;
-    justifi(justi:any,employees:any){
+    justifi(employees:any){
       this.getJusticaciones();
       this.employees = employees;
       this.eP1=true;
-      justi.show();
+      
     }
   
     just:any;
@@ -343,7 +343,7 @@ url:any;
        .subscribe(data=>{
   
          if (data == 'success') {
-          this._alerta.openToast('Operario editado!' , 'bg-success text-white' ,'Editar oprario')
+          this._alerta.openToast('¡Operario editado!' , 'bg-success text-white' ,'Editar oprario')
   
             // console.log(this.employees.puesto_id);
             this._empleados.consultaPuesto(this.employees.puesto_id)
@@ -372,7 +372,7 @@ url:any;
     nEmpleado:any;
     nEmpleado1:any;
     error:boolean=false;
-    consultaEmpleado(nEmplea:number){
+    consultaEmpleado(nEmplea:any){
   
       this.nEmpleado =nEmplea;
       const empleado = parseInt(this.nEmpleado)
@@ -394,12 +394,7 @@ url:any;
     }
   
     volverPerfil(employees:any){
-      
-    
-        this.bot=false;
         this.editar = false;
-      
-      
     }
   
   
@@ -415,8 +410,8 @@ url:any;
       this.fechaFin = null;
       this.vacaData=null;
       this.vacaciones=false;
-      this.pu.hide();
-      puestoC.hide();
+    
+     
     }
     hideTurno(puestoC:any,employees:any){
    this.employees.turno = employees
@@ -428,8 +423,8 @@ url:any;
       this.fechaFin = null;
       this.vacaciones=false;
       this.vacaData=null;
-      this.pu.hide();
-      puestoC.hide();
+    
+     
     }
   
     hides(puestoC:any){
@@ -439,7 +434,7 @@ url:any;
       this.btnEditar = false;
       this.fechaCambio = null;
     
-      puestoC.hide();
+     
     }
     addChangeJu(value:any){
       
@@ -474,72 +469,68 @@ url:any;
     }
   
   
-  
-    pu:any;
+
     eP:boolean = false;
     tAsigando:any
-    editarTurno(puestoC:any,turno:any){
-      this.tAsigando = turno
-      
-      this.pu = puestoC;
-      this.pu.show();
-      this.eP=true;
-    }
-  
-  
+    
     vacaData:any;
     vacacionesTurnos(data:any ,nEmpleado:any){
-    
+      
       this._empleados.vacacionesTurno(data , nEmpleado)
       .subscribe(data=>{ 
-       
+        
         if (data != 'error') {
-           this.vacaciones=true;
-           this.vacaData = data;
+          this.vacaciones=true;
+          this.vacaData = data;
         } else {
           this.vacaciones=false;
-           
-         }
+          
+        }
       });
-  
+      
     }
-  
+    
     descargas(nEmpleado:number){
-    this.excelService.exportAsExcelFile(this.vacaData , 'vacaciones ' + nEmpleado)
+      this.excelService.exportAsExcelFile(this.vacaData , 'vacaciones ' + nEmpleado)
     }
-  
+
+    check(event:any){
+      console.log(event.target.value);
+      
+
+      this.tAsigando = event.target.value;
+    }
+
+    
     btnEditar:boolean=false;
     vacaciones:boolean=false;
     edirPuesto(pue:any,descripcion:any){
-      this.btnEditar = true;
-      if (pue.value.turno == this.tAsigando) {
+     
+      
+      if (!this.tAsigando) {
         this._alerta.openToast1('Está asignando el mismo turno...', 'bg-danger text-white' , 'ERROR');
         this.employees.turno = pue.value.turnos;
-  
-        this.hide(this.pu); 
+        
       }else{
-       
+        this.btnEditar = true;
         this._empleados.editarSoloTurno(pue.value)
         .subscribe(res=>{ 
-  
-  
          if (res == 'errorFecha') {
          
            this.employees.turno = pue.value.turnos;
           this._alerta.openToast1('Debes seleccionar una fecha posterior. Para cambiar fechas anteriores, utiliza la pestaña CONTROL HORARIO.' , 'bg-danger text-white' , 'ERROR');
-        this.hide(this.pu); 
          }else  if (res == 'success') {
            this.employees.descripcion=descripcion;
             this.btnEditar = false;
-            this.hide(this.pu); 
+            this.editar = false;
           } else if(res == 'baja'){
             this.employees.turno = pue.value.turnos;
             this._alerta.openToast1('ERROR: El operario/a tiene activa una justificación en la fecha de cambio de turno.' , 'bg-danger text-white' , 'ERROR');
-            this.hide(this.pu); 
+  
           }else{
             this.employees.turno = pue.value.turnos;
             this._alerta.openToast1('ERROR: No se puedo generar la plantilla...' , 'bg-danger text-white' , 'ERROR');
-            this.hide(this.pu); 
+  
           }
         });
   
@@ -977,6 +968,8 @@ url:any;
         //  console.log(tu.value);
          this._empleados.getContratosExcel(co.value)
          .subscribe(data=>{ 
+          console.log(data);
+          
            this.dataExcelContrato = data;
            this.contratosE = null;
            this.excelService.exportAsExcelFile( this.dataExcelContrato, 'Empleados');
@@ -1035,30 +1028,36 @@ url:any;
         
       }
   
-      archivo = {
-        nombre: null,
-        nombreArchivo: null,
-        base64textString: '',
-         fechaSubido:'',
-         caducidad:'',
-         idDocumento:null,
-         idServicio:null,
-      }
-  
-  pdf:any;
-  cargar:boolean=false;
-    cargarPdf(pdf:any,nEmpleado:any,idDocumento:any, caducidad:any){
+
+   cargar:boolean=false;
+   async cargarPdf(nEmpleado:any,idDocumento:any, caducidad:any){
       if (caducidad == 1) {
        this.caduDocu = true;
       } else {
        this.caduDocu = false;
         
       }
-      this.archivo.nombre = nEmpleado;
-      this.archivo.idDocumento = idDocumento;
-      this.archivo.idServicio = this.idServicio;
-      this.pdf =pdf;
-     pdf.show();
+      
+      this.ubicar =   this.modalService.open(UbicarModalComponent, {
+          containerClass: 'right',
+          modalClass: 'modal-side modal-top-right',
+          ignoreBackdropClick: true,
+          data: {
+            caduDocu:this.caduDocu,
+            idDocumento:idDocumento,
+            nEmpleado:nEmpleado,
+            idServicio:this.idServicio
+          },
+        });
+        this.ubicar.onClose.subscribe((message: any) => {
+          if(message == 'success'){
+           setTimeout(()=>{
+             this.getDocu(nEmpleado);
+           },500);
+   
+          }
+       });
+    
   
     }
   
@@ -1077,81 +1076,15 @@ url:any;
   //  }
   
   
-   seleccionarArchivo(event:any) {
-    var files = event.target.files;
-    var file = files[0];
-  
-  // return console.log(file.type);
-  
-    if (!file.type ) {
-      alert('Solo se adminten archivos con extensión .PDF');
-      location.reload();
-    }else{
-      this.archivo.nombreArchivo = file.name;
-  
-      if(files && file) {
-        var reader = new FileReader();
-        reader.onload = this._handleReaderLoaded.bind(this);
-        reader.readAsBinaryString(file);
-      }
-  
-    }
-  
-  }
-      _handleReaderLoaded(readerEvent:any) {
-        var binaryString = readerEvent.target.result;
-        this.archivo.base64textString = btoa(binaryString);
-      }
-  
+
       
    
-    upload() {
   
-      if (this.archivo.nombreArchivo == null || this.archivo.nombreArchivo == undefined) {
-        alert ('Archivo vacio.');
-      } else {
-  
-        if(this.archivo.caducidad < this.archivo.fechaSubido){
-            return  alert ('Error de fechas.');
-        }
-  
-        this._empleados.uploadFile(this.archivo)
-        .subscribe(res=> {
-          
-          if (res == 'success') {
-            this.cargar = true;
-            this.getDocu(this.archivo.nombre);
-            this.archivo.base64textString='';
-            this.archivo.nombreArchivo=null;
-            this.archivo.nombre=null;
-            this.archivo.idDocumento=null;
-            this.archivo.fechaSubido='';
-            this.archivo.caducidad='';
-            this.cargar = false;
-            this.pdf.hide();
-            this._alerta.openToast1('Documento cargado correctamente.' ,'bg-sucess text-white' ,'Documento');
-          } else if(res == 'repe') {
-            this._alerta.openToast1('Este documento, ya fue cargado. Si quiere  volver a cargar un documento nuevo, por favor elimine el antiguo.','bg-danger text-white' ,'ERROR');
-           this.out();
-          } else if(res == 'errorSubir') {
-            this._alerta.openToast1('Este documento, no se ha podido subir.','bg-danger text-white' ,'ERROR');
-           this.out();
-          }
-         
-        });
-      }
-        // location.reload();
-    }
   
     out(){
       this.cargar = false;
-      this.pdf.hide();
-      this.archivo.base64textString='';
-      this.archivo.nombreArchivo=null;
-      this.archivo.nombre=null;
-      this.archivo.idDocumento=null;
-      this.archivo.fechaSubido='';
-      this.archivo.caducidad='';  
+     
+
     }
   
   
@@ -1159,7 +1092,7 @@ url:any;
     data:any;
     getDocu(nEmpleado:any){
       this.controlB = false;
-      this.getDocu1();
+      
       this._empleados.getPdf(nEmpleado)
       .subscribe(data=>{
       console.log(data);
@@ -1375,7 +1308,7 @@ url:any;
   }
     submitPuesto(coP:any){
       this._empleados.asignarPuestoMultiple(coP.value)
-      .subscribe(()=>{ 
+      .subscribe(dtas=>{ 
      this._alerta.openToast1('Puestos asignados correctamente...' , 'bg-success text-white' , 'OK');
      this.getPuestosAsignados(this.emp_numero);
      this.contratosE = null;

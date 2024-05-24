@@ -1,54 +1,58 @@
-<div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel"></h5>
-  </div>
-  <div class="modal-body" *ngIf="!ubicaciones">
-    ¿Está seguro de querer ubicar la bobina en esta ubicación? 
-          
-  </div>
 
-  <div class="modal-body" *ngIf="ubicaciones">
-    {{'ubi' | translate}}
-    <br>
-    <div class="btn-group">
-      <input (click)="getUbi(3)" mdbRadio type="radio" class="btn-check" name="options" id="option3" autocomplete="off"/>
-      <label class="btn btn-secondary" for="option3">{{'ubi' | translate}}</label>
-      <input (click)="getUbi(2)" mdbRadio  type="radio"  class="btn-check"  name="options"  id="option2"  autocomplete="off"  />
-      <label class="btn btn-secondary" for="option2">{{'maquina' | translate}}</label>
-      <input (click)="getUbi(1)" mdbRadio type="radio" class="btn-check"  name="options"  id="option1" autocomplete="off"/>
-      <label class="btn btn-secondary" for="option1">{{'todasU' | translate}}</label>
-    </div>
-    <br>
-    <br>
-  <form #enviar="ngForm" (ngSubmit)="a(enviar)" *ngIf="select">
-      <mdb-form-control>
-        <mdb-select name="idUbicacion" ngModel required="">
-          <mdb-option *ngFor="let option of data" [value]="option.idUbicacion" >
-            {{option.nombreUbicacion}}</mdb-option>
-          </mdb-select>
-          <label mdbLabel class="form-label">{{'ubi' | translate}}</label>
-        </mdb-form-control>
-        <input type="hidden" [(ngModel)]="item.of" name="of">
-        <input type="hidden" [(ngModel)]="item.anch_real" name="anch_real">
-        <input type="hidden" [(ngModel)]="item.instruccion" name="instruccion">
-        <input type="hidden"   [(ngModel)]="user" name="user">
-        <br>
-        <button *ngIf="ubicaciones && !action" [disabled]="enviar.invalid"   type="submit" class="btn btn-success">OK</button>
-  </form>
-  </div>
-  <div class="modal-footer" *ngIf="!action">
-    <button *ngIf="!ubicaciones"   type="submit" class="btn btn-success" (click)="si()">OK</button>
-    <button  class="btn btn-danger" type="button" (click)="no()">NO </button>
+<div class="modal-header bg-secondary text-white">
+  <h5 class="modal-title  text-uppercase" id="exampleModalLabel">Cargar documento </h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modalRef.close()"
+  ></button>
 </div>
 
-<div class="modal-footer" *ngIf="action">
-  <button class="btn btn-primary" type="button" disabled>
-    <span
-      class="spinner-border spinner-border-sm"
-      role="status"
-      aria-hidden="true"
-    ></span>
-    UBICANDO...
+
+<div class="modal-body">
+ 
+  <div class="row">
+
+    <form #for="ngForm" (ngSubmit)="upload()">
+      <!-- <label>Nombre archivo:</label> -->
+      <input type="hidden" [(ngModel)]="archivo.nombre" name="file">
+      <input type="hidden" [(ngModel)]="archivo.idDocumento" name="idDocumento">
+      <div class="file-field md-form">
+          <!-- <div mdbBtn floating="true" size="md" gradient="purple" mdbWavesEffect>
+              <mdb-icon fas icon="cloud-upload-alt" aria-hidden="true"></mdb-icon>
+              <input type="file" mdbFileSelect (change)="seleccionarArchivo($event)">
+          </div>
+          <div class="file-path-wrapper mt-3">
+              <input required class="file-path" type="text" placeholder="Cargue su documento" [value]="archivo.nombreArchivo">
+          </div> -->
+          <input class="form-control" type="file" id="formFileDisabled"  (change)="seleccionarArchivo($event)" />
+      </div>
+
+      <div class="">
+          Inicio del documento
+          <input required class="form-control" type="date" placeholder="Fecha de Carga" [(ngModel)]="archivo.fechaSubido" name="fechaSubido">
+      </div>
+
+      <div class="" *ngIf="!caduDocu">
+          Fecha de caducidad
+          <input required class="form-control" type="date" placeholder="Fecha de Caducidad" [(ngModel)]="archivo.caducidad" name="caducidad">
+      </div>
+      <div class="alert alert-warning top" *ngIf="caduDocu">
+          Este documento no tiene fecha de caducidad
+      </div>
+      <br>
+      <button [disabled]="for.invalid" *ngIf="!cargar"  type="button"  class="btn btn-secondary" (click)="upload()" mdbWavesEffect>Comenzar la carga </button>
+      <div *ngIf="cargar" class="alert alert-success">
+          Archivo cargado correctamente
+      </div>
+  </form>
+</div>
+        
+</div>
+<div class="modal-footer">
+  <button  type="button" class="btn btn-secondary" (click)="modalRef.close()">
+   NO, GRACIAS
   </button>
 </div>
 
- 

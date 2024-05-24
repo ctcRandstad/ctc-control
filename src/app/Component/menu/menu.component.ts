@@ -56,7 +56,6 @@ export class MenuComponent implements OnInit {
   clase:boolean=false;
   idServicio:any;
   ngOnInit() {
-    this.getCaducidadDocumentos();
     let ser:any = localStorage.getItem(btoa('servicio'));
     let rol:any = localStorage.getItem('rol');
     this.usuario = localStorage.getItem('usuario');
@@ -65,6 +64,7 @@ export class MenuComponent implements OnInit {
     this.idServicio = atob(ser);
     this.tipoUsuario = atob(rol);
     this.usuario =  atob(this.usuario);
+    this.getCaducidadDocumentos();
 
     this._config.getServicio(this.idServicio)
     .subscribe(data=>{

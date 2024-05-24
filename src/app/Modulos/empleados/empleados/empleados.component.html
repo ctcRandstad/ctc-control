@@ -72,9 +72,10 @@
                     <th>DNI</th>
                     <th>Nombre </th>
                     <th>Apellidos </th>
-                    <th>Info</th>
+                    <th>Consentimiento</th>
+                    <th class="text-center">Info</th>
                     <th *ngIf="tipoUsuario == 'A2020'">Baja</th>
-                    <th></th>
+                    <th>Contraseña</th>
                 </tr>
             </thead>
             <tbody *ngIf="dataTotal > 0">
@@ -84,11 +85,13 @@
                     <td class="text-uppercase">{{item.dni}}</td>
                     <td class="text-uppercase">{{item.nombre}}</td>
                     <td class="text-uppercase">{{item.apellidos}} &nbsp; <span *ngIf="item.fechaBaja" class="text-danger">LA BAJA SERÁ EL  : {{item.fechaBaja | date: 'mediumDate'}}</span></td>
-                    <td  class=" cursor q" (click)="empleado(item)">
-                        <i class="fas fa-info-circle fa-lg"></i>
+                    <td class="text-uppercase  bg-propio" *ngIf="item.consentimientos == 1">SMS Activado</td>
+                    <td class="text-uppercase bg-propio1" *ngIf="item.consentimientos == 0">SMS desactivado</td>
+                    <td  class=" cursor q text-center text-primary" (click)="empleado(item)">
+                        <i class="fas fa-user-plus "></i>
                     </td>
-                    <td *ngIf="tipoUsuario == 'A2020'" (click)="modal(item)"  class=" cursor q text-danger">
-                        <i class="fas fa-trash-alt fa-lg"></i>
+                    <td  *ngIf="tipoUsuario == 'A2020'" (click)="modal(item)"  class=" cursor q text-danger">
+                        <i class="fas fa-trash-alt fa-lg "></i>
                     </td>
                     <td>
                         <button (click)="reset(item.nEmpleado)"  class="btn text-white btn-sm" style="background-color: #ec4a89;" mdbWavesEffect>Resetear</button>
@@ -154,10 +157,10 @@
             <br>
             <!-- Menu vertical -->
             <div class="row">
-                <div class=" ">
+                <div class="col-12 ">
                     <mdb-tabs [pills]="true" [vertical]="true" class="margin">
-                        <mdb-tab class="home"> <ng-template mdbTabTitle><span><i class="fas fa-chalkboard-teacher"></i> Perfil</span></ng-template>
-                            <div class="" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        <mdb-tab class="col-2" class="home"> <ng-template mdbTabTitle><span><i class="fas fa-chalkboard-teacher"></i> Perfil</span></ng-template>
+                            <div class="col-12" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                                 <table class="table table-borderless">
                                     <thead class="grey lighten-1  text-white">
                                         <tr>
@@ -215,7 +218,7 @@
                                     </div>
         
                                     <div class="chip" *ngIf="puestosAsignados == null">
-                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg" alt="Contact Person"> <span>El trabajador no tiene puestos asignados.</span>
+                                        <span>El trabajador no tiene puestos asignados.</span>
                                     </div>
                                 </tfoot>
                             </div>
@@ -427,7 +430,7 @@
                         <mdb-tab  title="Messages"> <ng-template mdbTabTitle > <span (click)="getDocu(employees.nEmpleado)"><i class="fas fa-file-invoice" > </i> Documentos</span></ng-template>
                                 <span *ngFor="let titul of tit">
                                         <td colspan="3" *ngIf="tipoUsuario == 'A2020'">
-                                            <h6 class="text-warning cursor text-uppercase" (click)="cargarPdf(pdf,employees.nEmpleado , titul.idDocumento ,titul.caducidadD)">
+                                            <h6 class="text-warning cursor text-uppercase" (click)="cargarPdf(employees.nEmpleado , titul.idDocumento ,titul.caducidadD)">
                                                 <i class="fas fa-upload"></i> {{titul.titulo}} &nbsp;&nbsp;&nbsp;
                                             </h6>    
                                          </td>
@@ -442,7 +445,7 @@
                                             <th>Nombre </th>
                                             <th> Fecha de carga</th>
                                             <th> Fecha de Caducidad</th>
-                                            <th> Días restantes</th>
+                                            <th>Restan</th>
                                             <th *ngIf="tipoUsuario == 'A2020'">Descargar</th>
                                             <th *ngIf="tipoUsuario == 'A2020'">Borrar</th>
         
@@ -479,9 +482,226 @@
                                     </tbody>
                                 </table>
                         </mdb-tab>
-                        <mdb-tab title="Messages"><ng-template mdbTabTitle><span><i class="fas fa-vote-yea"></i> Asignar puestos</span></ng-template></mdb-tab>
+                        <mdb-tab  title="Puestos"><ng-template mdbTabTitle><span><i class="fas fa-vote-yea"></i> Asignar puestos</span></ng-template>
+                            <form class="form-row text-center container" #coP="ngForm" (ngSubmit)="submitPuesto(coP)">
+                                <div class="col-md-12">
+                                    <div class="md-form col-4">
+                                        <mdb-form-control>
+                                            <mdb-select [multiple]="true" name="puestos" [(ngModel)]="contratosE">
+                                              <mdb-select-all-option>Select all</mdb-select-all-option>
+                                              <mdb-option *ngFor="let option of puestos" [value]="option.value">{{
+                                                option.label
+                                              }}</mdb-option>
+                                            </mdb-select>
+                                            <label mdbLabel class="form-label">Example label</label>
+                                          </mdb-form-control>
+                                    </div>
+                                </div>
+                                <hr>
+                               <div class="col-4">
+                                <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                                <input type="hidden" name="nEmpleado" [(ngModel)]="emp_numero">
+                                <button type="submit" mdbBtn  class="btn btn-secondary" aria-label="Close"  mdbWavesEffect>Aceptar</button>
+                               </div>
+                            </form>
+                         
+                        </mdb-tab>
                       </mdb-tabs>
                 </div>
             </div>
         </div>
+
+
+
+            <!-- Modificar trabajador -->
+    <!-- Modificar trabajador -->
+    <!-- Modificar trabajador -->
+    <div class="row" *ngIf="editar">
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <div class="col-md-1">
+            <img [src]="employees.foto" alt="avatar" width="100">
+        </div>
+        <div class="col-md-2 aa top" >
+            <button class="btn btn-secondary" (click)="volverPerfil(employees)"><i class="fas fa-sign-out-alt"></i> Volver al perfil</button>
+            <hr class="hr">
+            <span class="text-primary"> {{employees.nombre}} {{employees.apellidos}}</span>
+            <hr class="hr">
+
+        </div>
+          <div class="col-md-7 top">
+            <mdb-tabs [pills]="true">
+                <mdb-tab>
+                   <ng-template mdbTabTitle><span><i class="fas fa-chart-pie fa-fw me-2"></i>Editar solo el turno</span></ng-template>
+        
+                        <div class=" row ">
+                            <form class="form-row text-center" #pue="ngForm" (ngSubmit)="edirPuesto(pue,employees.descripcion)">
+                                <div class="col-md-4">
+                                    <label for="inputEmail4">Turno</label>
+                                    <select class="form-select" name="turno" [(ngModel)]="employees.turno" required (change)="check($event)">
+                                    <option selected>Seleccione un turno</option>
+                                    <option [value]="item.turno"  *ngFor="let item of turnos">{{ item.descripcion}}</option>
+                                    
+                                </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="inputEmail43">Fecha Cambio</label>
+                                    <input type="date" name="fechaCambio" #fe class="form-control" [(ngModel)]="fechaCambio" required (change)="vacacionesTurnos(fe.value, employees.nEmpleado)">
+                                </div>
+                                <br>
+                                <div class="col-md-11 alert alert-secondary tb container" *ngIf="vacaciones">
+                                    SE HAN DETECTADO VACACIONES ASIGNADAS QUE SE BORRARÁN AL CAMBIAR DE TURNO, ¿QUIERES DESCARGARLAS PREVIAMENTE
+                                </div>
+                                <div class="col-md-12" *ngIf="!btnEditar && vacaciones">
+                                    <button (click)="descargas(employees.nEmpleado)" [disabled]="pue.invalid" type="submit" mdbBtn size="sm" outline="true" class=" btn btn-outline-success btn-sm btn-sm" mdbWavesEffect>    
+                                        <i class="far fa-file-excel"></i> Aceptar y descargar vacaciones</button> &nbsp;&nbsp;
+                                        <button [disabled]="pue.invalid" type="submit" mdbBtn  size="sm" outline="true" class=" btn btn-outline-dark btn-sm btn-sm" mdbWavesEffect>
+                                            <i class="far fa-save"></i> Aceptar sin descargar vacaciones</button>
+                                </div>
+                                <div class="col-md-6 tb" *ngIf="!btnEditar && !vacaciones">
+
+                                    <button [disabled]="pue.invalid" type="submit" mdbBtn  size="sm" outline="true" class=" btn btn-primary btn-sm" mdbWavesEffect><mdb-icon far icon="save">
+                                    </mdb-icon> Aceptar cambio</button>
+                                </div>
+                                <input type="hidden" name="nEmpleado" [(ngModel)]="employees.nEmpleado">
+                                <input type="hidden" name="turnos" [(ngModel)]="employees.idTurno">
+                                <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                            </form>
+                        </div>
+
+                        <div class=" alert alert-primary text-center animated zoomIn" *ngIf="btnEditar ">
+                            <h4 class="modal-title w-100" id="myModalLabel"> <span class="spinner-grow spinner-grow-sm">
+                            </span> <span class="sr-only text-center">Loading...</span> Generando plantilla...</h4>
+                        </div>
+                                    
+                </mdb-tab>
+
+
+                <mdb-tab>
+                  <ng-template mdbTabTitle
+                    ><span><i class="fas fa-chart-line fa-fw me-2"></i>Agregar Jutificaciones</span></ng-template
+                  >
+                  Tab content 2
+                </mdb-tab>
+                <mdb-tab>
+                  <ng-template mdbTabTitle
+                    ><span><i class="fas fa-cogs fa-fw me-2"></i>Agregar Comentario</span></ng-template
+                  >
+                  Tab content 3
+                </mdb-tab>
+              </mdb-tabs>
+          </div>
+          <hr class="hr">
+          
+
+        <div class="col-md-2 aa top ">
+            <p class="alert alert-dark text-center">{{employees.descripcion}}</p>
+        </div>
+
+
+        <div class="top container col-md-9">
+
+            <form #editOperario="ngForm" (ngSubmit)="aeditarPersonal(editOperario ,employees.descripcion)">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Nombre</label>
+                        <input type="text" placeholder="Nombre" [(ngModel)]="employees.nombre" name="nombre" required class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Apellidos</label>
+                        <input type="text" placeholder="Apellidos" [(ngModel)]="employees.apellidos" name="apellidos" required class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Nro. Empleado</label>
+                        <input type="text" autocomplete="off" (keyup)="consultaEmpleado(nEmplea)" #nEmplea placeholder="Nro. Empleado" [(ngModel)]="employees.nEmpleado" name="nEmpleado" class="form-control" required>
+
+                    </div>
+                    <div class="alert alert-danger" *ngIf="error">
+                        <p>Número de Empleado repetido</p>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">DNI/NIF</label>
+                        <input type="text" placeholder="DNI/NIF" [(ngModel)]="employees.dni" name="dni" class="form-control" required>
+
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Fecha Inicio</label>
+                        <input type="date" name="fechaInicio" class="form-control" [(ngModel)]="employees.fechaInicio" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Fecha Nacimiento</label>
+                        <input type="date" name="fechaNacimiento" class="form-control" [(ngModel)]="employees.fechaNacimiento" required>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Contrato</label>
+                        <select class="form-select text-uppercase" name="contrato" required [(ngModel)]="employees.contrato" (change)="cambioPuesto($event.target)">
+                        <option selected>Seleccione un contrato</option>
+                        <option class="text-uppercase" [value]="item.idContrato"  *ngFor="let item of contratos">{{ item.nombre}}</option>
+                        
+                    </select></div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Teléfono</label>
+                        <input type="text" placeholder="Teléfono" [(ngModel)]="employees.telefono1" name="telefono1" required class="form-control">
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Teléfono opional</label>
+                        <input type="text" placeholder="Teléfono opcional" [(ngModel)]="employees.telefono2" name="telefono2" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Email opional</label>
+                        <input type="text" placeholder="Email opcional" [(ngModel)]="employees.email" name="email" class="form-control">
+                    </div>
+                    <input type="hidden" name="turno" [(ngModel)]="employees.turno">
+
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Puesto</label>
+                        <select class="form-select" name="puesto_id" required [(ngModel)]="employees.puesto_id" (change)="cambioPuesto($event.target)">
+                        <option selected>Seleccione un puesto</option>
+                        <option [value]="item.value"  *ngFor="let item of puestos">{{ item.label}}</option>
+                        
+                    </select></div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Plus</label>
+                        <select class="form-select" name="bocadillo" required [(ngModel)]="employees.bocadillo">
+                        <option value="B">B</option>
+                        <option value="N">Sin plus</option>
+                        
+                        
+                    </select></div>
+                    <div class="col-md-3">
+                        <label for="inputEmail43">Fecha Cambio</label>
+                        <input type="date" name="fechaCambio" class="form-control" ngModel required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputEmail4">Categoría</label>
+                        <input type="text" placeholder="CATEGORÍA" [(ngModel)]="employees.categoriaE" name="categoriaE" class="form-control">
+
+                    </div>
+                    <div class="col-md-3 t " *ngIf="!bot && !error">
+                        <button [disabled]="editOperario.invalid" type="submit" class="btn btn-outline-success btn-block" mdbWavesEffect><mdb-icon far icon="check-circle"></mdb-icon> GUARDAR CAMBIOS</button>
+                    </div>
+                    <div class="col-md-6 t " *ngIf="bot">
+                        <div mdbBtn color="primary" type="div" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando plantilla anual ...
+                        </div>
+                    </div>
+                </div>
+
+
+                <input type="hidden" name="foto" [(ngModel)]="employees.foto">
+                <input type="hidden" name="id" [(ngModel)]="employees.id">
+                <input type="hidden" name="activo" [(ngModel)]="employees.activo">
+            </form>
+        </div>
+    </div>
+   <br>
 </section>

@@ -2,7 +2,7 @@
 
 <!-- Navbar-->
 <!-- <nav class="navbar navbar-expand-lg {{setColor}}"> -->
-  <nav class="navbar navbar-expand-lg " style="background-color: #640D6B;">
+  <nav class="navbar navbar-expand-lg animate__animated animate__fadeIn" style="background-color: #640D6B;">
   <div class="container-fluid justify-content-between">
     <!-- Left elements -->
     <div class="d-flex">
@@ -32,17 +32,17 @@
     <!-- Right elements -->
     <ul class="navbar-nav flex-row">
       <li class="nav-item">
-        <a routerLinkActive="actives1" [routerLink]="['../../Fichajes']" class="nav-link waves-light text-white" mdbWavesEffect>
+        <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Huellas']" class="nav-link waves-light text-white" mdbWavesEffect>
           <i class="fas fa-fingerprint"></i>
        </a> 
       </li>
       <li class="nav-item">
-        <a routerLinkActive="actives1" [routerLink]="['../../Config']" class="nav-link waves-light text-white" mdbWavesEffect>
-          <i class="far fa-envelope"></i>
+        <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Mensajes']" class="nav-link waves-light text-white" mdbWavesEffect>
+          <i class="far fa-envelope"></i>  <span class="badge rounded-pill badge-notification bg-danger animated tada  infinite" alt="Notifications" *ngIf="mensajes > 0 && tipoUsuario == 'A2020'">{{mensajes}}</span>
        </a> 
       </li>
       <li class="nav-item">
-        <a routerLinkActive="actives1" [routerLink]="['../../Mensajes']" class="nav-link waves-light text-white" mdbWavesEffect>
+        <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Config']" class="nav-link waves-light text-white" mdbWavesEffect>
         <i class="fas fa-cogs"></i>
        </a> 
       </li>
@@ -120,8 +120,8 @@
             </a>
             <ul mdbDropdownMenu class="dropdown-menu dropdown-menu1" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a class="dropdown-item cursor" [routerLink]="['informes']"><i class="far fa-file-alt"></i> Informes</a>
-                <a *ngIf="tipoUsuario == 'A2020'" class="dropdown-item cursor" [routerLink]="['../control-horas-anterior']"><i class="far fa-folder-open"></i> Consultas</a>
+                <a class="dropdown-item cursor" [routerLink]="['../../Cabezeras/Informes']"><i class="far fa-file-alt"></i> Informes</a>
+                <a *ngIf="tipoUsuario == 'A2020'" class="dropdown-item cursor" [routerLink]="['../../Cabezeras/Consultas']"><i class="far fa-folder-open"></i> Consultas</a>
                 <a *ngIf="tipoUsuario == 'A2020'" class="dropdown-item cursor" (click)="salir()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
               </li>
             </ul>
@@ -133,7 +133,7 @@
   </div>
 </nav>
 <!-- Navbar -->
-<hr>
+<br>
 
 <!-- nav rutas -->
 <!-- nav rutas -->

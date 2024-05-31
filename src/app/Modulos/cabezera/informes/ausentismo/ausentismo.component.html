@@ -1,0 +1,200 @@
+<div class="row top" *ngIf="!pri">
+    <div class="col-md-2 top1">
+
+        <button (click)="exportAsXLSX()" mdbBtn class="btn btn-success" mdbWavesEffect>
+            <i class="fas fa-file-excel"></i>
+        </button>
+        &nbsp;
+        <button (click)="print('v-pills-profile1')" mdbBtn class="btn btn-danger" mdbWavesEffect>
+            <i class="far fa-file-pdf"></i>
+        </button>
+    </div>
+
+    <div class="col-md-1"></div>
+    <div class="col-md-6 alert alert-secondary  text-center">
+        INFORME DE AUSENTISMO
+
+    </div>
+</div>
+
+
+
+<section class="top animate__animated animate__fadeIn" id="v-pills-profile" *ngIf=" !pri">
+
+    <table class="table datatable-table table-sm"
+    mdbTable
+    mdbTableSort
+    #table="mdbTable"
+    #sort="mdbTableSort"
+    [dataSource]="data"
+    [sort]="sort"
+    [pagination]="pagination">
+
+    <thead class="grey lighten-1  text-white">
+            <tr class="grey lighten-1  text-white">
+                <!-- <th>ABSENTISMO</th> -->
+                <!-- <th>ID SEC. &nbsp;</th> -->
+                <th>ENERO</th>
+                <th>FEBRERO</th>
+                <th>MARZO</th>
+                <th>ABRIL</th>
+                <th>MAYO</th>
+                <th>JUNIO</th>
+                <th>JULIO</th>
+                <th>AGOSTO</th>
+                <th>SEPTIEMBRE</th>
+                <th>OCTUBRE</th>
+                <th>NOVIEMBRE</th>
+                <th>DICIEMBRE</th>
+            </tr>
+        </thead>
+        <tbody *ngIf=" !loading" class="datatable-body" >
+
+            <tr>
+                <td *ngIf="totalEnero > 0 && mes > 1"> {{totalEnero | number}} </td>
+                <td *ngIf="totalEnero == 0 && mes == 1"> ----- </td>
+
+                <td *ngIf="totalF > 0 && mes > 2"> {{totalF | number}} </td>
+                <td *ngIf="totalF == 0 && mes == 2"> ----- </td>
+
+                <td *ngIf="totalM > 0 && mes > 3"> {{totalM | number}} </td>
+                <td *ngIf="totalM == 0 || mes == 3"> ----- </td>
+
+                <td *ngIf="totalA > 0 && mes > 4"> {{totalA | number}} </td>
+                <td *ngIf="totalA == 0 || mes == 4"> ----- </td>
+
+                <td *ngIf="totalMa > 0 && mes > 5"> {{totalMa | number}} </td>
+                <td *ngIf="totalMa == 0 || mes == 5"> ----- </td>
+
+                <td *ngIf="totalJu > 0 && mes > 6"> {{totalJu | number}} </td>
+                <td *ngIf="totalJu == 0 || mes == 6"> ----- </td>
+
+                <td *ngIf="totalJul > 0 && mes > 7"> {{totalJul | number}} </td>
+                <td *ngIf="totalJul == 0 || mes == 7"> ----- </td>
+
+                <td *ngIf="totalAgo > 0 && mes > 8"> {{totalAgo | number}} </td>
+                <td *ngIf="totalAgo == 0 || mes == 8"> ----- </td>
+
+                <td *ngIf="totalSep > 0 && mes > 9"> {{totalSep | number}} </td>
+                <td *ngIf="totalSep == 0 || mes == 9"> ----- </td>
+
+                <td *ngIf="totalOct > 0 && mes > 10"> {{totalOct | number}} </td>
+                <td *ngIf="totalOct == 0 || mes == 10"> ----- </td>
+
+                <td *ngIf="totalNo > 0 && mes > 11"> {{totalNo | number}} </td>
+                <td *ngIf="totalNo == 0 || mes == 11"> ----- </td>
+
+                <td *ngIf="totalDic > 0 && mes > 12"> {{totalDic | number}} </td>
+                <td *ngIf="totalDic == 0 || mes == 12"> ----- </td>
+
+            </tr>
+            <tfoot>
+                <tr>
+                    <td colspan="8">
+                        <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <ng-container *ngIf="loading">
+            <div class="datatable-loader bg-light">
+              <span class="datatable-loader-inner">
+                <span class="datatable-progress bg-primary"></span>
+              </span>
+            </div>
+            <p class="text-center text-muted my-4">Cargando resultados...</p>
+          </ng-container>
+    <hr>
+    <div class="container alert alert-primary text-center">
+        <h4>El absentismo del mes en curso se mostrará al finalizar el mes.</h4>
+    </div>
+
+</section>
+
+
+
+<!-- Impresión -->
+
+<section  id="v-pills-profile1" *ngIf="pri">
+
+    <div class="col-md-12">
+
+        <div #alert class="alert alert-secondary alert-dismissible fade show text-center h5" role="alert"> INFORME DE AUSENTISMO</div>
+    </div>
+    <br><br>
+
+
+
+    <table mdbTable hover="true">
+        <thead>
+            <tr class="grey lighten-1  text-white">
+                <!-- <th>ABSENTISMO</th> -->
+                <!-- <th>ID SEC. &nbsp;</th> -->
+                <th>ENERO</th>
+                <th>FEBRERO</th>
+                <th>MARZO</th>
+                <th>ABRIL</th>
+                <th>MAYO</th>
+                <th>JUNIO</th>
+                <th>JULIO</th>
+                <th>AGOSTO</th>
+                <th>SEPTIEMBRE</th>
+                <th>OCTUBRE</th>
+                <th>NOVIEMBRE</th>
+                <th>DICIEMBRE</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <!-- <tr *ngFor="let item of data">
+                <td> {{item.enero}} </td>
+            </tr> -->
+
+            <tr>
+                <td *ngIf="totalEnero > 0 && mes > 1"> {{totalEnero | number}} </td>
+                <td *ngIf="totalEnero == 0 && mes == 1"> ----- </td>
+
+                <td *ngIf="totalF > 0 && mes > 2"> {{totalF | number}} </td>
+                <td *ngIf="totalF == 0 && mes == 2"> ----- </td>
+
+                <td *ngIf="totalM > 0 && mes > 3"> {{totalM | number}} </td>
+                <td *ngIf="totalM == 0 || mes == 3"> ----- </td>
+
+                <td *ngIf="totalA > 0 && mes > 4"> {{totalA | number}} </td>
+                <td *ngIf="totalA == 0 || mes == 4"> ----- </td>
+
+                <td *ngIf="totalMa > 0 && mes > 5"> {{totalMa | number}} </td>
+                <td *ngIf="totalMa == 0 || mes == 5"> ----- </td>
+
+                <td *ngIf="totalJu > 0 && mes > 6"> {{totalJu | number}} </td>
+                <td *ngIf="totalJu == 0 || mes == 6"> ----- </td>
+
+                <td *ngIf="totalJul > 0 && mes > 7"> {{totalJul | number}} </td>
+                <td *ngIf="totalJul == 0 || mes == 7"> ----- </td>
+
+                <td *ngIf="totalAgo > 0 && mes > 8"> {{totalAgo | number}} </td>
+                <td *ngIf="totalAgo == 0 || mes == 8"> ----- </td>
+
+                <td *ngIf="totalSep > 0 && mes > 9"> {{totalSep | number}} </td>
+                <td *ngIf="totalSep == 0 || mes == 9"> ----- </td>
+
+                <td *ngIf="totalOct > 0 && mes > 10"> {{totalOct | number}} </td>
+                <td *ngIf="totalOct == 0 || mes == 10"> ----- </td>
+
+                <td *ngIf="totalNo > 0 && mes > 11"> {{totalNo | number}} </td>
+                <td *ngIf="totalNo == 0 || mes == 11"> ----- </td>
+
+                <td *ngIf="totalDic > 0 && mes > 12"> {{totalDic | number}} </td>
+                <td *ngIf="totalDic == 0 || mes == 12"> ----- </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <hr>
+    <div class="alert alert-info text-center">
+        <h4>El absentismo del mes en curso se mostrará al finalizar el mes.</h4>
+    </div>
+
+
+
+</section>

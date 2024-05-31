@@ -14,6 +14,8 @@ import { AddEmpleadosComponent } from './add-empleados/add-empleados.component';
 import { MdbTableModule } from 'mdb-angular-ui-kit/table';
 import { MdbSelectModule } from 'mdb-angular-ui-kit/select';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
+import { PerfilComponent } from './papelera/perfil/perfil.component';
+import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 
 @NgModule({
     declarations: [
@@ -22,7 +24,8 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
         JustiicacionesComponent,
         SolicitudesComponent,
         MenuSComponent,
-        AddEmpleadosComponent
+        AddEmpleadosComponent,
+        PerfilComponent
     ],
     schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     imports: [
@@ -34,7 +37,8 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
         MdbTableModule,
         MdbSelectModule, 
         ReactiveFormsModule,
-        MdbTabsModule
+        MdbTabsModule,
+        MdbAccordionModule,
     ]
 })
 export class EmpleadosModule { }

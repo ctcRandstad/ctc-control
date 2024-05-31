@@ -1,0 +1,45 @@
+<div class="row top" >
+    <div class="col-md-2 top1">
+
+       
+    </div>
+
+    <div class="col-md-1"></div>
+    <div class="col-md-6 alert alert-secondary  text-center">
+       BUSCAR POR RANGO DE FECHAS | HORAS COMITÉ
+
+    </div>
+</div>
+<div class="row top" >
+    <div class="col-md-2 "> </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-9 a">
+        <section class="top container">
+            &nbsp;
+            <form #action="ngForm" (ngSubmit)="buscar(action )">
+                <div class="row ">
+                    <div class="col-md-3">
+                        <p class="text-center text-primary">Fecha Inicio</p>
+                        <input type="date" required name="fechaInicio" ngModel class="form-control form-control-sm">
+        
+                    </div>
+                    <div class="col-md-3">
+                        <p class="text-center text-primary">Fecha Fin</p>
+                        <input type="date" name="fechaFinal" ngModel class="form-control form-control-sm">
+                    </div>
+                    <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                    <div class="col-md-3 top1">
+                        <button [disabled]="action.invalid" type="submit"  class=" btn btn-primary btn-sm" mdbWavesEffect>
+                            <i class="fas fa-search"></i>
+                        </button>
+                        &nbsp;
+                        &nbsp;
+                        <button type="reset"  mdbBtn color="secondary" size="sm" class=" btn btn-primary btn-sm" mdbWavesEffect>
+                            Quitar fechas
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

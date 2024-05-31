@@ -1,0 +1,343 @@
+<div class="row top" *ngIf="!pri">
+    <div class="col-md-2 top1">
+
+        <button (click)="exportAsXLSX()" mdbBtn class="btn btn-success" mdbWavesEffect>
+            <i class="fas fa-file-excel"></i>
+        </button>
+        &nbsp;
+        <button (click)="print('v-pills-profile1')" mdbBtn class="btn btn-danger" mdbWavesEffect>
+            <i class="far fa-file-pdf"></i>
+        </button>
+    </div>
+
+    <div class="col-md-1"></div>
+    <div class="col-md-6 alert alert-secondary  text-center">
+        INFORME DE HORAS EXTRAS POR SECCIÓN
+
+    </div>
+</div>
+
+<section class="top animate__animated animate__fadeIn" id="v-pills-profile" *ngIf=" !pri">
+
+
+    <table class="table datatable-table table-sm"
+    mdbTable
+    mdbTableSort
+    #table="mdbTable"
+    #sort="mdbTableSort"
+    [dataSource]="data"
+    [sort]="sort"
+    [pagination]="pagination">
+    <thead class="grey lighten-1  text-white">
+                <tr>
+                <th>SECCIONES</th>
+                <th>ID SEC. &nbsp;</th>
+                <th>ENERO</th>
+                <th>FEBRERO</th>
+                <th>MARZO</th>
+                <th>ABRIL</th>
+                <th>MAYO</th>
+                <th>JUNIO</th>
+                <th>JULIO</th>
+                <th>AGOSTO</th>
+                <th>SEPTIEMBRE</th>
+                <th>OCTUBRE</th>
+                <th>NOVIEMBRE</th>
+                <th>DICIEMBRE</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="!loading">
+
+            <tr *ngFor="let item of data">
+                <td> {{item.seccion}} </td>
+                <td> {{item.idPuesto}} </td>
+
+                <td *ngIf="item.eneroh"> {{item.eneroh}} </td>
+                <td *ngIf="!item.eneroh &&  mes > 1">0</td>
+                <td *ngIf="!item.eneroh &&  mes <= 1">-----</td>
+
+                <td *ngIf="item.febreroh"> {{item.febreroh}} </td>
+                <td *ngIf="!item.febreroh &&  mes > 2">0</td>
+                <td *ngIf="!item.febreroh &&  mes <= 2">-----</td>
+
+                <td *ngIf="item.marzoh"> {{item.marzoh}} </td>
+                <td *ngIf="!item.marzoh &&  mes > 3">0</td>
+                <td *ngIf="!item.marzoh &&  mes <= 3">-----</td>
+
+                <td *ngIf="item.abrilh"> {{item.abrilh}} </td>
+                <td *ngIf="!item.abrilh &&  mes > 4"> 0</td>
+                <td *ngIf="!item.abrilh &&  mes <= 4"> -----</td>
+
+                <td *ngIf="item.mayoh"> {{item.mayoh}} </td>
+                <td *ngIf="!item.mayoh &&  mes > 5"> 0</td>
+                <td *ngIf="!item.mayoh &&  mes <=  5"> -----</td>
+
+                <td *ngIf="item.junioh"> {{item.junioh}} </td>
+                <td *ngIf="!item.junioh &&  mes > 6"> 0</td>
+                <td *ngIf="!item.junioh &&  mes <= 6"> -----</td>
+
+                <td *ngIf="item.julioh"> {{item.julioh}} </td>
+                <td *ngIf="!item.julioh &&  mes > 7">0</td>
+                <td *ngIf="!item.julioh &&  mes <= 7">-----</td>
+
+
+                <td *ngIf="item.agostoh"> {{item.agostoh}} </td>
+                <td *ngIf="!item.agostoh &&  mes > 8">0</td>
+                <td *ngIf="!item.agostoh &&  mes <= 8">-----</td>
+
+                <td *ngIf="item.septiembreh"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{item.septiembreh}} </td>
+                <td *ngIf="!item.septiembreh &&  mes > 9">&nbsp;&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.septiembreh &&  mes <= 9">&nbsp;&nbsp;&nbsp;-----</td>
+
+                <td *ngIf="item.octubreh">&nbsp;&nbsp; {{item.octubreh}} </td>
+                <td *ngIf="!item.octubreh &&  mes > 10">&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.octubreh &&  mes <= 10">&nbsp;&nbsp;-----</td>
+
+                <td *ngIf="item.noviembreh">&nbsp;&nbsp;&nbsp; {{item.noviembreh}} </td>
+                <td *ngIf="!item.noviembreh &&  mes > 11">&nbsp;&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.noviembreh &&  mes <= 11">&nbsp;&nbsp;&nbsp;-----</td>
+
+                <td *ngIf="item.diciembreh">&nbsp;&nbsp;&nbsp; {{item.diciembreh}} </td>
+                <td *ngIf="!item.diciembreh &&  mes > 12">&nbsp;&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.diciembreh &&  mes <= 12">&nbsp;&nbsp;&nbsp;-----</td>
+
+            </tr>
+
+            <br><br>
+            <tr class="alert alert-warning ">
+                <td colspan="2"> TOTALS</td>
+                <td>{{totalEnero}}</td>
+                <td>{{totalF}}</td>
+                <td>{{totalM}}</td>
+                <td>{{totalA}}</td>
+                <td>{{totalMa}}</td>
+                <td>{{totalJu}}</td>
+                <td>{{totalJul}}</td>
+                <td>{{totalAgo}}</td>
+                <td>{{totalSep}}</td>
+                <td>{{totalOct}}</td>
+                <td>{{totalNo}}</td>
+                <td>{{totalDic}}</td>
+                <!-- <td>{{totalEnero}}</td> -->
+
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="10">
+                    <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <ng-container *ngIf="loading">
+        <div class="datatable-loader bg-light">
+          <span class="datatable-loader-inner">
+            <span class="datatable-progress bg-primary"></span>
+          </span>
+        </div>
+        <p class="text-center text-muted my-4">Cargando resultados...</p>
+      </ng-container>
+    <hr>
+
+    <div class="row" *ngIf="!loading">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <table  class="table table-sm table-bordered container">
+            <thead>
+
+                <tr class="alert alert-danger">
+                    <td class="text-center">MES</td>
+                    <td class="text-center">HORA EXTRAS</td>
+                    <td class="text-center">HORA EXTRAS NOCTURNAS</td>
+                    <td class="text-center">HORA EXTRAS FESTIVAS</td>
+                </tr>
+            </thead>
+                <tbody>
+                    <tr *ngFor="let item of datosH">
+                        <td *ngIf="item.mes == 1">ENERO</td>
+                        <td *ngIf="item.mes == 2">FEBRERO</td>
+                        <td *ngIf="item.mes == 3">MARZO</td>
+                        <td *ngIf="item.mes == 4">ABRIL</td>
+                        <td *ngIf="item.mes == 5">MAYO</td>
+                        <td *ngIf="item.mes == 6">JUNIO</td>
+                        <td *ngIf="item.mes == 7">JULIO</td>
+                        <td *ngIf="item.mes == 8">AGOSTO</td>
+                        <td *ngIf="item.mes == 9">SEPTIEMBRE</td>
+                        <td *ngIf="item.mes == 10">OCTUBRE</td>
+                        <td *ngIf="item.mes == 11">NOVIEMBRE</td>
+                        <td *ngIf="item.mes == 12">DICIEMBRE</td>
+                        
+                        <td class="text-center" *ngIf="item.ehe">{{item.ehe}}</td>
+                        <td class="text-center" *ngIf="!item.ehe">----</td>
+                        <td class="text-center" *ngIf="item.ehen">{{item.ehen}}</td>
+                        <td class="text-center" *ngIf="!item.ehen">----</td>
+                        <td class="text-center" *ngIf="item.ehef">{{item.ehef}}</td>
+                        <td class="text-center" *ngIf="!item.ehef">----</td>
+                        
+                        
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</section>
+
+
+
+<!-- Impresión -->
+
+<section  class=" h1" id="v-pills-profile1" *ngIf="pri">
+
+
+    <div class="col-md-12">
+
+        <div #alert class="alert alert-warning alert-dismissible fade show text-center h5" role="alert">
+            <button type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>Horas extras trabajadas por sección
+        </div>
+    </div>
+    <br><br>
+
+    <table mdbTable hover="true">
+        <thead>
+            <tr class="grey lighten-1  text-white">
+                <th>SECCIONES</th>
+                <th>ID SEC. &nbsp;</th>
+                <th>ENERO</th>
+                <th>FEBRERO</th>
+                <th>MARZO</th>
+                <th>ABRIL</th>
+                <th>MAYO</th>
+                <th>JUNIO</th>
+                <th>JULIO</th>
+                <th>AGOSTO</th>
+                <th>SEPTIEMBRE</th>
+                <th>OCTUBRE</th>
+                <th>NOVIEMBRE</th>
+                <th>DICIEMBRE</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr *ngFor="let item of data">
+                <td> {{item.seccion}} </td>
+                <td> {{item.idPuesto}} </td>
+
+                <td *ngIf="item.eneroh"> {{item.eneroh}} </td>
+                <td *ngIf="!item.eneroh &&  mes > 1">0</td>
+                <td *ngIf="!item.eneroh &&  mes <= 1">-----</td>
+
+                <td *ngIf="item.febreroh"> {{item.febreroh}} </td>
+                <td *ngIf="!item.febreroh &&  mes > 2">0</td>
+                <td *ngIf="!item.febreroh &&  mes <= 2">-----</td>
+
+                <td *ngIf="item.marzoh"> {{item.marzoh}} </td>
+                <td *ngIf="!item.marzoh &&  mes > 3">0</td>
+                <td *ngIf="!item.marzoh &&  mes <= 3">-----</td>
+
+                <td *ngIf="item.abrilh"> {{item.abrilh}} </td>
+                <td *ngIf="!item.abrilh &&  mes > 4"> 0</td>
+                <td *ngIf="!item.abrilh &&  mes <= 4"> -----</td>
+
+                <td *ngIf="item.mayoh"> {{item.mayoh}} </td>
+                <td *ngIf="!item.mayoh &&  mes > 5"> 0</td>
+                <td *ngIf="!item.mayoh &&  mes <=  5"> -----</td>
+
+                <td *ngIf="item.junioh"> {{item.junioh}} </td>
+                <td *ngIf="!item.junioh &&  mes > 6"> 0</td>
+                <td *ngIf="!item.junioh &&  mes <= 6"> -----</td>
+
+                <td *ngIf="item.julioh"> {{item.julioh}} </td>
+                <td *ngIf="!item.julioh &&  mes > 7">0</td>
+                <td *ngIf="!item.julioh &&  mes <= 7">-----</td>
+
+
+                <td *ngIf="item.agostoh"> {{item.agostoh}} </td>
+                <td *ngIf="!item.agostoh &&  mes > 8">0</td>
+                <td *ngIf="!item.agostoh &&  mes <= 8">-----</td>
+
+                <td *ngIf="item.septiembreh"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{item.septiembreh}} </td>
+                <td *ngIf="!item.septiembreh &&  mes > 9">&nbsp;&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.septiembreh &&  mes <= 9">&nbsp;&nbsp;&nbsp;-----</td>
+
+                <td *ngIf="item.octubreh">&nbsp;&nbsp; {{item.octubreh}} </td>
+                <td *ngIf="!item.octubreh &&  mes > 10">&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.octubreh &&  mes <= 10">&nbsp;&nbsp;-----</td>
+
+                <td *ngIf="item.noviembreh">&nbsp;&nbsp;&nbsp; {{item.noviembreh}} </td>
+                <td *ngIf="!item.noviembreh &&  mes > 11">&nbsp;&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.noviembreh &&  mes <= 11">&nbsp;&nbsp;&nbsp;-----</td>
+
+                <td *ngIf="item.diciembreh">&nbsp;&nbsp;&nbsp; {{item.diciembreh}} </td>
+                <td *ngIf="!item.diciembreh &&  mes > 12">&nbsp;&nbsp;&nbsp;0</td>
+                <td *ngIf="!item.diciembreh &&  mes <= 12">&nbsp;&nbsp;&nbsp;-----</td>
+
+            </tr>
+
+            <br><br>
+            <tr class="alert alert-warning ">
+                <td colspan="2"> TOTALS</td>
+                <td>{{totalEnero}}</td>
+                <td>{{totalF}}</td>
+                <td>{{totalM}}</td>
+                <td>{{totalA}}</td>
+                <td>{{totalMa}}</td>
+                <td>{{totalJu}}</td>
+                <td>{{totalJul}}</td>
+                <td>{{totalAgo}}</td>
+                <td>{{totalSep}}</td>
+                <td>{{totalOct}}</td>
+                <td>{{totalNo}}</td>
+                <td>{{totalDic}}</td>
+                <!-- <td>{{totalEnero}}</td> -->
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <br>
+    <br>
+    <div class="row topMenu1">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <table mdbTable  class="table table-sm table-bordered container">
+
+                <tr class="alert alert-danger">
+                    <td class="text-center">MES</td>
+                    <td class="text-center">HORA EXTRAS</td>
+                    <td class="text-center">HORA EXTRAS NOCTURNAS</td>
+                    <td class="text-center">HORA EXTRAS FESTIVAS</td>
+                </tr>
+
+                <tr *ngFor="let item of datosH">
+                    <td *ngIf="item.mes == 1">ENERO</td>
+                    <td *ngIf="item.mes == 2">FEBRERO</td>
+                    <td *ngIf="item.mes == 3">MARZO</td>
+                    <td *ngIf="item.mes == 4">ABRIL</td>
+                    <td *ngIf="item.mes == 5">MAYO</td>
+                    <td *ngIf="item.mes == 6">JUNIO</td>
+                    <td *ngIf="item.mes == 7">JULIO</td>
+                    <td *ngIf="item.mes == 8">AGOSTO</td>
+                    <td *ngIf="item.mes == 9">SEPTIEMBRE</td>
+                    <td *ngIf="item.mes == 10">OCTUBRE</td>
+                    <td *ngIf="item.mes == 11">NOVIEMBRE</td>
+                    <td *ngIf="item.mes == 12">DICIEMBRE</td>
+
+                    <td class="text-center" *ngIf="item.ehe">{{item.ehe}}</td>
+                    <td class="text-center" *ngIf="!item.ehe">----</td>
+                    <td class="text-center" *ngIf="item.ehen">{{item.ehen}}</td>
+                    <td class="text-center" *ngIf="!item.ehen">----</td>
+                    <td class="text-center" *ngIf="item.ehef">{{item.ehef}}</td>
+                    <td class="text-center" *ngIf="!item.ehef">----</td>
+
+
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+</section>

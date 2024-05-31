@@ -1,0 +1,15 @@
+<div class="modal-content">
+    <div class="modal-body py-1">
+        <ul class="list-group list-group-light">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let item of items">
+              <div>
+                <div class="fw-bold">{{item.sms}}</div>
+                <div class="text-muted">{{empleado}}</div>
+              </div>
+              <span class="badge rounded-pill badge-success">{{item.fechaM | date: 'EEEE d , MMMM y, H:mm'}}</span>
+          </ul>
+          <div class="modal-footer">
+            <button type="button" mdbBtn class="btn btn-primary"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+        </div>
+    </div>
+  </div>

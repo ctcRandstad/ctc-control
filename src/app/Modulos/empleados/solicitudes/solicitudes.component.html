@@ -1,1 +1,110 @@
-<p>solicitudes works!</p>
+
+<app-menu></app-menu>
+
+
+<section class="top animate__animated animate__fadeIn" id="arriba">
+    <div class="main">
+        <div class="row">
+            <div class="col-md-5">
+                <app-menu-s></app-menu-s>
+            </div>
+            <div class="col-md-3 ">
+                <div class="col-auto">    
+                <div class="input-group mb-3">
+                    <span class="input-group-text " id="search-addon"><i class="fas fa-search"></i></span>
+                    <input autocomplete="off" (keyup)="search($event)" [(ngModel)]="filterQuery" type="search" class="form-control rounded" placeholder="Buscar empleado" aria-label="Search"
+                      aria-describedby="search-addon" />
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button (click)="exportAsXLSX()"class="btn btn-outline-success" mdbWavesEffect>
+                    DESCARGAR LISTADO  &nbsp;<i class="far fa-file-excel  fa-lg "></i>
+                 </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form #action="ngForm" (ngSubmit)="buscar(action)">
+                    <div class="row form-row">
+                        <div class="col-md-5">
+                            <p class="text-center text-primary">Fecha Inicio</p>
+                            <input type="date" required name="fechaInicio" ngModel class="form-control form-control-sm">
+
+                        </div>
+                        <div class="col-md-5">
+                            <p class="text-center text-primary">Fecha Fin</p>
+                            <input type="date" name="fechaFinal" ngModel class="form-control form-control-sm">
+                        </div>
+
+                        <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+
+                        <div class="col-md-2 top1">
+                            <button [disabled]="action.invalid" type="submit" mdbBtn  class=" btn btn-primary btn-sm" mdbWavesEffect>
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <!-- <button *ngIf="valor == 1" type="button" (click)="reload()" mdbBtn color="secondary" size="sm" class=" waves-light" mdbWavesEffect>
+                               Quitar filtro
+                            </button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<br>
+    <div *ngIf="mostrarTabla">
+        <table mdbTable class="table datatable-table table-sm"
+        mdbTableSort
+        #table="mdbTable"
+        #sort="mdbTableSort"
+        [dataSource]="dataSource"
+        [sort]="sort"
+        [pagination]="pagination">
+            <thead class="grey lighten-1  text-white">
+                <tr>
+                    <th>Empleado</th>
+                    <th>Tipo de solicitud</th>
+                    <th>Inicio</th>
+                    <th>Final</th>
+                    <th>Estado</th>
+                    <th>Comentario</th>
+                    <th>SMS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of table.data ">
+                    <td class="text-capitalize">{{ item.nombre}}</td>
+                    <td class="text-capitalize">{{ item.evento}}</td>
+                    <td class="text-capitalize">{{ item.fecha_inicio | date: 'EEEE, d MMMM, y'}}</td>
+                    <td class="text-capitalize">{{ item.fecha_fin | date: 'EEEE, d MMMM, y'}}</td>
+                    <td *ngIf="item.estado == 1">
+                        <span class="alerta alert-primary">En proceso </span>
+                    </td>
+                    <td *ngIf="item.estado == 0">
+                        <span class="alerta alert-success">Petición de aprobada </span>
+                    </td>
+                    <td *ngIf="item.estado == 2">
+                        <span class="alerta alert-danger">Petición de denegada </span>
+                    </td>
+                    <td *ngIf="item.estado == 3">
+                        <span class="alerta alert-warning">Petición de eliminada </span>
+                    </td>
+                    <td class="text-primary" *ngIf="item.comentario">{{ item.comentario }}</td>
+                    <td *ngIf="!item.comentario">-------</td>
+                    <td class="text-primary cursor zoom" (click)="verSms(item.id, item)" mdbWavesEffect>
+                        <i class="fas fa-sms fa-lg "></i>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</section>

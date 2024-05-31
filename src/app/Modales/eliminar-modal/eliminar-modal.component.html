@@ -1,31 +1,292 @@
-<div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel"></h5>
+
+  <div class="" *ngIf="eliminar == 1">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title " id="exampleModalLabel"></h5>
+      {{apellidos}}, {{nombre}}
   </div>
-  <div class="modal-body text-uppercase" >
-    <div class="alert alert-warning" role="alert">
-        {{'btnB' | translate}} ELIMINADA <br>
-        OF: {{item.o_f}}
-        <br>
-        {{'ancho' | translate}}: {{item.anch_real}}
-        <br>
-        {{'maquina1' | translate}}: {{item.maquina}}
+    <div class="modal-body text-uppercase" >
+    
+  
     </div>
-    <button (click)="no()" type="reset" class="btn btn-outline-primary">OK</button>
-  </div>
+  
+    <div class="modal-body text-uppercase" >
+      <form #formi="ngForm" class="form-row text-center container" #addJ="ngForm" (ngSubmit)="addJus(formi)">
+        <div class="col-md-12">
+            <label for="inputEmail4">Justificación</label>
+            <select class="form-select" (change)="addChangeJu($event)">
+                <option selected>{{detallesJ}}</option>
+            <option class="text-uppercase" value="{{item.idJusti}}-{{item.pluses}}"  *ngFor="let item of justi">{{ item.detallesJ}}</option>
+            
+        </select>
+        </div>
 
 
-
-  <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel"></h5>
-  </div>
-  <div class="modal-body text-uppercase" >
-    <div class="alert alert-warning" role="alert">
-        {{'btnB' | translate}} ELIMINADA <br>
-        OF: {{item.o_f}}
-        <br>
-        {{'ancho' | translate}}: {{item.anch_real}}
-        <br>
-        {{'maquina1' | translate}}: {{item.maquina}}
+        <input type="hidden" name="nEmpleado" [(ngModel)]="nEmpleado">
+        <input type="hidden" name="justificacion" [(ngModel)]="idJustificacion" required>
+        <input type="hidden" name="fechaInicioJ" [(ngModel)]="fechaInicioJ" required>
+        <input type="hidden" name="fechaFinJ" [(ngModel)]="fechaFinJ" required>
+        <input type="hidden" name="idJE" [(ngModel)]="idJE" required>
+        <input type="hidden" name="plus" [(ngModel)]="plus" required>
+        <input type="hidden" name="idServicio" [(ngModel)]="idServicio" required>
+        <div class="modal-footer">
+        <button type="button" mdbBtn  class="btn btn-primary" *ngIf="idJustificacion && !btn" (click)="addJus(formi)" mdbWavesEffect>Guardar cambios</button>
+        <button *ngIf="btn" class="btn btn-primary" type="button" disabled>
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span class="visually-hidden">Loading...</span>
+        </button>
+        <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+        </div>
+      </form>
     </div>
-    <button (click)="no()" type="reset" class="btn btn-outline-primary">OK</button>
   </div>
+
+  <div class="" *ngIf="eliminar == 2">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title " id="exampleModalLabel"></h5>
+      {{apellidos}}, {{nombre}}
+    </div>
+      <form class="container" #action="ngForm" (ngSubmit)="alta(action)">
+        <div class="md-form ml-0 mr-0">
+          <label for="form29" class="ml-0">Fecha de alta</label>
+            <input type="date" required id="form29" name="fechaAlta" ngModel class="form-control ">
+        </div>
+        <input type="hidden" name="nEmpleado" [(ngModel)]="nEmpleado">
+        <input type="hidden" name="idJE" [(ngModel)]="idJE">
+        <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+        <div class="modal-footer">
+        <div class="text-center mt-4" *ngIf="!btnExitos">
+            <button type="submit" [disabled]="action.invalid" mdbBtn  class="btn btn-primary" mdbWavesEffect>Alta <i class="fas fa-sign-out-alt"></i></button>
+             &nbsp;  
+          <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+        </div>
+        <div  class="text-center mt-4" *ngIf="btnExitos">
+          <button  class="btn btn-primary" type="button" disabled>
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </button>
+        </div>
+        </div>
+     </form>
+  </div>
+
+
+  <div class="" *ngIf="eliminar == 3">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title " id="exampleModalLabel"></h5>
+      {{apellidos}}, {{nombre}}
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-danger" role="alert">
+          ¿Quiere eliminar la justificación selecccionada.?
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+    <button *ngIf="!si" type="button" mdbBtn  class="btn btn-primary" mdbWavesEffect (click)="borrarAhora(nEmpleado , fechaInicioJ,fechaFinJ,idJE)">Guardar cambios</button>
+
+    <button *ngIf="si"  class="btn btn-primary" type="button" disabled>
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      <span class="visually-hidden">Loading...</span>
+    </button>
+  </div>
+  </div>
+
+
+  <div class="" *ngIf="eliminar == 4">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title " id="exampleModalLabel"></h5>
+  {{tit}}  
+    </div>
+    <div class="modal-body">
+      <i class="far fa-trash-alt text-danger fa-2x"></i>   ¿QUISIERA ELIMINAR LA ASIGNACIÓN?
+      <hr class="hr">
+      <div class="alert alert-danger " role="alert">
+        Ten en cuenta, que si borras la asignación selecciona, no podrás visualizar ningún documento asignado a un trabajador que pertenezca a dicha asignación.
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+    <button *ngIf="!si" type="button" mdbBtn  class="btn btn-primary" mdbWavesEffect (click)="eliminarD()">Guardar cambios</button>
+
+    <button *ngIf="si"  class="btn btn-primary" type="button" disabled>
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      <span class="visually-hidden">Loading...</span>
+    </button>
+  </div>
+  </div>
+
+
+  <div class="" *ngIf="eliminar == 5">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title " id="exampleModalLabel"></h5>
+        {{desc}}  
+    </div>
+    <div class="modal-body">
+       <!--Body-->
+       <form #descr="ngForm" (ngSubmit)="addDEsc(descr)">
+        <div class="modal-body mb-1">
+            <h5 class="mt-1 mb-2 text-center ">{{desc}}</h5>
+            <div class="md-form ml-0 mr-0">
+                <mdb-form-control>
+                  <input mdbInput type="text" id="form1" class="form-control" name="descripcion" [(ngModel)]="desc"/>
+                  <label mdbLabel class="form-label" for="form1">Ingrese la descripción</label>
+                </mdb-form-control>
+            </div>
+            <input type="hidden" name="idHora" [(ngModel)]="idHora">
+            <div class="text-center mt-4">
+                <button *ngIf="!si" class=" btn btn-primary" mdbWavesEffect>aceptar
+                  <i class="fas fa-sign-in-alt"></i>
+                  </button>
+            </div>
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+    <button *ngIf="si"  class="btn btn-primary" type="button" disabled>
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      <span class="visually-hidden">Loading...</span>
+    </button>
+  </div>
+  </div>
+
+
+  <div class="" *ngIf="eliminar == 6">
+    <form #contrato="ngForm" (ngSubmit)="addContratos(contrato )">
+      <div class="modal-body mb-1">
+          <h5 class="mt-1 mb-2  text-center">ETT/Empresa</h5>
+          <mdb-form-control>
+            <input mdbInput required name="nombre" [(ngModel)]="contratos.nombre" type="text" id="form1" class="form-control" />
+            <label mdbLabel class="form-label" for="form1">Nombre <small class="text-danger">(obligatorio)</small></label>
+          </mdb-form-control>
+          <br>
+          <mdb-form-control>
+            <input mdbInput type="text" id="form1" class="form-control" required autocomplete="off" name="direccion" [(ngModel)]="contratos.direccion" />
+            <label mdbLabel class="form-label" for="form1">Dirección <small class="text-danger">(obligatorio)</small></label>
+          </mdb-form-control>
+          <br>
+          <mdb-form-control>
+            <input mdbInput type="text" id="form1" class="form-control" required autocomplete="off" name="telefono" [(ngModel)]="contratos.telefono" />
+            <label mdbLabel class="form-label" for="form1">Teléfono <small class="text-danger">(obligatorio)</small></label>
+          </mdb-form-control>
+          <br>
+          <mdb-form-control>
+            <input mdbInput type="text" id="form1" class="form-control"  required autocomplete="off" name="vacaciones" [(ngModel)]="contratos.vacaciones"/>
+            <label mdbLabel class="form-label" for="form1">Vacaciones <small class="text-danger">(obligatorio)</small></label>
+          </mdb-form-control>
+          <input type="hidden" name="idContrato" [(ngModel)]="contratos.idContrato">
+          <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+
+          <div class="text-center mt-4 top">
+            <button [disabled]="contrato.invalid" *ngIf="!si" class=" btn btn-primary" mdbWavesEffect>aceptar
+              <i class="fas fa-sign-in-alt"></i>
+              </button>
+        </div>
+          <div class="modal-footer">
+            <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+            <button *ngIf="si"  class="btn btn-primary" type="button" disabled>
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Loading...</span>
+            </button>
+          </div>
+      </div>
+  </form>
+</div>
+
+
+<div class="" *ngIf="eliminar == 7">
+  <form #contratoAdd="ngForm" (ngSubmit)="addContratos(contratoAdd )">
+    <div class="modal-body mb-1">
+        <h5 class="mt-1 mb-2  text-center">ETT/Empresa</h5>
+        <mdb-form-control>
+          <input mdbInput required name="nombre" ngModel type="text" id="form1" class="form-control" />
+          <label mdbLabel class="form-label" for="form1">Nombre <small class="text-danger">(obligatorio)</small></label>
+        </mdb-form-control>
+        <br>
+        <mdb-form-control>
+          <input mdbInput type="text" id="form1" class="form-control" required autocomplete="off" name="direccion" ngModel />
+          <label mdbLabel class="form-label" for="form1">Dirección <small class="text-danger">(obligatorio)</small></label>
+        </mdb-form-control>
+        <br>
+        <mdb-form-control>
+          <input mdbInput type="text" id="form1" class="form-control" required autocomplete="off" name="telefono" ngModel />
+          <label mdbLabel class="form-label" for="form1">Teléfono <small class="text-danger">(obligatorio)</small></label>
+        </mdb-form-control>
+        <br>
+        <mdb-form-control>
+          <input mdbInput type="text" id="form1" class="form-control"  required autocomplete="off" name="vacaciones" ngModel/>
+          <label mdbLabel class="form-label" for="form1">Vacaciones <small class="text-danger">(obligatorio)</small></label>
+        </mdb-form-control>
+        <input type="hidden" name="idContrato" [(ngModel)]="idContrato">
+        <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+
+        <div class="text-center mt-4 top">
+          <button [disabled]="contratoAdd.invalid" *ngIf="!si" class=" btn btn-primary" mdbWavesEffect>aceptar
+            <i class="fas fa-sign-in-alt"></i>
+            </button>
+      </div>
+        <div class="modal-footer">
+          <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+          <button *ngIf="si"  class="btn btn-primary" type="button" disabled>
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </button>
+        </div>
+    </div>
+</form>
+</div>
+
+<div class="" *ngIf="eliminar == 8">
+  <div class="modal-header text-primary text-uppercase">
+    <h5 class="modal-title " id="exampleModalLabel"></h5>
+    Eliminar Empresa/ETT    
+  </div>
+  <div class="modal-body text-uppercase">
+    <i class="far fa-trash-alt text-danger fa-2x "></i>   ¿Estás seguro de querer dar de baja a la empresa?
+    <hr class="hr">
+    <div class="alert alert-danger text-center" role="alert">
+      Empresa/ETT    {{name}}
+    </div>
+</div>
+<div class="modal-footer">
+  <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+  <button *ngIf="!si" type="button" mdbBtn  class="btn btn-primary" mdbWavesEffect (click)="bajaE()">Guardar cambios</button>
+
+  <button *ngIf="si"  class="btn btn-primary" type="button" disabled>
+    <span
+      class="spinner-border spinner-border-sm"
+      role="status"
+      aria-hidden="true"
+    ></span>
+    <span class="visually-hidden">Loading...</span>
+  </button>
+</div>
+</div>

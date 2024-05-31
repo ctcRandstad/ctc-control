@@ -1,13 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { MdbTableDirective } from 'mdb-angular-ui-kit/table';
-import { Observable } from 'rxjs';
 import { BajaModalComponent } from 'src/app/Modales/baja-modal/baja-modal.component';
 import { UbicarModalComponent } from 'src/app/Modales/ubicar-modal/ubicar-modal.component';
-import { Contratos } from 'src/app/Models/contratos';
 import { Empleado } from 'src/app/Models/emplados';
-import { Puestos } from 'src/app/Models/puestos';
-import { Turnos } from 'src/app/Models/turnos';
 import { ConfigService } from 'src/app/Services/config.service';
 import { ControlHorasService } from 'src/app/Services/control-horas.service';
 import { EmpleadosService } from 'src/app/Services/empleados.service';
@@ -61,6 +57,7 @@ verEmpleado:boolean=false;
   filterQuery="";
   dataSource:any;
   dataTotal:any;
+  loading:boolean = true;
   getEmpleadosActivos(){
    this._empleados.getEmplaedosActivos(this.idServicio)
    .subscribe(resp=>{
@@ -68,6 +65,9 @@ verEmpleado:boolean=false;
      if (resp != 'error') {
        this.dataSource = resp;
        this.dataTotal = this.dataSource.length;
+       setTimeout(()=>{
+        this.loading=false;
+       },2000);
      } else {
       this.dataSource = [];
       this.dataTotal = 0;
@@ -256,8 +256,7 @@ url:any;
     getPuesto(){
       this._empleados.getPuestos1(this.idServicio)
       .subscribe(data=>{
-        console.log(data);
-        
+      
         if (data != 'error') {
           this.puestos = data;
         } else {
@@ -269,7 +268,8 @@ url:any;
   
     edit(){
       this.editar = true;
-        this.nEmpleado1 = this.employees.nEmpleado
+        this.nEmpleado1 = this.employees.nEmpleado;
+        this.justifi(this.employees);
     }
   
     contratos!:any;
@@ -316,7 +316,7 @@ url:any;
      this._control.getJustificaciones(this.idServicio)
      .subscribe(just=>{ 
      this.just = just;
-    //  console.log(this.just);
+     console.log(this.just);
      });
     }
 
@@ -437,12 +437,13 @@ url:any;
      
     }
     addChangeJu(value:any){
-      
-       this.employees.idJustificacion = value;
+     
+       this.employees.idJustificacion = value.target.value;
     }
   
-    addJus(addJ:any,justi:any){
-     
+    addJus(addJ:any){
+      this.btnEditar = true;
+  
      this._empleados.addJusti(addJ.value)
     .subscribe(data=>{ 
      
@@ -450,7 +451,7 @@ url:any;
         this._alerta.openToast('ERROR: El empleado ya tiene una justificación activa asignada en el rango de fecha seleccionada.' , 'bg-danger text-white' , 'ERROR');
         this.fechaCambio=null;
        this.fechaFin=null;
-        justi.hide();
+       this.btnEditar = false;
         return;
        }
     
@@ -458,12 +459,14 @@ url:any;
        this._alerta.openToast1('Justificación asignada' , 'bg-success text-white' , 'Justificación');
        this.fechaCambio=null;
        this.fechaFin=null;
-       justi.hide();
+      this.btnEditar = false;
+      this.editar = false;
+      
      } else {
       this._alerta.openToast1('ERROR: Justificación no asignada' , 'bg-danger text-white' , 'ERROR');
       this.fechaCambio=null;
        this.fechaFin=null;
-       
+       this.btnEditar = false;
      }
   });   
     }
@@ -505,8 +508,7 @@ url:any;
     btnEditar:boolean=false;
     vacaciones:boolean=false;
     edirPuesto(pue:any,descripcion:any){
-     
-      
+   
       if (!this.tAsigando) {
         this._alerta.openToast1('Está asignando el mismo turno...', 'bg-danger text-white' , 'ERROR');
         this.employees.turno = pue.value.turnos;
@@ -519,17 +521,24 @@ url:any;
          
            this.employees.turno = pue.value.turnos;
           this._alerta.openToast1('Debes seleccionar una fecha posterior. Para cambiar fechas anteriores, utiliza la pestaña CONTROL HORARIO.' , 'bg-danger text-white' , 'ERROR');
+          this.btnEditar = false;
          }else  if (res == 'success') {
-           this.employees.descripcion=descripcion;
+          this._empleados.getTurnosById(pue.value.turno)
+          .subscribe(data=>{ 
+       
+          this.employees.descripcion=data.descripcion;
+          });
+           this.editar = false;
             this.btnEditar = false;
-            this.editar = false;
           } else if(res == 'baja'){
             this.employees.turno = pue.value.turnos;
             this._alerta.openToast1('ERROR: El operario/a tiene activa una justificación en la fecha de cambio de turno.' , 'bg-danger text-white' , 'ERROR');
+            this.btnEditar = false;
   
           }else{
             this.employees.turno = pue.value.turnos;
             this._alerta.openToast1('ERROR: No se puedo generar la plantilla...' , 'bg-danger text-white' , 'ERROR');
+            this.btnEditar = false;
   
           }
         });
@@ -1095,8 +1104,6 @@ url:any;
       
       this._empleados.getPdf(nEmpleado)
       .subscribe(data=>{
-      console.log(data);
-      
         if (data == 'error') {
           this.data=null;
           this.getDocus = true;
@@ -1277,7 +1284,7 @@ url:any;
     }
   
     com:any;
-    addCo(come:any, frame:any){
+    addCo(come:any){
       
       this._empleados.addCoemntarioEmpleado(this.employees.nEmpleado , come.value,this.idServicio)
       .subscribe(data=>{  
@@ -1285,8 +1292,9 @@ url:any;
       if (data == 'success') {
       
         this._alerta.openAlert('Comentario editado.' ,'bg-warning text-white' , 'Comentario');
-        frame.hide();
+       
         this.edi = false;
+        this.editar = false;
         this.getEmpleadosActivos();
         this.com = null;
         this.fecha();

@@ -1,0 +1,29 @@
+.tops {
+    margin-top: -4px;
+}
+
+.tops1 {
+    margin-top: -14px;
+}
+
+.actives {
+    background: hsl(2, 89%, 59%)!important;
+    color: #ffffff!important;
+}
+
+.top1 {
+    margin-top: 40px;
+}
+
+.zoom {
+    transition: transform .2s;
+}
+
+.zoom:hover {
+    transform: scale(1.25);
+}
+
+.alerta{
+padding: 10px;
+border-radius: 5px;
+}

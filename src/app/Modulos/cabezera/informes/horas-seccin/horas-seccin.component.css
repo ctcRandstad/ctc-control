@@ -1,0 +1,26 @@
+.main {
+    margin: 215px;
+    /* // margin-right: 105px; */
+}
+
+.main1 {
+    margin: -17px;
+    /* // margin-right: 105px; */
+}
+
+thead tr th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #bdbdbd;
+}
+
+.table-responsive {
+    height: 200px;
+    overflow: scroll;
+}
+
+.topsprint {
+    font-size: 35px!important;
+    margin: 205px;
+}

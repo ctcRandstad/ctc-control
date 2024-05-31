@@ -1,1 +1,235 @@
-<p>papelera works!</p>
+<app-menu></app-menu>
+
+
+<section class="top animate__animated animate__fadeIn" id="arriba">
+    <div class="main" *ngIf="!verEmpleado && !altaUser">
+        <div class="row">
+            <div class="col-md-5">
+                <app-menu-s></app-menu-s>
+            </div>
+            <div class="col-md-3">
+                <div class="col-auto">
+                  
+                    
+                <div class="input-group mb-3">
+                    <span class="input-group-text " id="search-addon"><i class="fas fa-search"></i></span>
+                    <input autocomplete="off" (keyup)="search($event)" [(ngModel)]="filterQuery" type="search" class="form-control rounded" placeholder="Buscar empleado" aria-label="Search"
+                      aria-describedby="search-addon" />
+                  </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-2 tops">
+                <button (click)="exportAsXLSX()"class="btn btn-outline-success" mdbWavesEffect>
+                    DESCARGAR LISTADO  &nbsp;<i class="far fa-file-excel  fa-lg "></i>
+                 </button>
+            </div>
+            <div class="col-md-12 text-center top">
+                <div class="alert alert-danger">
+                    Empleados eliminados: {{dataTotal}}
+
+                </div>
+            </div>
+        </div>
+        <div class="row animated fadeIn">
+
+
+            <table class="table datatable-table table-sm"    mdbTable
+            mdbTableSort
+            #table="mdbTable"
+            #sort="mdbTableSort"
+            [dataSource]="dataSource"
+            [sort]="sort"
+            [pagination]="pagination">
+                <thead class="grey lighten-1  text-white">
+                    <tr>
+                        <th> N° Empleado</th>
+                        <th> Nombre</th>
+                        <th>Apellidos </th>
+                        <th>Comentario </th>
+                        <th>Info</th>
+                        <th>Alta</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="dataTotal > 0 && !loading">
+                    <tr *ngFor="let item of table.data">
+                        <td>{{item.nEmpleado}}</td>
+                        <td>{{item.nombre}}</td>
+                        <td>{{item.apellidos}}</td>
+                        <td class="text-primary text-capitalize" *ngIf="!item.comentario">S/Comentario</td>
+                        <td class="text-danger text-uppercase" *ngIf="item.comentario">{{item.comentario}}</td>
+                        <td (click)="empleado(item)" class=" cursor q text-primary">
+                            <i class="fas fa-user-plus "></i>
+                        </td>
+                        <td (click)="modal(item)" class=" cursor q  text-success">
+                            <i class="fas fa-hdd"></i>
+                        </td>
+
+                    </tr>
+                </tbody>
+                <tbody *ngIf="dataTotal == 0">
+                    <tr>
+                        <td colspan="7">
+                            <p class="text-center text-warning h3">No hay empleados de baja</p>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+
+            </table>
+            <ng-container *ngIf="loading">
+                <div class="datatable-loader bg-light">
+                  <span class="datatable-loader-inner">
+                    <span class="datatable-progress bg-primary"></span>
+                  </span>
+                </div>
+                <p class="text-center text-muted my-4">Cargando resultados...</p>
+              </ng-container>
+        </div>
+    </div>
+
+
+            <!-- Operario y foto -->
+            <div class="" *ngIf="verEmpleado  && !altaUser">
+                <div class="row">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                   
+                    <div class="col-md-1" >
+                        <img [src]="employees.foto" alt="avatar" width="100">
+                    </div>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                    <div class="col-md-3 top">
+                        <i ngClass="fas fa-edit fa-2x"   class="text-warning cursor"></i>
+                        <!-- <mdb-icon *ngIf="tipoUsuario != 'A2020'" fas icon="edit" size="2x" class="text-warning cursor"></mdb-icon> -->
+                        <strong class="text">&nbsp; {{ employees.nombre }} {{ employees.apellidos }}</strong>
+                        <br>
+                        <small  class="bajo">DNI/NIF: {{employees.dni}}</small>
+    
+                        <br>
+                        <small class="text" *ngIf="employees.activo == 1">Trabajador  Inactivo</small>
+                        <br>
+                        <small class="text-danger" *ngIf="employees.categoriaE">Categoría: {{employees.categoriaE}}  </small>
+                        <small class="text-danger" *ngIf="!employees.categoriaE">Categoría: ---  </small>
+                        <br>
+                        <small class="text-success" *ngIf="employees.bocadillo == 'B'">Plus incluido  </small>
+                        <!-- <small class="text-danger" *ngIf="!employees.categoriaE">{{employees.categoriaE}}  </small> -->
+        
+                    </div>
+            
+                    <div class="col-md-2 top">
+                        <!-- <button type="button" mdbBtn outline="true" color="warning" size="sm" class="waves-effect"> Nueva consulta</button> -->
+                        <a routerLink="../Papelera" class="btn btn-outline-success" role="button" (click)="salir()">
+                            <i class="fas fa-arrow-circle-left"></i> Nueva consulta</a>
+                    </div>
+                </div>
+                <br>
+                <!-- Menu vertical -->
+                <div class="row">
+                    <div class="col-12 ">
+                        <mdb-tabs [pills]="true" [vertical]="true" class="margin">
+                            <mdb-tab class="col-2" class="home"> <ng-template mdbTabTitle><span><i class="fas fa-chalkboard-teacher"></i> Perfil</span></ng-template>
+                                <div class="col-12" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                    <table class="table table-borderless">
+                                        <thead class="grey lighten-1  text-white">
+                                            <tr>
+                                                <th scope="col">Puesto</th>
+                                                <th scope="col">Turno</th>
+                                                <th scope="col">Teléfono</th>
+                                                <th scope="col">Tel. Opcional</th>
+                                                <th scope="col">Email Opcional</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ employees.descripcionPuesto}}</td>
+                                                <td>{{ employees.descripcion}}</td>
+                                                <td>{{ employees.telefono1}}</td>
+                                                <td *ngIf="employees.telefono2 == null">------------</td>
+                                                <td *ngIf="employees.telefono2 != null">{{ employees.telefono2}}</td>
+                                                <td *ngIf="employees.email == null">------------</td>
+                                                <td *ngIf="employees.email != null">{{ employees.email}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <hr class="hr">
+            
+                                        <thead class="grey lighten-1  text-white">
+                                            <tr>
+                                                <th scope="col">Antiguedad</th>
+                                                <th scope="col">Contrato</th>
+                                                <th scope="col">Nacimiento</th>
+                                                <th scope="col">Nro. Empleado</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span class="text-primary italic" *ngIf="employees.fechaReincorporacion">Primera entrada:</span> {{ employees.fechaInicio | date : 'mediumDate'}}
+                                                    <br *ngIf="employees.fechaReincorporacion">
+                                                    <span class="text-primary italic" *ngIf="employees.fechaReincorporacion">Reincorporación:</span> {{ employees.fechaReincorporacion | date : 'mediumDate'}} <br>
+                                              
+                                                </td>
+                                                <td class="text-uppercase">{{ employees.empresa}}</td>
+                                                <td>{{ employees.fechaNacimiento | date : 'mediumDate'}}
+                                                    <br>
+                                                  
+                                                </td>
+                                                <td>{{ employees.nEmpleado}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </mdb-tab>
+                          
+                           
+                          </mdb-tabs>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row container" *ngIf="altaUser">
+                <hr class="hr">
+                <div class="col-9 top">
+                    <p>¿Está seguro de dar de alta <strong>{{ nombre }} {{ apellidos }} </strong> ?.</p>
+
+                </div>
+                <div class="col-md-2 top">
+                    <!-- <button type="button" mdbBtn outline="true" color="warning" size="sm" class="waves-effect"> Nueva consulta</button> -->
+                    <a routerLink="../Papelera" class="btn btn-outline-success" role="button" (click)="salir()">
+                        <i class="fas fa-arrow-circle-left"></i> Nueva consulta</a>
+                </div>  
+                
+                <form #altas="ngForm" (ngSubmit)="alta(altas)">
+                    <div class="row conteiner">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <input width="200" type="date" class="form-control" name="fecha" required [(ngModel)]="fecha">
+                            <input type="hidden" name="nEmpleado" [(ngModel)]="id">
+                            <input type="hidden" name="turno" [(ngModel)]="turno">
+                            <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                        </div>
+                        <div class="col-2 top">
+                            <button *ngIf="!btn" [disabled]="altas.invalid" type="submit" class="btn btn-outline-primary"><i class="fas fa-save"></i> Si, dar de alta    
+                            </button>
+                              <button *ngIf="btn" mdbBtn class="btn btn-outline-primary" type="button" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Generando Plantilla...
+                              </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+    
+</section>

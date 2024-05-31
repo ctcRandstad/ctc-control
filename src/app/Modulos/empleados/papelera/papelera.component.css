@@ -1,0 +1,13 @@
+.q{
+    transform: scale(var(--escala, 0.8));
+    transition: transform 0.25s;
+  }
+  
+  .q:hover {
+      text-align: center;
+      background: #850F8D;
+      color: #ffffff!important;
+      --escala: 1;
+      border-radius: 10px;
+  }
+  

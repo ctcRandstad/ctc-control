@@ -1,7 +1,7 @@
 <app-menu></app-menu>
 
 
-<section class="top" id="arriba">
+<section class="top animate__animated animate__fadeIn" id="arriba">
 
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" *ngIf="!verEmpleado && tipoUsuario == 'A2020'">
 
@@ -78,7 +78,7 @@
                     <th>Contraseña</th>
                 </tr>
             </thead>
-            <tbody *ngIf="dataTotal > 0">
+            <tbody *ngIf="dataTotal > 0 && !loading" class="datatable-body" >
                 <tr *ngFor="let item of table.data">
                     <td>{{item.nEmpleado}}</td>
                     <td class="text-uppercase">{{item.empresa}}</td>
@@ -107,12 +107,20 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5">
+                    <td colspan="6">
                         <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
                     </td>
                 </tr>
             </tfoot>
         </table>
+        <ng-container *ngIf="loading">
+            <div class="datatable-loader bg-light">
+              <span class="datatable-loader-inner">
+                <span class="datatable-progress bg-primary"></span>
+              </span>
+            </div>
+            <p class="text-center text-muted my-4">Cargando resultados...</p>
+          </ng-container>
     </div>
 
 
@@ -145,7 +153,7 @@
     
                 </div>
                 <div class="col-md-4" [ngClass]="{'h4 text-danger ':coment}">
-                    <span class="padding text-uppercase" [ngClass]="{'border border-danger':coment}">{{coment}}</span>
+                    <span class="padding text-uppercase" [ngClass]="{'alert alert-primary':coment}">{{coment}}</span>
                 </div>
     
                 <div class="col-md-2 top">
@@ -560,8 +568,7 @@
                                 </div>
                                 <div class="col-md-6 tb" *ngIf="!btnEditar && !vacaciones">
 
-                                    <button [disabled]="pue.invalid" type="submit" mdbBtn  size="sm" outline="true" class=" btn btn-primary btn-sm" mdbWavesEffect><mdb-icon far icon="save">
-                                    </mdb-icon> Aceptar cambio</button>
+                                    <button [disabled]="pue.invalid" type="submit" mdbBtn  size="sm" outline="true" class=" btn btn-primary btn-sm" mdbWavesEffect><i class="fas fa-save"></i> Aceptar cambio</button>
                                 </div>
                                 <input type="hidden" name="nEmpleado" [(ngModel)]="employees.nEmpleado">
                                 <input type="hidden" name="turnos" [(ngModel)]="employees.idTurno">
@@ -577,17 +584,60 @@
                 </mdb-tab>
 
 
-                <mdb-tab>
-                  <ng-template mdbTabTitle
-                    ><span><i class="fas fa-chart-line fa-fw me-2"></i>Agregar Jutificaciones</span></ng-template
-                  >
-                  Tab content 2
+                <mdb-tab >
+                  <ng-template  mdbTabTitle ><span><i class="fas fa-briefcase-medical fa-fw me-2"></i>Agregar Jutificaciones</span></ng-template>
+                  <!-- Justifaciones -->
+                  <form class="form-row text-center container" #addJ="ngForm" (ngSubmit)="addJus(addJ)">
+                    <div class="col-md-6">
+                        <label for="inputEmail4">Justificación</label>
+                        <select class="form-select" (change)="addChangeJu($event)">
+                            <option selected>Seleccione una Justificación</option>
+                        <option [value]="item.idJusti"  *ngFor="let item of just">{{ item.detallesJ}}</option>
+                        
+                    </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="inputEmail43">Fecha Inicio</label>
+                        <input type="date" name="fechaInicio" class="form-control" [(ngModel)]="fechaCambio" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputEmail43">Fecha Fin</label>
+                        <input type="date" name="fechaFin" class="form-control" [(ngModel)]="fechaFin">
+                    </div>
+                    <div class="col-md-12 top" *ngIf="!btnEditar">
+                        <button [disabled]="addJ.invalid" type="submit" mdbBtn  class="btn btn-primary btn-sm" mdbWavesEffect><i class="fas fa-save"></i> Guardar</button>
+                    </div>
+                    <input type="hidden" name="nEmpleado" [(ngModel)]="employees.nEmpleado">
+                    <input type="hidden" name="justificacion" [(ngModel)]="employees.idJustificacion" required>
+                    <input *ngIf="eP1" type="hidden" name="nEmpleado" [(ngModel)]="employees.nEmpleado" required>
+                    <input *ngIf="eP1" type="hidden" name="idServicio" [(ngModel)]="idServicio" required>
+
+                </form>
+                <div *ngIf="btnEditar" class="alert alert-info col-md-12 text-center animated zoomIn h4" role="alert">
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span> Generando plantilla...
+                </div>
+            
+            <p class="alert alert-secondary">Si desconoces la fecha fin de la justificación, deja el campo vacío. Recuerda actualizar la fecha fin cuando la conozcas.</p>
                 </mdb-tab>
+
                 <mdb-tab>
-                  <ng-template mdbTabTitle
-                    ><span><i class="fas fa-cogs fa-fw me-2"></i>Agregar Comentario</span></ng-template
-                  >
-                  Tab content 3
+                  <ng-template mdbTabTitle><span><i class="fas fa-comment-alt fa-fw me-2"></i> Agregar Comentario</span></ng-template>
+                  <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-6">
+                        <h5 class="mt-1 mb-2 alert alert-primary text-center" *ngIf="coment">{{coment}}</h5>
+                        <div class="md-form ml-0 mr-0">
+                          <input type="text" #come name="come" [(ngModel)]="com" type="text" id="form29" class="form-control " mdbInput>
+                          <label for="form29" class="ml-0">Cambie el comentario</label>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary btn-sm" (click)="addCo(come)"  mdbWavesEffect><i class="fas fa-save"></i> Aceptar </button>
+                </div>
                 </mdb-tab>
               </mdb-tabs>
           </div>

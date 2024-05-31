@@ -23,6 +23,11 @@ const routes: Routes = [
     loadChildren:()=> import('./Modulos/horarios/horarios.module').then(m => m.HorariosModule)
   },
   {
+    path: 'Cabezeras',
+    canActivate :[AuthGuard],
+    loadChildren:()=> import('./Modulos/cabezera/cabezera.module').then(m => m.CabezeraModule)
+  },
+  {
   path : '**',
   redirectTo: 'Main'
 

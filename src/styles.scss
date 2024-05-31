@@ -249,3 +249,20 @@ $light: #e5ecf2;
 .hr{
     border: 0.2px solid #850F8D;
 }
+
+.animate__animated.animate__fadeIn {
+    --animate-duration: 2s;
+  }
+  .q{
+    transform: scale(var(--escala, 0.8));
+    transition: transform 0.25s;
+  }
+  
+  .q:hover {
+      text-align: center;
+      background: #850F8D;
+      color: #ffffff!important;
+      --escala: 1;
+      border-radius: 10px;
+  }
+  

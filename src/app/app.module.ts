@@ -50,7 +50,10 @@ import { UbicarModalComponent } from './Modales/ubicar-modal/ubicar-modal.compon
 import { ReubicarModalComponent } from './Modales/reubicar-modal/reubicar-modal.component';
 import { BajaModalComponent } from './Modales/baja-modal/baja-modal.component';
 import { EliminarModalComponent } from './Modales/eliminar-modal/eliminar-modal.component';
-import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+import { AvisosComponent } from './Modales/avisos/avisos.component';
+import { LoadingComponent } from './Modales/loading/loading.component';
+
+
 
 
 
@@ -63,12 +66,14 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     ToastComponent,
-    AlertComponent,
     PefilModalComponent,
     UbicarModalComponent,
     ReubicarModalComponent,
     BajaModalComponent,
     EliminarModalComponent,
+    AvisosComponent,
+    LoadingComponent,
+   
   ],
  
   imports: [
@@ -77,38 +82,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    MdbAccordionModule,
-    MdbAutocompleteModule,
-    MdbCarouselModule,
-    MdbChartModule,
-    MdbCheckboxModule,
-    MdbCollapseModule,
-    MdbDatepickerModule,
-    MdbFormsModule,
-    MdbInfiniteScrollModule,
-    MdbLazyLoadingModule,
-    MdbLightboxModule,
-    MdbModalModule,
-    MdbNotificationModule,
-    MdbPopconfirmModule,
-    MdbPopoverModule,
-    MdbRadioModule,
-    MdbRangeModule,
-    MdbRatingModule,
-    MdbRippleModule,
-    MdbScrollspyModule,
-    MdbSelectModule,
-    MdbSidenavModule,
-    MdbSmoothScrollModule,
-    MdbStepperModule,
-    MdbStickyModule,
-    MdbTabsModule,
-    MdbTimepickerModule,
-    MdbTooltipModule,
-    MdbValidationModule,
     BrowserAnimationsModule,
-    MdbTableModule,
-   
+    MdbNotificationModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

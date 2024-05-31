@@ -1,0 +1,192 @@
+<app-menu></app-menu>
+<!-- Modificar trabajador -->
+<div class="topLoader" *ngIf="!loader">
+    <div class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-secondary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-success" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-danger" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-warning" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-info" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-light" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-dark" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+
+<div class="row conteiner animate__animated animate__fadeIn" *ngIf="loader">
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <div class="col-md-1">
+        <img [src]="employees.foto" alt="avatar" width="100">
+    </div>
+    <div class="col-md-2  top" (click)="volverPerfil()">
+        <button mdbBtn type="button" class="btn btn-secondary">
+            <i class="fas fa-sign-out-alt"></i>  Volver al listado</button>
+    </div>
+   <div class="col-md-4 top">
+    <mdb-accordion [borderless]="true">
+        <mdb-accordion-item>
+          <ng-template mdbAccordionItemHeader class="text-center"><i class="fas fa-pen-square"></i> &nbsp; Editar solo el turno</ng-template>
+          <ng-template mdbAccordionItemBody>
+            <div class="col-12  top" (click)="editarTurno(employees.turno)">
+            <div class="row">
+                <form class="text-center" #pue="ngForm" (ngSubmit)="edirPuesto(pue,employees.descripcion)">
+                    <div class="col-12">
+                        <label for="inputEmail4">Turno</label>
+                        <select class="form-select" name="turno" [(ngModel)]="employees.turno" required (change)="check($event)">
+                        <option selected>Seleccione un turno</option>
+                        <option [value]="item.turno"  *ngFor="let item of turnos">{{ item.descripcion}}</option>
+                        
+                    </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="inputEmail43">Fecha Cambio</label>
+                        <input type="date" name="fechaCambio" #fe class="form-control" [(ngModel)]="fechaCambio" required>
+                    </div>
+                    <div class="col-12 tb" *ngIf="!btnEditar ">
+
+                        <button [disabled]="pue.invalid" type="submit" mdbBtn  size="sm" outline="true" class=" btn btn-primary btn-sm" mdbWavesEffect><i class="fas fa-save"></i> Aceptar cambio</button>
+                    </div>
+                    <input type="hidden" name="nEmpleado" [(ngModel)]="employees.nEmpleado">
+                    <input type="hidden" name="turnos" [(ngModel)]="employees.idTurno">
+                    <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                </form>
+            </div>
+
+            <div class=" alert alert-primary text-center animated zoomIn" *ngIf="btnEditar ">
+                <h4 class="modal-title w-100" id="myModalLabel"> <span class="spinner-grow spinner-grow-sm">
+                </span> <span class="sr-only text-center">Loading...</span> Generando plantilla...</h4>
+            </div>
+        </div>
+          </ng-template>
+        </mdb-accordion-item>
+      </mdb-accordion>
+   </div>
+   <div class="col-md-1 tops "></div>
+
+    <div class="col-md-1 tops ">
+        <p class="alert alert-dark">Turno {{employees.turno}}</p>
+    </div>
+
+
+
+    <div class="top container col-md-9">
+
+        <form #editOperario="ngForm" (ngSubmit)="aeditarPersonal(editOperario)">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="inputEmail4">Nombre</label>
+                    <input type="text" placeholder="Nombre" [(ngModel)]="employees.nombre" name="nombre" required class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Apellidos</label>
+                    <input type="text" placeholder="Apellidos" [(ngModel)]="employees.apellidos" name="apellidos" required class="form-control">
+
+                </div>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Nro. Empleado</label>
+                    <input type="text" autocomplete="off" (keyup)="consultaEmpleado(nEmplea)" #nEmplea placeholder="Nro. Empleado" [(ngModel)]="employees.nEmpleado" name="nEmpleado" class="form-control" required>
+
+                </div>
+                <div class="alert alert-danger" *ngIf="error">
+                    <p>Número de Empleado repetido</p>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputEmail4">DNI/NIF</label>
+                    <input type="text" placeholder="DNI/NIF" [(ngModel)]="employees.dni" name="dni" class="form-control" required>
+
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Fecha Inicio</label>
+                    <input type="date" name="fechaInicio" class="form-control" [(ngModel)]="employees.fechaInicio" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Fecha Nacimiento</label>
+                    <input type="date" name="fechaNacimiento" class="form-control" [(ngModel)]="employees.fechaNacimiento" required>
+
+                </div>
+
+                <div class="col-md-3">
+                    <label for="inputEmail4">Contrato</label>
+                    <select class="form-select text-uppercase" name="contrato" required [(ngModel)]="employees.contrato" (change)="cambioPuesto($event)">
+                    <option selected>Seleccione un contrato</option>
+                    <option class="text-uppercase" [value]="item.idContrato"  *ngFor="let item of contratos">{{ item.nombre}}</option>
+                    
+                </select></div>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Teléfono</label>
+                    <input type="text" placeholder="Teléfono" [(ngModel)]="employees.telefono1" name="telefono1" required class="form-control">
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Teléfono opional</label>
+                    <input type="text" placeholder="Teléfono opcional" [(ngModel)]="employees.telefono2" name="telefono2" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="inputEmail4">Email opional</label>
+                    <input type="text" placeholder="Email opcional" [(ngModel)]="employees.email" name="email" class="form-control">
+                </div>
+                <input type="hidden" name="turno" [(ngModel)]="employees.turno">
+
+                <div class="col-md-3">
+                    <label for="inputEmail4">Puesto</label>
+                    <select class="form-select" name="puesto_id" required [(ngModel)]="employees.puesto_id" (change)="cambioPuesto($event)">
+                    <option selected>Seleccione un puesto</option>
+                    <option [value]="item.idPuesto"  *ngFor="let item of puestos">{{ item.descripcionPuesto}}</option>
+                    
+                </select></div>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Plus</label>
+                    <select class="form-select" name="bocadillo" required [(ngModel)]="employees.bocadillo">
+                    <option value="B">B</option>
+                    <option value="N">Sin plus</option>
+                    
+                    
+                </select></div>
+                <div class="col-md-3">
+                    <label for="inputEmail43">Fecha Cambio</label>
+                    <input type="date" name="fechaCambio" class="form-control" ngModel required>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputEmail4">Categoría</label>
+                    <input type="text" placeholder="CATEGORÍA" [(ngModel)]="employees.categoriaE" name="categoriaE" class="form-control">
+
+                </div>
+                <div class="col-md-3 top " *ngIf="!bot && !error">
+                    <button [disabled]="editOperario.invalid" type="submit" class="btn btn-outline-success btn-block" mdbWavesEffect><mdb-icon far icon="check-circle"></mdb-icon> GUARDAR CAMBIOS</button>
+                </div>
+                <div class="col-md-6 t " *ngIf="bot">
+                    <div mdbBtn class="text-primary" type="div" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando plantilla anual ...
+                    </div>
+                </div>
+            </div>
+
+
+            <input type="hidden" name="foto" [(ngModel)]="employees.foto">
+            <input type="hidden" name="id" [(ngModel)]="employees.id">
+            <input type="hidden" name="activo" [(ngModel)]="employees.activo">
+        </form>
+    </div>
+</div>

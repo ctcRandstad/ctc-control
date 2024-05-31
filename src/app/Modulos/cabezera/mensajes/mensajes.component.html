@@ -1,0 +1,108 @@
+<app-menu></app-menu>
+  
+    <section class="top animate__animated animate__fadeIn" style="background-color: #F1F1F1;">
+        <div class="container py-5">
+      
+          <div class="row">
+            <div class="col-md-12">
+      
+              <div class="card" id="chat3" style="border-radius: 15px;">
+                <div class="card-body">
+      
+                  <div class="row">
+                    <div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0">
+                      <div class="p-3">
+                        <div class="input-group rounded mb-3">
+                         <button class="btn btn-secondary" (click)="reload()"><i class="fas fa-sync"></i> Recargar SMS</button>
+                        </div>
+          <!-- Lista de los del Mensaje -->
+                        <div data-mdb-perfect-scrollbar-init style="position: relative; height: 400px;overflow: auto;">
+                          <ul class="list-unstyled mb-0" >
+                            <li class="p-2 border-bottom" *ngFor="let item of mensajes; let i=index" >
+                              <a  class="d-flex justify-content-between cursor" (click)="verM(item,i)" [ngClass]="{'active': indexs == i}">
+                                <div class="d-flex flex-row">
+                                  <div>
+                                    <img
+                                      src="assets/img/avatar.png"
+                                      alt="avatar" class="d-flex align-self-center me-3" width="60">
+                                    <span *ngIf="item.respuesta" class="badge bg-danger badge-dot"></span>
+                                    <span *ngIf="!item.respuesta" class="badge bg-success badge-dot"></span>
+                                  </div>
+                                  <div class="pt-1">
+                                    <p class="fw-bold mb-0">{{item.nombre}}, {{item.apellidos}}</p>
+                                    <p class="small text-muted col-8 text-truncate" style="max-width: 150px">{{item.comentario}}</p>
+                                  </div>
+                                </div>
+                                <div class="pt-1">
+                                  <p class="small text-muted mb-1">{{item.fechaM | date: 'medium'}}</p>
+                                  <span class="badge bg-success rounded-pill float-end" *ngIf="item.leido == 1">
+                                    <i class="fas fa-envelope-open-text"></i>
+                                  </span>
+                                  <span class="badge bg-danger rounded-pill float-end" *ngIf="item.leido == 0">
+                                    <i class="far fa-envelope"></i>
+                                  </span>
+                                </div>
+                            </a>
+                            <cite *ngIf="item.respuesta" class="text-danger">Chat Cerrado</cite>
+                            </li>
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <br>
+                            <button mdbBtn class="btn btn-primary" *ngIf="!finData && mensajes " (click)="scroll()">Cargar más reportes</button>
+                            <div class="alert alert-success" role="alert" *ngIf="!mensajes">
+                                <p class="text-center">No tiene reportes para mostrar.</p>
+                            </div>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Detalle del Mensaje -->
+                    <div class="col-md-6 col-lg-7 col-xl-7 border-start" *ngIf="!mostraMensaje"></div>
+                    <div class="col-md-6 col-lg-7 col-xl-7 " *ngIf="mostraMensaje">
+                      <div class="pt-3 pe-3" data-mdb-perfect-scrollbar-init
+                        style="position: relative; height: 400px;overflow: auto;" >
+                        <hr class="hr">
+                        <!-- Operarios -->
+                        <div class="d-flex flex-row justify-content-end">
+                            <div>
+                              <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{data.comentario}}.</p>
+                              <p class="small me-3 mb-3 rounded-3 text-muted">{{data.fechaM | date: 'H:mm'}} {{data.fechaM | date: 'MMM d, y'}} | Mes {{data.fecha }}</p>
+                            </div>
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                              alt="avatar 1" style="width: 45px; height: 100%;">
+                          </div>
+
+                        <!-- Administrador -->
+                        <div class="d-flex flex-row justify-content-start" *ngIf="data.respuesta">
+                          <img src="assets/img/logo.png"
+                            alt="avatar 1" style="width: 55px; height: 110%;">
+                          <div>
+                            <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;" > {{data.respuesta}}.</p>
+                            <p class="small ms-3 mb-3 rounded-3 text-muted float-end">{{data.fechaR | date: 'MMM d, y'}} | {{data.fechaR | date: 'H:mm'}}</p>
+                          </div>
+                        </div>
+                        
+                      </div>
+                        <!-- Envio de los mensajes -->
+                      <div class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2" *ngIf="!data.respuesta">
+                        <img src="assets/img/logo.png"
+                          alt="avatar 3" style="width: 50px; height: 110%;">
+                        <input type="text" class="form-control form-control-lg" id="exampleFormControlInput2"
+                          placeholder="Escribe un mensaje" name="m" [(ngModel)]="me" #mensa>
+                        <a class="ms-1 text-muted" ><i class="fas fa-paperclip"></i></a>
+                        <a class="ms-3 text-muted" ><i class="fas fa-smile"></i></a>
+                        <a class="ms-3 cursor" (click)="enviarM(mensa,data.nEmpleado)" ><i class="fas fa-paper-plane"></i></a>
+                      </div>
+      
+                    </div>
+                  </div>
+      
+                </div>
+              </div>
+      
+            </div>
+          </div>
+      
+        </div>
+      </section>
+  

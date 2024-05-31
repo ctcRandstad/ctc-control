@@ -1,0 +1,8 @@
+.margin{
+    /* Arriba | Derecha | Abajo | Izquierda */
+    margin: 50px 3em 0 3em;
+}
+
+.tbl{
+    margin-top: 14px;
+}

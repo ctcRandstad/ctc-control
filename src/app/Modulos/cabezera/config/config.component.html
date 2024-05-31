@@ -1,0 +1,610 @@
+
+<app-menu></app-menu>
+<section class="top animate__animated animate__fadeIn margin" >
+    <mdb-tabs [pills]="true" [vertical]="true" class="text-uppercase">
+         <mdb-tab>
+            <ng-template mdbTabTitle><span><i class="fas fa-home"></i> Servicio</span></ng-template>
+            <div class="animate__animated animate__fadeIn" >
+                <form #editarS="ngForm" (ngSubmit)="editar(editarS)">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <mdb-form-control>
+                                <input mdbInput name="nombre" [(ngModel)]="servicio.nombre" type="text" id="form3Example1" class="form-control" />
+                                <label mdbLabel class="form-label" for="form3Example1">Nombre del Servicio</label>
+                              </mdb-form-control>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <mdb-form-control>
+                                <input mdbInput name="provincia" [(ngModel)]="servicio.provincia" type="text" id="form3Example1" class="form-control" />
+                                <label mdbLabel class="form-label" for="form3Example1">Provincia del Servicio</label>
+                              </mdb-form-control>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <mdb-form-control>
+                                <input mdbInput name="direccion" [(ngModel)]="servicio.direccion" type="text" id="form3Example1" class="form-control" />
+                                <label mdbLabel class="form-label" for="form3Example1">Dirección del Servicio</label>
+                              </mdb-form-control>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <mdb-form-control>
+                                <input mdbInput name="municipio" [(ngModel)]="servicio.municipio" type="text" id="form3Example1" class="form-control" />
+                                <label mdbLabel class="form-label" for="form3Example1">Municipio del Servicio</label>
+                              </mdb-form-control>
+                        </div>
+                    </div>
+                        <br>
+                    <button *ngIf="!btnSi" type="submit" class="btn btn-primary btn-lg"> <i class="far fa-hdd"></i> Aceptar</button>
+                    <input type="hidden" name="idServicio" [(ngModel)]="servicio.idServicio" class="form-control" id="inputCity">
+                </form>
+                <div class="text-center" *ngIf="btnSi">
+                    
+                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                 
+                    <p class="text-danger h4 animated zoomIn infinite"> Editando......</p>
+                </div>
+            </div>
+          </mdb-tab>
+
+          <mdb-tab>
+            <ng-template mdbTabTitle><span><i class="far fa-calendar-alt"></i> Calendarios</span></ng-template>
+            <div class="animate__animated animate__fadeIn" >
+                <div class="row">
+                    <div class="col-md-3 text-capitalize">
+                        <mdb-form-control>
+                            <mdb-select (ngModelChange)="getSelectedValue($event)" [(ngModel)]="selectedValue">
+                              <mdb-option *ngFor="let option of data" [value]="option.value">{{ option.label}}</mdb-option>
+                            </mdb-select>
+                            <label mdbLabel class="form-label">Listado de Turnos</label>
+                          </mdb-form-control>
+                    </div>
+                    <!-- Turnos -->
+                    <div class="col-md-9 text-capitalize" *ngIf="mostrarI">
+                        <form #ed="ngForm" (ngSubmit)="editarT(ed)">
+                            <div class="form-row row">
+                                <div class="col-md-2">
+                                    <input type="hidden" readonly name="id" [(ngModel)]="id" class="form-control" placeholder="First name">
+                                    <input type="hidden" name="id" [(ngModel)]="id" class="form-control" placeholder="First name">
+                                    <input type="text" name="des" [(ngModel)]="des" class="form-control" placeholder="Descripción">
+                                </div>
+                                <div class="col-md-3">
+                                    {{jefeTurno}}
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-select" name="jefeTurno" ngModel placeholder="Empleados">
+                                        <option selected>Empleados</option>
+                                       <option *ngFor="let item of datas" [value]="">    {{ item.apellidos}} {{ item.nombre}}</option>
+                                   </select>
+                                </div>
+                                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input mdbCheckbox [(ngModel)]="estado" name="estadoH"  class="form-check-input" type="checkbox"  id="flexCheckDefault"  />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <span class="text-danger" *ngIf="!estado"> Habilitar</span>
+                                            <span class="text-primary" *ngIf="estado"> Habilitado</span>
+                                        </label>
+                                      </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary btn-block"> Editar Turno</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br>
+
+                <!-- Puestos -->
+                <div class="row">
+                    <div class="col-md-3 text-capitalize">
+                        <mdb-form-control>
+                            <mdb-select (ngModelChange)="getSelectedValueP($event)" [(ngModel)]="selectedValueP">
+                              <mdb-option *ngFor="let option of dataP" [value]="option.value">{{ option.label}}</mdb-option>
+                            </mdb-select>
+                            <label mdbLabel class="form-label">Listado de Puestos</label>
+                          </mdb-form-control>
+                    </div>
+                    <div class="col-md-9 text-capitalize" *ngIf="mostrarP">
+                        <form #ed="ngForm" (ngSubmit)="editarP(ed)">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="text" readonly name="idP" [(ngModel)]="idP" class="form-control" placeholder="First name">
+                                    <input type="hidden" name="idP" [(ngModel)]="idP" class="form-control" placeholder="First name">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="desP" [(ngModel)]="desP" class="form-control" placeholder="Descripción">
+                                </div>
+                                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input mdbCheckbox [(ngModel)]="estadoP" name="estadoP"  class="form-check-input" type="checkbox"  id="flexCheckDefault"  />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <span class="text-danger" *ngIf="!estadoP"> Habilitar</span>
+                                            <span class="text-primary" *ngIf="estadoP"> Habilitado</span>
+                                        </label>
+                                      </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary btn-block"> Editar Puestos</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3 text-capitalize">
+                        <mdb-form-control>
+                            <mdb-select (ngModelChange)="getSelectedValueC($event)" [(ngModel)]="selectedValueC">
+                              <mdb-option *ngFor="let option of dataC" [value]="option.value">{{ option.label}}</mdb-option>
+                            </mdb-select>
+                            <label mdbLabel class="form-label">Listado de Convenios</label>
+                          </mdb-form-control>
+                    </div>
+                    <div class="col-md-9 text-capitalize" *ngIf="mostrarC">
+                        <form #edC="ngForm" (ngSubmit)="editarC(edC)">
+                            <div class="row">
+
+                                <input type="hidden" name="idC" [(ngModel)]="idC" class="form-control" placeholder="First name">
+                                <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                                <div class="col text-dark">
+                                    <mdb-form-control>
+                                        <input mdbInput name="horas" [(ngModel)]="horas" type="text" id="form3Example1" class="form-control" />
+                                        <label mdbLabel class="form-label" for="form3Example1">Horas anuales</label>
+                                      </mdb-form-control>
+                                </div>
+                                <div class="col text-dark">
+                                    <mdb-form-control>
+                                        <input mdbInput name="horaDias" [(ngModel)]="horaDias" type="text" id="form3Example1" class="form-control" />
+                                        <label mdbLabel class="form-label" for="form3Example1">Horas diarias</label>
+                                      </mdb-form-control>
+                                    <span class="text-danger"><small>(Utiliza un punto para separar decimales)</small></span>
+                                </div>
+
+                                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                                <div class="col text-dark">
+                                    <div class="form-check">
+                                        <input mdbCheckbox [(ngModel)]="estadoC" name="estadoC"  class="form-check-input" type="checkbox"  id="flexCheckDefault"  />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <span class="text-danger" *ngIf="!estadoC"> Habilitar</span>
+                                            <span class="text-primary" *ngIf="estadoC"> Habilitado</span>
+                                        </label>
+                                      </div>
+                                   
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary"> Editar horas anuales</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-md-3 text-capitalize">
+                        <mdb-form-control>
+                            <mdb-select (ngModelChange)="getSelectedValueJu($event)" [(ngModel)]="selectedValueJu">
+                              <mdb-option *ngFor="let option of dataJu" [value]="option.value">{{ option.label}}</mdb-option>
+                            </mdb-select>
+                            <label mdbLabel class="form-label">Listado de Justificaciones</label>
+                          </mdb-form-control>
+                    </div>
+                    <div class="col-md-9 text-capitalize" *ngIf="mostrarJu">
+                        <form #edJ="ngForm" (ngSubmit)="editarJ(edJ)">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" name="name" [(ngModel)]="detalle" class="form-control" placeholder="Cambiar el  detalle">
+                                    <input type="hidden" name="idJu" [(ngModel)]="idJu" class="form-control" placeholder="First name">
+                                </div>
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input mdbCheckbox [(ngModel)]="estadoJu" name="pluses"  class="form-check-input" type="checkbox"  id="flexCheckDefault"  />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <span class="text-danger" *ngIf="!estadoJu"> Habilitar plus</span>
+                                            <span class="text-primary" *ngIf="estadoJu"> Plus habilitado</span>
+                                        </label>
+                                      </div>
+                                </div>
+
+
+                                <div class="col">
+                                    <button [disabled]="edJ.invalid" type="submit" class="btn btn-primary btn-block"> Editar Justificación</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <button type="button" (click)="reset()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-spinner fa-spin text-white"></i>    Reset
+               </button> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <a href="{{url}}calendario/index.php?idServicio={{idServicio}}&ruta=zrtmg7896@$" target="_blanck" class="btn btn-primary btn-sm">
+                    <i class="far fa-calendar-alt"></i> Cargar calendario
+                </a>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <a (click)="abrirVentana('calendario/tipoTurno.php?idServicio=')" class="btn btn-primary btn-sm ">
+                    <i class="far fa-clock"></i> Horarios turnos
+                </a>
+            </div>
+
+          </mdb-tab>
+
+          <mdb-tab>
+            <ng-template mdbTabTitle><span><i class="fas fa-business-time"></i> Lista de Contratos</span></ng-template>
+
+            <div class="animate__animated animate__fadeIn" >
+                <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+                    <a data-toggle="modal" data-target="#frame" (click)="addModal()" mdbWavesEffect floating="true" size="lg" color="red" class="btn btn-danger fixed-abajo" mdbWavesEffect >
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+                <!-- listado de contartos -->
+        
+                <table class="table datatable-table table-sm">
+                    <thead class="grey lighten-1 text-white">
+                        <tr>
+                            <!-- <td>N° contrato</td> -->
+                            <td>Nombre</td>
+                            <td>Dirección</td>
+                            <td>Teléfono</td>
+                            <td>Vacaciones</td>
+                            <td>Editar</td>
+                            <td>Eliminar</td>
+                            <td class="cursor text-dark">
+                              <a   tabindex="0"
+                              trigger="focus"
+                              mdbPopoverTitle="Usuarios"
+                              mdbPopover="A continuación se mostrarán los usuarios del sistema E.T.T .">  
+                              <i class="fas fa-users"></i>
+                            </a> 
+                            </td>
+                            <td class="cursor text-dark">
+                                <a tabindex="0"
+                                trigger="focus"
+                                mdbPopoverTitle="Contraseñas"
+                                mdbPopover="La contraseña es:  CTC (en mayúscula) más   el nombre de la E.T.T.(en minúscula) EJ: CTCmarlex.">  
+                                <i class="fas fa-unlock-alt "></i>
+                              </a> 
+                                <mdb-icon fas icon="key" mdbPopover="" placement="right" mdbPopoverHeader="Contraseñas"></mdb-icon>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody class="text-uppercase">
+                        <tr *ngFor="let item of dataContrato">
+                            <!-- <td>{{ item.idContrato}}</td> -->
+                            <td>{{ item.nombre}}</td>
+                            <td>{{ item.direccion}}</td>
+                            <td>{{ item.telefono}}</td>
+                            <td>{{ item.vacaciones}}</td>
+                            <td class="cursor q text-primary" (click)="modal(item)">
+                                <i class="fas fa-edit fa-lg"></i>
+                            </td>
+                            <td class="cursor q   text-danger " (click)="eliminarE(item.nombre,item.idContrato)">
+                                <i class="fas fa-trash-alt fa-lg"></i>
+                            </td>
+                            <td>{{item.idServicio}}-{{item.nombre}}</td>
+                            <td>*</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </mdb-tab>
+
+          <mdb-tab>
+            <ng-template mdbTabTitle><span (click)="getConfogHoras()"><i class="fas fa-user-clock"></i> horas</span></ng-template>
+            <div class="animate__animated animate__fadeIn" >
+                <div class="alert alert-secondary" role="alert">
+                    Configuración de horas <span class="float-right">  <!-- Material checked -->
+                      
+                    <div class="form-check float-end">
+                        <input [checked]="bolsaHabilitado" (click)="bolsaH(bolsa)"  mdbCheckbox class="form-check-input"  type="checkbox"  id="flexCheckDefault"/>
+                        <label class="form-check-label" for="flexCheckDefault">  
+                            <span *ngIf="bolsaHabilitado" class="text-success"> Bolsas de horas Habilitado</span>
+                            <span *ngIf="!bolsaHabilitado" class="text-danger"> Bolsas de horas Deshabilitado</span>
+                        </label>
+                      </div>
+                    </span>
+                </div>
+
+
+                <table class="table datatable-table table-sm"
+                        mdbTable
+                        mdbTableSort
+                        #tableHoras="mdbTable"
+                        #sort="mdbTableSort"
+                        [dataSource]="configHoras"
+                        [sort]="sort"
+                        [pagination]="paginations">
+                        <thead class="grey lighten-1  text-white">
+                        <tr>
+                            <td>Columna</td>
+                            <td>Descripción</td>
+                            <td>estada</td>
+                            <td>Editar</td>
+                            <td>Estado</td>
+                            <td>Tipo plus</td>
+                            <td>Tipología</td>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!loadingHoras">
+                        <tr *ngFor="let item of tableHoras.data">
+                            <td>{{ item.columna}}</td>
+                            <td>{{ item.descripcion}}</td>
+                            <td *ngIf="item.estadoColumna == 0 ">Desabilitada</td>
+                            <td *ngIf="item.estadoColumna == 1 ">Habilitada</td>
+                            <td class="cursor text-primary q" >
+                                <i class="fas fa-edit fa-lg" (click)="editH(item.idHora ,item.descripcion )"></i> 
+                                &nbsp; &nbsp; &nbsp;
+                                <mdb-icon *ngIf="item.pluses == 1" class="text-primary" fas icon="cog" size="2x" (click)="configPluses(item)"> </mdb-icon>
+                            </td>
+                            <td *ngIf="item.estadoColumna == 0"  (click)="estadoHoras(item.idHora, item.estadoColumna)">
+                                 <button class="btn btn-danger cursor btn-sm"> Desabilitada</button>
+                                 </td>
+                            <td *ngIf="item.estadoColumna == 1"  (click)="estadoHoras(item.idHora, item.estadoColumna)"> 
+                                <button  class="btn btn-primary cursor btn-sm">Habilitada</button> 
+                            </td>
+                            <td *ngIf="item.tipoPlus == 1">Individual</td>
+                            <td *ngIf="item.tipoPlus == 2">Colectivo</td>
+                            <td *ngIf="!item.tipoPlus">-----</td>
+                            <td *ngIf="item.tipologia">{{ item.tipologia}}</td>
+                            <td *ngIf="!item.tipologia">-----</td>
+                        </tr>
+                    </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #paginations></mdb-table-pagination>
+                                </td>
+                            </tr>
+                        </tfoot>
+                </table>
+                <ng-container *ngIf="loadingHoras">
+                    <div class="datatable-loader bg-light">
+                      <span class="datatable-loader-inner">
+                        <span class="datatable-progress bg-primary"></span>
+                      </span>
+                    </div>
+                    <p class="text-center text-muted my-4">Cargando resultados...</p>
+                  </ng-container>
+
+                <hr>
+
+
+
+                <form #config="ngForm" (ngSubmit)="addConfig(config)">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="form8">Descipción</label>
+                            <div class="md-form">
+                                <textarea name="texto" [(ngModel)]="texto" type="text" id="form8" class="md-textarea form-control"></textarea>
+                            </div>
+                            <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+
+                        </div>
+                        <div class="col-md-3 top">
+                            <button type="submit" mdbBtn class="btn btn-secondary" mdbWavesEffect>Aceptar</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <br><br>
+          </mdb-tab>
+
+          <mdb-tab>
+            <ng-template mdbTabTitle><span (click)="getTitulos()"><i class="fas fa-file-import"></i> documentos</span></ng-template>
+            <div class="animate__animated animate__fadeIn" >
+                <div class="alert alert-secondary" role="alert">
+                    Agregar nueva asignación
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form #doc="ngForm" (ngSubmit)="addTitulo(doc)">
+                            <div class="md-form mt-3">
+                                <mdb-form-control>
+                                    <input mdbInput type="text" id="typeText" class="form-control" equired name="titulo" [(ngModel)]="titulo" />
+                                    <label mdbLabel class="form-label" for="typeText">Título</label>
+                                  </mdb-form-control>
+
+                                <input type="hidden" name="idDocumento" [(ngModel)]="idDocumento">
+                                <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                            </div>
+                            <br>
+                            <div class="form-check">
+                                <input mdbCheckbox class="form-check-input" type="checkbox" name="caducidad" [(ngModel)]="cadu"  id="flexCheckDefault"/>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Sin  fecha de caducidad
+                                </label>
+                            </div>
+                            <br>
+                            <button [disabled]="doc.invalid" mdbBtn  class="btn btn-primary" mdbWavesEffect type="submit">Aceptar</button>
+                        </form>
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table datatable-table table-sm"
+                        mdbTable
+                        mdbTableSort
+                        #tables="mdbTable"
+                        #sort="mdbTableSort"
+                        [dataSource]="todoTitulos"
+                        [sort]="sort">
+                        <thead class="grey lighten-1  text-white">
+                            <tr>
+                                <td>Título</td>
+                                <td>Caducidad</td>
+                                <td>Editar</td>
+                                <td>Borrar</td>
+                            </tr>
+                         </thead>
+                         <tbody>
+                             <tr *ngFor="let item of tables.data">
+                                <td class="text-uppercase">{{item.titulo}}</td>
+                                <td class="text-uppercase text-primary" *ngIf="item.caducidadD == 0">Con caducidad</td>
+                                <td class="text-uppercase text-warning" *ngIf="item.caducidadD == 1">Sin caducidad</td>
+                                <!-- <td></td> -->
+                                <td (click)="editT(item)" class="text-primary cursor q">
+                                    <i class="fas fa-edit fa-lg"></i>
+                                </td>
+                                <td (click)="borrar(item,docs)" class="text-danger cursor q">
+                                    <i class="fas fa-trash-alt fa-lg"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+          </mdb-tab>
+
+          <mdb-tab >
+            <ng-template mdbTabTitle><span (click)="getTitulos1()"><i class="fas fa-comment-alt"></i> Comentarios de fichajes</span></ng-template>
+               
+
+            <div class="animate__animated animate__fadeIn">
+                <div class="alert alert-secondary" role="alert">
+                    Agregar nuevo comentario de fichajes.
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form #doc1="ngForm" (ngSubmit)="addTitulo1(doc1)">
+                            <div class="md-form mt-3">
+                               
+                                <mdb-form-control>
+                                    <textarea  mdbInput required name="tituloF" [(ngModel)]="tituloF" type="text" id="form1" class="form-control" ></textarea>
+                                    <label mdbLabel class="form-label" for="form1">Comentario</label>                  
+                                  </mdb-form-control>
+
+                                <input type="hidden" name="idDocumentoF" [(ngModel)]="idDocumentoF">
+                                <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                            </div>
+                            <br>
+                            <button [disabled]="doc1.invalid" mdbBtn  class="btn btn-primary" mdbWavesEffect type="submit">Aceptar</button>
+                        </form>
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table datatable-table table-sm"
+                        mdbTable
+                        mdbTableSort
+                        #table="mdbTable"
+                        #sort="mdbTableSort"
+                        [dataSource]="todoTitulos1"
+                        [sort]="sort"
+                        [pagination]="pagination"
+                        >
+                        <thead class="grey lighten-1  text-white">
+                            <tr>
+                                <td>Comentario</td>
+                                <td>Editar</td>
+                                <!-- <td>Borrar</td> -->
+                            </tr>
+                        </thead>
+                        <tbody class="datatable-body" *ngIf="!loading">
+                            <tr *ngFor="let item of table.data">
+                                <td class="text-uppercase">{{item.tituloF}}</td>
+                                <td (click)="editT1(item)" class="text-primary cursor q">
+                                    <i class="fas fa-edit fa-lg"></i>
+                                </td>
+                                <!-- <td (click)="borrar1(item,docs)" class="text-danger cursor">
+                                    <mdb-icon fas icon="trash" size="lg"></mdb-icon>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <mdb-table-pagination [entries]="5" rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
+                                </td>
+                            </tr>
+                        </tfoot>
+                        </table>
+                        <ng-container *ngIf="loading">
+                            <div class="datatable-loader bg-light">
+                              <span class="datatable-loader-inner">
+                                <span class="datatable-progress bg-primary"></span>
+                              </span>
+                            </div>
+                            <p class="text-center text-muted my-4">Cargando resultados...</p>
+                          </ng-container>
+                    </div>
+                </div>
+
+            </div>
+          </mdb-tab>
+
+          <mdb-tab>
+            <ng-template  mdbTabTitle><span (click)="getSolicitud()"><i class="fas fa-list" ></i> listado de solicitudes</span></ng-template>
+           
+            
+            
+            <div class="row animate__animated animate__fadeIn">
+                    <div class="alert alert-secondary" role="alert">
+                        Agregar nueva solicitud.
+                    </div>
+                    <div class="col-md-4">
+                        <form #soli="ngForm" (ngSubmit)="addSolicitud(soli)">
+                            <div class="md-form mt-3">
+                                <mdb-form-control>
+                                    <input mdbInput required name="tituloL" [(ngModel)]="tituloL" type="text" id="form1" class="form-control" />
+                                    <label mdbLabel class="form-label" for="form1">Nombre de la solicitud</label>
+                                  </mdb-form-control>
+
+                                <input type="hidden" name="idListado" [(ngModel)]="idListado">
+                                <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
+                            </div>
+                            <br>
+                            <button [disabled]="soli.invalid" mdbBtn  block="true" class="btn btn-primary" mdbWavesEffect type="submit">Aceptar</button>
+                        </form>
+                    </div>
+                   
+                    <div class="col-md-7 tbl">
+                        <table class="table datatable-table table-sm"
+                        mdbTable
+                        mdbTableSort
+                        #table1="mdbTable"
+                        #sort="mdbTableSort"
+                        [dataSource]="todoSolicitud"
+                        [sort]="sort">
+                        <thead class="grey lighten-1  text-white">
+                            <tr>
+                                <td>Solicitud</td>
+                                <td>Editar</td>
+                                <td>Habilitar / Deshabilitar</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let item of table1.data">
+                                    <td *ngIf="item.estadoS == 1" class="text-uppercase"> {{item.tituloL}}</td>
+                                    <td *ngIf="item.estadoS == 0" class="text-uppercase text-danger"> <del>  {{item.tituloL}}</del></td>
+                                    <td (click)="editSoli(item)" class="text-primary cursor q">
+                                        <i class="fas fa-edit fa-lg"></i>
+                                    </td>
+                                    <td *ngIf="item.estadoS== 1" (click)="bo(item.idListado, item.estadoS)" class="text-danger cursor text-center q">
+                                        <i class="fas fa-trash-alt fa-lg"></i>
+                                    </td>
+                                    <td *ngIf="item.estadoS== 0" (click)="bo(item.idListado, item.estadoS)" class="text-success cursor q text-center">
+                                        <i class="fas fa-check-double fa-lg"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+          
+          </mdb-tab>
+
+      </mdb-tabs>
+</section>

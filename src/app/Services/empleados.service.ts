@@ -795,7 +795,7 @@ export class EmpleadosService {
     }));
   }
 
-  eliminarD( idDocumento:number):Observable<any>{
+  eliminarD( idDocumento:any):Observable<any>{
     return this.http.post(this.url +"empleados/empleados.php?id=eliminarD", {'idDocumento' : idDocumento})
     .pipe(
       map((e)=> {  

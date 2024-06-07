@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { MdbTableDirective } from 'mdb-angular-ui-kit/table';
 import { AvisosComponent } from 'src/app/Modales/avisos/avisos.component';
@@ -19,13 +20,20 @@ export class SolicitudesComponent implements OnInit {
     private _alerta:NotificacionService,
     private excelService:ExcelService,
     private _empleados:EmpleadosService,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private ruta: Router,
   ) { }
   idServicio:any;
-  
+  tipoUsuario:any
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
     this.idServicio = atob(ser);
+    let tipoUsuario:any = localStorage.getItem('rol');
+    this.tipoUsuario = atob(tipoUsuario);
+    if (this.tipoUsuario == 'E2020') {
+      this.ruta.navigate(['Empleados']);
+      return;
+    }
   }
 
   filterQuery:string='';
@@ -57,7 +65,6 @@ export class SolicitudesComponent implements OnInit {
         alert('Sin mensajes guardados.')
       } else {
         this.sms = data;
-        console.log(this.sms);
         this.modalRef=  this.modalService.open(AvisosComponent, {
           animation: true,
           backdrop: true,

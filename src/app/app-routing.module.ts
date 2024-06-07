@@ -28,6 +28,16 @@ const routes: Routes = [
     loadChildren:()=> import('./Modulos/cabezera/cabezera.module').then(m => m.CabezeraModule)
   },
   {
+    path: 'Encargados',
+    canActivate :[AuthGuard],
+    loadChildren:()=> import('./Modulos/encargados/encargados.module').then(m => m.EncargadosModule)
+  },
+  {
+    path: 'Consultas',
+    canActivate :[AuthGuard],
+    loadChildren:()=> import('./Modulos/consultas-anteriores/consultas-ant.module').then(m => m.ConsultasAntModule)
+  },
+  {
   path : '**',
   redirectTo: 'Main'
 
@@ -36,7 +46,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes )],
+  imports: [RouterModule.forRoot(routes , { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

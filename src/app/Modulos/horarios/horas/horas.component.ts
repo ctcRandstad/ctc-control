@@ -126,7 +126,9 @@ datos:any;
 turnos='aaa';
 datosConsulta:any;
 loadingHoras:boolean=true;
+mostrarBtn:boolean=false;
   buscar(action:any , alertaSinValidar:any){
+    this.mostrarBtn = true;
     this.filterQuery =''
     this.datosConsulta = action.value;
     this.horasMostrar = false;
@@ -143,7 +145,8 @@ loadingHoras:boolean=true;
       if (data == 'no') {
       this.datas=false;
       // this.loading=false;
-        this._alerta.openToast1('LA FECHA DE INICIO ES MENOR A LA DE HOY...' , 'bg-danger text-white' , 'ERROR')
+        this._alerta.openToast1('LA FECHA DE INICIO ES MENOR A LA DE HOY...' , 'bg-danger text-white' , 'ERROR');
+        this.mostrarBtn = false;
       }else{
 
         this.dataSource = data;
@@ -161,16 +164,17 @@ loadingHoras:boolean=true;
 
           setTimeout(()=>{
           this.modalM.close();
-            // this.loading = false;
-            this.datas = true;
+          this.datas = true;
           },2000)
           
-          }else{
-             this.datas = true;
-          }
-        });
-        setTimeout(()=>{
-          this.loadingHoras = false;
+        }else{
+          this.datas = true;
+        }
+      });
+      setTimeout(()=>{
+        this.loadingHoras = false;
+        this.mostrarBtn = false;
+
         },3000);
     }
     });
@@ -186,34 +190,36 @@ loadingHoras:boolean=true;
     this.fechaTrabajo = item.fechaTrabajo
     this.nombre = item.nombre,
     this.apellidos = item.apellidos,
-    this.fechaTrabajo = item.fechaTrabajo
-  }
+    this.fechaTrabajo = item.fechaTrabajo;
 
-  addComent(cometario:any,errores:any){
-   
-
-   this._empleados.addCometario(cometario.value)
-   .subscribe(data=>{ 
-
-      if (data == 'success') {
-        this._alerta.openToast1('Comentario guardado' , 'bg-sucess text-white' , 'OK');
-        this._empleados.consultaProgramacionAdmin(this.fechas)
-        .subscribe(data=>{ 
-            this.dataSource = data;        
+    this.modalM =  this.modalService.open(HorasModalComponent, {
+      containerClass: 'right',
+      modalClass: 'modal-side modal-top-right',
+      ignoreBackdropClick: true,
+      data: {
+       param:5,
+       nEmpleado:this.nEmpleado,
+       fechaTrabajo:this.fechaTrabajo,
+       idServicio:this.idServicio,
+       name:this.nombre,
+       lastName:this.apellidos,
+       comentF: this.comentF
+    
+      },
+    });
+    this.modalM.onClose.subscribe((message: any) => {
      
-           });
-      } else {
-        this._alerta.openToast1('Error en el sistema' , 'bg-danger text-white' , 'OK');
-        // console.log(data);
+      if(message == 'closeMessage' ||  message == 'success'){
+        this._empleados.consultaProgramacionAdmin(this.fechas)
+        .subscribe(res=>{
+          this.dataSource = res;
+          this.datas = true;
         
-        
+       })
       }
    });
-    errores.hide();
-
-    
-
   }
+
 
   
 
@@ -335,32 +341,67 @@ for (let i = 0; i < this.horas.length; i++) {
       this.idPla = idPalntilla;
       this.name = nombre;
       this.lastName = apellido
-      this._empleados.getPuestos(this.idServicio)
-      .subscribe(data=>{
-        if (data != 'error') {
-          this.puestos = data;
-        } else {
-          alert('Error en los  Puestos de trabajos::::')
-        }
-        
-      })
+  // modal
+  this.modalM =  this.modalService.open(HorasModalComponent, {
+    containerClass: 'right',
+    modalClass: 'modal-side modal-top-right',
+    ignoreBackdropClick: true,
+    data: {
+     param:6,
+     idPlantillaF:this.idPla,
+     idServicio:this.idServicio,
+     usuario:this.usuario,
+     name:this.name,
+     lastName:this.lastName,
+     puestos: this.puestos
   
+    },
+  });
+  this.modalM.onClose.subscribe((message: any) => {
+   
+    if(message == 'closeMessage' ||  message == 'success'){
+      this._empleados.consultaProgramacionAdmin(this.fechas)
+      .subscribe(res=>{
+        this.dataSource = res;
+        this.datas = true;
+      
+     })
+    }
+ });
     }
     }else{
       this.puesto = puesto;
       this.idPla = idPalntilla;
       this.name = nombre;
       this.lastName = apellido
-      this._empleados.getPuestos(this.idServicio)
-      .subscribe(data=>{
-        if (data != 'error') {
-          this.puestos = data;
-        } else {
-          alert('Error en los  Puestos de trabajos::::')
-        }
-        
-      })
-
+    
+  // modal
+  this.modalM =  this.modalService.open(HorasModalComponent, {
+    containerClass: 'right',
+    modalClass: 'modal-side modal-top-right',
+    ignoreBackdropClick: true,
+    data: {
+     param:6,
+     idPlantillaF:this.idPla,
+     idServicio:this.idServicio,
+     usuario:this.usuario,
+     name:this.name,
+     lastName:this.lastName,
+     puestos: this.puestos
+  
+    },
+  });
+  this.modalM.onClose.subscribe((message: any) => {
+    
+    if(message == 'closeMessage' ||  message == 'success'){
+      this._empleados.consultaProgramacionAdmin(this.fechas)
+      .subscribe(res=>{
+        this.dataSource = res;
+        this.datas = true;
+      
+     })
+    }
+ });
     
     }
       
@@ -463,11 +504,7 @@ for (let i = 0; i < this.horas.length; i++) {
   }
 
 
-  
-  puesto_id?:number;
-  pu(event:any){
-     this.puesto_id = event.target.value;
-  }
+
   datosVN:any;
   hNormal(nNormal:any,idPlantilla:any,i:any,horario:any){
 
@@ -624,36 +661,13 @@ siValidar1(empleado:any, frame1:any){
   
 }
 
-camPuesto(changePuesto:any,fp:any){
 
-  this._control.cambioPuest(changePuesto.value)
-  .subscribe(data=>{ 
-    if (data == 'success') {
-
-      // this.getContolEmpleados();
-      this._empleados.consultaProgramacionAdmin(this.fechas)
-      .subscribe(res=>{
-        this.dataSource = res;
-        this._alerta.openToast1('Cambio de puesto correcto.', 'bg-success text-white' , 'OK')
-        fp.hide()
-      
-      })
-    } else {
-      
-    }  
-});
-  // console.log(changePuesto.value);
-  
-}
-
-addH(horario:any){
-this.horarios = horario;
-}
 horario?:string;
 horarios?:string;
 fechaTra:any;
 nEmpleado?:number;
-changeTurno(item:any ,fpHorario:any ){
+// Sin justificación
+changeTurno(item:any  ){
   this.puesto = item.puesto;
   this.horario = item.horario;
   this.idPla = item.idPalntilla;
@@ -661,44 +675,66 @@ changeTurno(item:any ,fpHorario:any ){
   this.lastName = item.apellidos;
   this.fechaTra = item.fechaTrabajo;
   this.nEmpleado = item.nEmpleado;
-  // fpHorario.show();
+  this.modalM =  this.modalService.open(HorasModalComponent, {
+    containerClass: 'right',
+    modalClass: 'modal-side modal-top-right',
+    ignoreBackdropClick: true,
+    data: {
+     param:3,
+     name:this.name,
+     horario:this.horario,
+     lastName:this.lastName,
+     fechaTra:this.fechaTra,
+     nEmpleado:this.nEmpleado,
+     idServicio:this.idServicio,
   
-}
-
-changeTurno1(item:any ,fpHorario1:any ){
-  this.puesto = item.puesto;
-  this.horario = item.horario;
-  this.idPla = item.idPalntilla;
-  this.name = item.nombre;
-  this.lastName = item.apellidos;
-  this.fechaTra = item.fechaTrabajo;
-  this.nEmpleado = item.nEmpleado;
-  fpHorario1.show();
-  
-}
-
-btn?:boolean;
-camHorario(changeHorario:any , fpHorario:any){
-  this.btn=true;
-  this._empleados.cambiarHorario(changeHorario.value)
-  .subscribe(data=>{ 
-  
-    if (data == 'success') {
+    },
+  });
+  this.modalM.onClose.subscribe((message: any) => {
+    console.log(message);
+    
+    if(message == 'closeMessage' ||  message == 'success'){
       this._empleados.consultaProgramacionAdmin(this.fechas)
       .subscribe(res=>{
         this.dataSource = res;
-        this._alerta.openToast1('Cambio de horario correcto.' , 'bg-success text-white' , 'OK');
-        fpHorario.hide()
-        this.btn = false;
-      })
+        this.datas = true;
       
-    }else{
-      this._alerta.openToast1('ERROR AL CAMBIAR DE HORARIO...' , 'bg-danger text-white' , 'OK');
-
+     })
     }
-  });
-  
+ });
+
 }
+
+
+// Con justificación
+
+changeTurno1(item:any  ){
+  this.puesto = item.puesto;
+  this.horario = item.horario;
+  this.idPla = item.idPalntilla;
+  this.name = item.nombre;
+  this.lastName = item.apellidos;
+  this.fechaTra = item.fechaTrabajo;
+  this.nEmpleado = item.nEmpleado;
+
+  this.modalM =  this.modalService.open(HorasModalComponent, {
+    containerClass: 'right',
+    modalClass: 'modal-side modal-top-right',
+    ignoreBackdropClick: true,
+    data: {
+     param:4,
+     name:this.name,
+     horario:this.horario,
+     lastName:this.lastName,
+  
+    },
+  });
+
+
+
+}
+
+
 
 dataExcel:any;
 exportAsXLSX():void {
@@ -758,41 +794,38 @@ this.name = nombre;
 this.lastName = apellidos;
 this.turnoOriginal = tu;
 
-this._empleados.getTurnos1A(this.idServicio)
-.subscribe(data=>{ 
-this.listTurno = data;
-// console.log(this.listTurno);
+this.modalM =  this.modalService.open(HorasModalComponent, {
+  containerClass: 'right',
+  modalClass: 'modal-side modal-top-right',
+  ignoreBackdropClick: true,
+  data: {
+   param:7,
+   name:this.name,
+   lastName:this.lastName,
+   fechaTra:this.fechaTra,
+   usuario:this.usuario,
+   idServicio:this.idServicio,
+   idPlantillaF:this.idPlant,
+   turnoOriginal:this.turnoOriginal
+
+  },
+});
+this.modalM.onClose.subscribe((message: any) => {
+  console.log(message);
+  
+  if(message == 'closeMessage' ||  message == 'success'){
+    this._empleados.consultaProgramacionAdmin(this.fechas)
+    .subscribe(res=>{
+      this.dataSource = res;
+      this.datas = true;
+    
+   })
+  }
 });
  
 }
 
-turno_id?:number;
-tu(event:any){
-   this.turno_id = event.target.value;
-  //  console.log(this.turno_id);
-   
-}
 
-camTurno(changePuesto:any,fp:any){
-// console.log(changePuesto.value);
 
-  this._control.cambioTurno(changePuesto.value)
-  .subscribe(data=>{ 
-    if (data == 'success') {
-
-      this._empleados.consultaProgramacionAdmin(this.fechas)
-      .subscribe(res=>{
-        this.dataSource = res;
-      
-      })
-      this._alerta.openToast1('Cambio de turno correcto...' , 'bg-success text-white' , 'OK')
-      fp.hide()
-    } else {
-      
-    }  
-});
-  // console.log(changePuesto.value);
-  
-}
 
 }

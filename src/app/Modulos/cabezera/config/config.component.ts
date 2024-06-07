@@ -59,8 +59,12 @@ export class ConfigComponent implements OnInit {
       let ser:any = localStorage.getItem(btoa('servicio'));
       let rol:any = localStorage.getItem('usuario')
       this.usuario = atob(rol);
-     
       this.idServicio = atob(ser);
+
+      if (this.usuario != 'admin') {
+        this.ruta.navigate(['Empleados']);
+        return;
+      }
       
       this.getEmpleadosActivos();
       this.getServicio();
@@ -586,10 +590,7 @@ getTexto(){
     } else {
       this.bolsaHabilitado = false;
     }
-    });
-
-
-    
+    }); 
   }
 
   // parosH(estatus){

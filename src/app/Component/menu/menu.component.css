@@ -44,7 +44,7 @@
 
 .actives1 {
   background-color:  hsl(303, 89%, 63%);
-  color: #ffffff;
+  color: #ffffff!important;
   border: none;
   border-radius: 5px;
 }

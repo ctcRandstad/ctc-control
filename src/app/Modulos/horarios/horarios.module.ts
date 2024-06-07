@@ -10,6 +10,9 @@ import { AlertasComponent } from './alertas/alertas.component';
 import { MdbTableModule } from 'mdb-angular-ui-kit/table';
 import { MdbSelectModule } from 'mdb-angular-ui-kit/select';
 import { HorasModalComponent } from 'src/app/Modales/horas-modal/horas-modal.component';
+import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
+import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
+import { DataFilterPipe } from 'src/app/pipes/data-filter.pipe';
 
 
 @NgModule({
@@ -17,7 +20,8 @@ import { HorasModalComponent } from 'src/app/Modales/horas-modal/horas-modal.com
     ProgramacionComponent,
     HorasComponent,
     AlertasComponent,
-    HorasModalComponent
+    HorasModalComponent,
+    DataFilterPipe
   ],
   imports: [
     CommonModule,
@@ -28,6 +32,8 @@ import { HorasModalComponent } from 'src/app/Modales/horas-modal/horas-modal.com
     MdbFormsModule,
     ReactiveFormsModule,
     MdbTableModule,
+    MdbTabsModule,
+    MdbAccordionModule
   ],
   schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
 })

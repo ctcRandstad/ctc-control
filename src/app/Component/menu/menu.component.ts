@@ -63,6 +63,7 @@ export class MenuComponent implements OnInit {
     this.foto = localStorage.getItem('foto');
     this.idServicio = atob(ser);
     this.tipoUsuario = atob(rol);
+    
     this.usuario =  atob(this.usuario);
     this.getCaducidadDocumentos();
 
@@ -73,44 +74,24 @@ export class MenuComponent implements OnInit {
     });
    })
     this.mueveReloj();
-    
+    this.getCaducidadDocumentos();
+    this.getVacaciones();  
+    this.getAlertas();
+    this.getComentarios();
     setInterval(()=>{
       this.mueveReloj();
-      this.getAlertas();
-      this.href = this.ruta.url;
-
-      
-      let separar = this.href.split('/principal/');
-      
-      
-      if (separar[1] == 'empleadosBajas') {
-        this.clase = true;
-      }else if(separar[1] == 'justificaciones'){
-        this.clase = true;
-      }else{
-        this.clase = false;
-      }
-      
+    
     },1000)
     this.fecha();
-    
-    setInterval(()=>{
-      this.getCaducidadDocumentos();
-      this.getVacaciones();  
-    },1000)
-    
-    this.getComentarios();
-   
+
+
       
     }
     
     salir(){
-   
-
+  
       this._ser.sesionOut(this.usuario)
       .subscribe(data=>{
-        console.log(data);
-        
         if (data == 'success') {
           localStorage.removeItem('token');
           this.ruta.navigate(['./auth']);
@@ -148,15 +129,13 @@ export class MenuComponent implements OnInit {
     this.fechaHoy =  f.getFullYear() + '/' + (f.getMonth() +1) + "/" +  f.getDate() ;
     
   }
-  
-  
+
   
   da:any;
   aler:boolean=false;
   getAlertas(){
     this._ser.getAlertas(this.idServicio)
     .subscribe(data=>{   
-  
       if (data != 'nada') {
       
         this.da = data;

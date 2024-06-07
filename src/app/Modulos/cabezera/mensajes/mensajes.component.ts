@@ -12,15 +12,20 @@ import { NotificacionService } from 'src/app/Services/notificacion.service';
 export class MensajesComponent implements OnInit {
   constructor(
     private _config:ConfigService,
-    private _empleados:EmpleadosService,
-    private _alerta: NotificacionService,
     private ruta: Router,
   ) { }
 
   idServicio:any;
+  usuario:any;
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
     this.idServicio = atob(ser);
+    let rol:any = localStorage.getItem('rol')
+    this.usuario = atob(rol);
+    if (this.usuario == 'E2020') {
+      this.ruta.navigate(['Empleados']);
+      return;
+    }
 
     this.getComentarios();
   }

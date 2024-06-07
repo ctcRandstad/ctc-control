@@ -1,11 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { CabezeraRoutingModule } from './cabezera-routing.module';
 import { MensajesComponent } from './mensajes/mensajes.component';
 import { ConfigComponent } from './config/config.component';
 import { InformesComponent } from './informes/informes.component';
-import { ConsultasComponent } from './consultas/consultas.component';
 import { MenuModule } from 'src/app/Component/menu/menu.module';
 import { HuellaComponent } from './huella/huella.component';
 import { FormsModule } from '@angular/forms';
@@ -29,7 +27,6 @@ import { HorasComiteComponent } from './informes/horas-comite/horas-comite.compo
     MensajesComponent,
     ConfigComponent,
     InformesComponent,
-    ConsultasComponent,
     HuellaComponent,
     AbsentismoComponent,
     AusentismoComponent,

@@ -4,7 +4,7 @@ import { MensajesComponent } from './mensajes/mensajes.component';
 import { ConfigComponent } from './config/config.component';
 import { HuellaComponent } from './huella/huella.component';
 import { InformesComponent } from './informes/informes.component';
-import { ConsultasComponent } from './consultas/consultas.component';
+import { ConsultasComponent } from '../consultas-anteriores/consultas/consultas.component';
 import { HorasSeccinComponent } from './informes/horas-seccin/horas-seccin.component';
 import { HorasNoTrabajadasComponent } from './informes/horas-no-trabajadas/horas-no-trabajadas.component';
 import { FichajeValidacionComponent } from './informes/fichaje-validacion/fichaje-validacion.component';
@@ -33,7 +33,6 @@ const routes: Routes = [
             { path: 'validacion-fichajes' ,  component: FichajeValidacionComponent },
           ]
      },
-      { path: 'Consultas' ,  component: ConsultasComponent },
       { path: '**' ,  redirectTo: 'Mensajes' }
     ]
   }

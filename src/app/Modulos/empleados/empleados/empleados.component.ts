@@ -316,7 +316,6 @@ url:any;
      this._control.getJustificaciones(this.idServicio)
      .subscribe(just=>{ 
      this.just = just;
-     console.log(this.just);
      });
     }
 
@@ -939,8 +938,7 @@ url:any;
       bolsas(){
         this._empleados.getBolsa(this.idServicio)
         .subscribe(data=>{   
-          console.log(data);
-          
+        
           this.bolsa = data;
         if (this.bolsa[0] == 1) {
           this.bolsaHabilitado = true;
@@ -955,19 +953,20 @@ url:any;
       dataE:any;
      
       exportAsXLSX(admin:any):void {
-        this._empleados.getContratosA(this.idServicio)
-        .subscribe(data=>{
+        this.excelService.exportAsExcelFile( this.dataSource, 'Empleados');
+        // this._empleados.getContratosA(this.idServicio)
+        // .subscribe(data=>{
         
-          if (data != 'error') {
-            this.contratos1 = data;
+        //   if (data != 'error') {
+        //     this.contratos1 = data;
            
            
-            admin.show();
-          } else {
-            alert('Error en los  contratos.')
-          }
+        //     admin.show();
+        //   } else {
+        //     alert('Error en los  contratos.')
+        //   }
           
-        })
+        // })
          
        }
   
@@ -977,8 +976,6 @@ url:any;
         //  console.log(tu.value);
          this._empleados.getContratosExcel(co.value)
          .subscribe(data=>{ 
-          console.log(data);
-          
            this.dataExcelContrato = data;
            this.contratosE = null;
            this.excelService.exportAsExcelFile( this.dataExcelContrato, 'Empleados');
@@ -992,26 +989,26 @@ url:any;
        encar:any;
        turnos1:any;
        excelencar(encar:any){
-  
-        this._empleados.getTurnos1A(this.idServicio)
-        .subscribe(data=>{
-          
-          if (data != 'error') {
-            this.turnos1 = data;
-            this.encar=encar;
+         this.excelService.exportAsExcelFile( this.dataSource, 'Empleados');
+        //  this._empleados.getTurnos1A(this.idServicio)
+        //  .subscribe(data=>{
            
-            this.encar.show();
-          } else {
-            alert('Error en los  turnos.')
-          }
+        //    if (data != 'error') {
+        //      this.turnos1 = data;
+        //     this.encar=encar;
+           
+        //     this.encar.show();
+        //   } else {
+        //     alert('Error en los  turnos.')
+        //   }
           
-        })
+        // })
        }
   
        turnosE:any;
        dataExcel:any[]=[];
        getTurno(tu:any){
-         console.log(tu.value);
+       
          this._empleados.getTurnosExcel(tu.value)
          .subscribe(data=>{ 
           
@@ -1124,8 +1121,7 @@ url:any;
      
       this._empleados.getTitulo(this.idServicio)
       .subscribe(data=>{
-     console.log(data);
-     
+    
         if (data == 'error') {
          
           this.getDocus1 = true;

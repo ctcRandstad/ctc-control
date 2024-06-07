@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { ControlHorasService } from 'src/app/Services/control-horas.service';
 import { EmpleadosService } from 'src/app/Services/empleados.service';
+import { LoginService } from 'src/app/Services/login.service';
 import { NotificacionService } from 'src/app/Services/notificacion.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class HorasModalComponent implements OnInit {
     public modalRef: MdbModalRef<HorasModalComponent>,
     public _empleados :EmpleadosService,
     private _control : ControlHorasService,
-    public _alerta :NotificacionService
+    public _alerta :NotificacionService,
+    public _login :LoginService,
   ) {
     this.optionsSelect = [
       { value: '8', label: '8 Horas' },
@@ -65,12 +67,54 @@ export class HorasModalComponent implements OnInit {
   fechaTrabajo:   any | null = null;
   nEmpledo:   any | null = null;
   idServicio:   any | null = null;
-
+  horario:   any | null = null;
+  name:   any | null = null;
+  lastName:   any | null = null;
+  horarios:   any | null = null;
+  nEmpleado:   any | null = null;
+  fechaTra:   any | null = null;
+  comentF:   any | null = null;
+  puesto:   any | null = null;
+  usuario:   any | null = null;
+  puestos:   any | null = null;
+  listTurno:   any | null = null;
+  turnoOriginal:   any | null = null;
+  idAlertaI:   any | null = null;
+  numero:   any | null = null;
   
 
 
   ngOnInit(): void {
+    this._empleados.getPuestos1(this.idServicio)
+    .subscribe(data=>{
+     
+      if (data != 'error') {
+        this.puestos = data;
+      }
+    });
+    this._empleados.getTurnos1A(this.idServicio)
+      .subscribe(data=>{ 
+        if (data != 'error') {
+          this.listTurno = data;
+        }
+      });
+      this.getT();
   }
+
+  turno:any;
+getT(){
+  this._empleados.getTurnos1(this.idServicio)
+    .subscribe(data=>{
+    
+      if (data != 'error') {
+        this.turno =  data;
+      }else{
+        this.turno=[];
+      }
+      
+      })
+}
+
 
 
   close(): void {
@@ -115,15 +159,157 @@ export class HorasModalComponent implements OnInit {
            this._alerta.openToast1('Justificación asignada...' , 'bg-success text-white' , 'OK');
            
            this.modalRef.close('success');
-
          }else{
           this.modalRef.close('closeMessage');
-
-
          }
- 
        });
- 
      }
+
+
+     addH(horario:any){
+      this.horarios = horario;
+      }
+
+btn?:boolean;
+camHorario(changeHorario:any){
+  this.btn=true;
+  this._empleados.cambiarHorario(changeHorario.value)
+  .subscribe(data=>{ 
+    if (data == 'success') {
+      this._alerta.openToast1('CAMBIO DE HORARIO CORRECTO...' , 'bg-success text-white' , 'OK');
+      this.modalRef.close('success');
+      this.btn =false;
+    }else{
+      this._alerta.openToast1('ERROR AL CAMBIAR DE HORARIO...' , 'bg-danger text-white' , 'ERROR');
+      this.modalRef.close('closeMessage');
+    }
+  });
+  
+}
+
+
+addComent(cometario:any){
+   
+
+  this._empleados.addCometario(cometario.value)
+  .subscribe(data=>{ 
+
+     if (data == 'success') {
+      this._alerta.openToast1('COMENTARIO GUARDADO...' , 'bg-success text-white' , 'OK');
+      this.modalRef.close('success');
+     
+     } else {
+       this._alerta.openToast1('Error en el sistema' , 'bg-danger text-white' , 'OK');
+       this.modalRef.close('closeMessage');
+     }
+  });
+
+
+ }
+
+   
+ puesto_id?:number;
+ pu(event:any){
+    this.puesto_id = event;
+ }
+
+ 
+camPuesto(changePuesto:any){
+
+  this._control.cambioPuest(changePuesto.value)
+  .subscribe(data=>{ 
+      if (data == 'success') {
+        this._alerta.openToast1('COMENTARIO GUARDADO...' , 'bg-success text-white' , 'OK');
+        this.modalRef.close('success');
+     
+    } else {
+      this._alerta.openToast1('Error en el sistema' , 'bg-danger text-white' , 'OK');
+      this.modalRef.close('closeMessage');
+    }  
+  });
+}
+
+
+turno_id?:number;
+tu(event:any){
+   this.turno_id = event;
+}
+
+camTurno(changePuesto:any){
+  // console.log(changePuesto.value);
+  
+    this._control.cambioTurno(changePuesto.value)
+    .subscribe(data=>{ 
+      if (data == 'success') {
+        this._alerta.openToast1('CAMBIO DE TURNO CORRECTO...' , 'bg-success text-white' , 'OK');
+        this.modalRef.close('success');
+      } else {
+        this._alerta.openToast1('Error en el sistema' , 'bg-danger text-white' , 'OK');
+        this.modalRef.close('closeMessage');
+        
+      }  
+  });
+    // console.log(changePuesto.value);
+    
+  }
+
+  filtarTuros:any;
+filtrar(co:any){
+  this.filtarTuros = co.value;
+  this.modalRef.close(this.filtarTuros);
+}
+
+siValidar(){    
+  this._control.validarEmpleado(this.fechaTrabajo,this.nEmpleado, this.idPlantillaF)
+  .subscribe(res=>{ 
+      if (res == 'success') {
+        this._control.eliminarAlertaCambio(this.idPlantillaF)
+        .subscribe(data=>{ 
+          console.log(data);
+          
+             if (data == 'success') {
+              this.modalRef.close('success');
+               this._alerta.openToast1('Empleado validado correctamente...', 'bg-success text-white' , 'OK');   // this.getAlertas1();    
+                
+             }
+        });
+      } else {
+        alert ('Error al validar!');
+      }
+      });
+  
+   }
+
+   siValidarInfo(actionI:any){
+    this._control.validarEmpleadoInfo(actionI.value)
+    .subscribe(data=>{
+       if (data == 'success') {
+        this._alerta.openToast1('Empleado validado correctamente...', 'bg-success text-white' , 'OK');
+        this.modalRef.close('success');
+       }else{
+        alert ('Error al validar!');
+        this.modalRef.close('closeMessage');
+
+       }
+    });
+    
+  }
+
+  validando?:Boolean;
+  siValidarTodo(){
+    this.validando=true;
+    this._login.validarTodo(this.numero,this.idServicio)
+    .subscribe(data=>{ 
+   
+       if (data == 'success') {
+         this._alerta.openToast1('TODO LOS CAMPOS FUERON VALIDADOS...' , 'bg-success text-white' , 'OK');
+         this.modalRef.close('success');
+       }else{
+        this._alerta.openToast1('ERROR AL VALIDAR...' , 'bg-danger text-white' , 'ERROR');
+        this.modalRef.close('closeMessage');
+        this.validando=false;
+       }
+    });
+  }
 
 }

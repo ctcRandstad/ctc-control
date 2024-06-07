@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfigService } from 'src/app/Services/config.service';
+
 import { ControlHorasService } from 'src/app/Services/control-horas.service';
 import { EmpleadosService } from 'src/app/Services/empleados.service';
-import { ExcelService } from 'src/app/Services/excel.service';
-import { LoginService } from 'src/app/Services/login.service';
+
 import { NotificacionService } from 'src/app/Services/notificacion.service';
-import { PageService } from 'src/app/Services/page.service';
-import { TokenService } from 'src/app/Services/token.service';
 
 @Component({
   selector: 'app-main',
@@ -17,10 +14,9 @@ import { TokenService } from 'src/app/Services/token.service';
 export class MainComponent implements OnInit {
   constructor(
     private _empleados:EmpleadosService,
-    private _config:ConfigService,
     private _control:ControlHorasService,
     private _alerta:NotificacionService,
-    private excelService:ExcelService,
+    private ruta:Router
   ) { }
   idServicio:any;
   tipoUsuario:any;
@@ -30,6 +26,10 @@ export class MainComponent implements OnInit {
    
     this.idServicio = atob(ser);
     this.tipoUsuario = atob(rol);
+    if (this.tipoUsuario == 'E2020') {
+      this.ruta.navigate(['Empleados']);
+      return;
+    }
     
     var today = new Date();
     this.anio = today.getFullYear();
@@ -181,7 +181,7 @@ dataTotalE:any;
   viewPanel:boolean=false;
   dataTurno:any=[];
   daySearch:any=null;
-  searchTurno(data:any,demoBasic:any){
+  searchTurno(data:any){
     this.viewPanel=false;
     this.dataTurno=[];
     // demoBasic.show();

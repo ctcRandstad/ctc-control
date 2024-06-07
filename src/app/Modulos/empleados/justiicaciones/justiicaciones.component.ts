@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { MdbTableDirective } from 'mdb-angular-ui-kit/table';
 import { EliminarModalComponent } from 'src/app/Modales/eliminar-modal/eliminar-modal.component';
@@ -24,6 +25,8 @@ export class JustiicacionesComponent implements OnInit {
     private _alerta:NotificacionService,
     private excelService:ExcelService,
     private modalService: MdbModalService,
+    private ruta:Router,
+
     ) { }
 
   filterQuery:string='';
@@ -35,6 +38,10 @@ export class JustiicacionesComponent implements OnInit {
    
     this.idServicio = atob(ser);
     this.tipoUsuario = atob(rol);
+    if (this.tipoUsuario == 'E2020') {
+      this.ruta.navigate(['Empleados']);
+      return;
+    }
     this.getJustifEmpleados(this.valor);
     this.getJustificacion();
   }

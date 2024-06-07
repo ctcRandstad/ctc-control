@@ -48,3 +48,313 @@
     </div>
 </div>
 
+
+
+
+<div  *ngIf="param == 3">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel"> {{horario}} | {{name}} {{lastName}}</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1">
+            <form #changeHorario="ngForm" (ngSubmit)="camHorario(changeHorario)">
+            <mdb-form-control>
+                <mdb-select (ngModelChange)="addH($event)" name="se" [(ngModel)]="selectedValue">
+                  <mdb-option  value="M" >MAÑANA</mdb-option>
+                  <mdb-option  value="T" >TARDE</mdb-option>
+                  <mdb-option  value="N" >NOCHE</mdb-option>
+                  <mdb-option  value="P" >PARTIDO</mdb-option>
+                  <mdb-option  value="F" >FIESTA</mdb-option>
+                  <mdb-option  value="V" >VACACIONES</mdb-option>
+                </mdb-select>
+                <label mdbLabel class="form-label">Seleccione un horario</label>
+              </mdb-form-control>
+              <input type="hidden" required name="fechaTrabajo" [(ngModel)]="fechaTra">
+              <input type="hidden" required name="nEmpleado" [(ngModel)]="nEmpleado">
+              <input type="hidden" required name="horario" [(ngModel)]="horarios">
+              <input type="hidden" required name="idServicio" [(ngModel)]="idServicio">
+            <div class="modal-footer">
+                <button [disabled]="changeHorario.invalid" *ngIf="!btn" type="submit" mdbBtn  class="btn btn-primary" aria-label="Close" mdbWavesEffect>Ok</button>
+                <button *ngIf="btn" mdbBtn class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                  </button>
+                <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div  *ngIf="param == 4">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">{{horario}} | {{name}} {{lastName}}</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1">
+            <div class="modal-body mx-3 alert alert-danger">
+                <p>Para modificar el horario, debe eliminar la justificación.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Comentario de los empleados -->
+<div  *ngIf="param == 5">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">
+            
+          Comentario a <span class="text-uppercase text-warning"> {{ lastName}} {{name}}</span> </h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1">
+            <form #infoError="ngForm" (ngSubmit)="addComent(infoError)">
+                <mdb-form-control>
+                    <textarea required="" mdbInput class="form-control" id="textAreaExample" rows="4" name="comentario" [(ngModel)]="comentF"></textarea>
+                    <label mdbLabel class="form-label" for="textAreaExample">Comentario</label>
+                  </mdb-form-control>
+                  <input type="hidden" [(ngModel)]="nEmpleado" name="nEmpleado">
+                  <input type="hidden" [(ngModel)]="fechaTrabajo" name="fechaTrabajo">
+                  <input type="hidden" [(ngModel)]="idServicio" name="idServicio">
+                  <div class="modal-footer">
+                      <button type="submit" [disabled]="infoError.invalid" class="btn btn-primary relative" mdbWavesEffect>Enviar comentario</button>
+                      <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Cambios en la sesión de trabajo -->
+<div  *ngIf="param == 6">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">{{puesto}} | {{name}} {{lastName}}</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1">
+            <mdb-form-control>
+                <mdb-select (ngModelChange)="pu($event)" [(ngModel)]="selectedValue">
+                  <mdb-option *ngFor="let option of puestos" [value]="option.value">{{ option.label  }}</mdb-option>
+                </mdb-select>
+                <label mdbLabel class="form-label">Seleccione un puesto</label>
+              </mdb-form-control>
+              <form #changePuesto="ngForm" (ngSubmit)="camPuesto(changePuesto )">
+                <div class="row">
+                    <div class="mx-auto">
+                        <input type="hidden" required name="puesto_id" [(ngModel)]="puesto_id">
+                        <input type="hidden" required name="idPla" [(ngModel)]="idPlantillaF">
+                        <input type="hidden" required name="usuario" [(ngModel)]="usuario">
+                        <input type="hidden" required name="idServicio" [(ngModel)]="idServicio">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" [disabled]="changePuesto.invalid" class="btn btn-primary">OK, Cambiar</button>
+                    <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Cambio de turno -->
+<div  *ngIf="param == 7">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">Turno: {{turnoOriginal}} | {{name}} {{lastName}}</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1">
+            <mdb-form-control>
+                <mdb-select (ngModelChange)="tu($event)" [(ngModel)]="selectedValue">
+                  <mdb-option *ngFor="let option of listTurno" [value]="option.value">{{ option.label  }}</mdb-option>
+                </mdb-select>
+                <label mdbLabel class="form-label">Seleccione un turno</label>
+              </mdb-form-control>
+              <form #changeTurnos="ngForm" (ngSubmit)="camTurno(changeTurnos)">
+                <div class="row">
+                    <div class="mx-auto">
+                        <input type="hidden" required name="turno_id" [(ngModel)]="turno_id">
+                        <input type="hidden" required name="idPlant" [(ngModel)]="idPlantillaF">
+                        <input type="hidden" required name="usuario" [(ngModel)]="usuario">
+                        <input type="hidden" required name="idServicio" [(ngModel)]="idServicio">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" [disabled]="changeTurnos.invalid" class="waves-light btn btn-primary">OK, Cambiar</button>
+                    <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Escojer turno para programació -->
+<div  *ngIf="param == 8">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">Turnos:  {{name}}</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1 ">
+          
+              <form #co="ngForm" (ngSubmit)="filtrar(co)">
+                <div class="row container">
+                    <p class="text-center text-primary">Turnos</p>
+                     <mdb-form-control>
+                         <mdb-select name="tur" [(ngModel)]="name" [multiple]="true">
+                            <mdb-select-all-option>Seleccionar todo</mdb-select-all-option>
+                            <mdb-option *ngFor="let option of turno" [value]="option.value">{{ option.label}}</mdb-option>
+                        </mdb-select>
+                        <label mdbLabel class="form-label">Listado</label>
+                    </mdb-form-control>
+                </div>
+                <br>
+                <div class="modal-footer">
+                    <button type="submit" [disabled]="co.invalid" class="waves-light btn btn-primary">OK, Cambiar</button>
+                    <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div  *ngIf="param == 9">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">Empleado:  {{name}} , {{lastName}}</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1 ">
+            <form #actionI="ngForm" (ngSubmit)="siValidarInfo(actionI)">
+                <div class="modal-body">
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <div class="col-md-12 text-center">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <p class="pt-3 pr-2" >¿Quiere validar a <strong>{{name}} {{ lastName}} </strong> N° empleado <strong> {{ nEmpleado}}</strong> ?</p>
+                                </div>
+                                <div class="mx-auto">
+
+                                    <input type="hidden" required name="idAlertaI" [(ngModel)]="idAlertaI">
+                                    <input type="hidden" required name="nEmpleado" [(ngModel)]="nEmpleado">
+                                    <input type="hidden" required name="fechaTrabajo" [(ngModel)]="fechaTrabajo">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="waves-light btn btn-primary" >Validar info. error</button>
+                            <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+                        </div>
+        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div  *ngIf="param == 10">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">Empleado:  {{name}} , {{lastName}}</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1 ">
+          
+            <p class="pt-3 pr-2" >¿Quiere validar a <strong>{{name}} {{ lastName}} </strong> N° empleado <strong> {{ nEmpleado}}</strong> ?</p>
+                <div class="modal-footer">
+                    <button type="submit"  class="waves-light btn btn-primary" (click)="siValidar()">Validar modificación</button>
+                    <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div  *ngIf="param == 11">
+    <div class="modal-header text-primary ">
+        <h5 class="modal-title  text-uppercase" id="exampleModalLabel">Validar todo</h5>
+        <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="close()"
+        ></button>
+    </div>
+    <div class="modal-content" >
+        <div class="modal-body py-1 ">
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-info text-center">¿Quiere validar todo los empleados?</div> 
+                </div>
+                <div class="col">  <div class="alert alert-danger text-center"> Esta opción es Irreversible.</div></div>
+            </div>
+                <div class="modal-footer">
+                    <button type="submit"  class="waves-light btn btn-primary" (click)="siValidarTodo()" *ngIf="!validando">Validar modificación</button>
+                    <button *ngIf="validando" mdbBtn class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                      </button>
+                    <button type="button" mdbBtn class="btn btn-danger"  aria-label="Close" (click)="close()" mdbWavesEffect>Cerrar</button>
+                </div>
+
+        </div>
+    </div>
+</div>

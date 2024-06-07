@@ -1,0 +1,129 @@
+.tab:hover {
+    box-shadow: inset 0 0 0 25px hsl(19, 89%, 56%);
+    color: #ffffff;
+   
+}
+.bg-propio{
+    background-color: #49243E;
+}
+
+.bg-propio1{
+    background-color: #5F374B;
+}
+
+.bg-propio2{
+    background-color: #EEEEEE;
+}
+
+
+
+.tab {
+    transition: all 0.5s ease;
+}
+
+.list-group {
+    margin-left: 10px;
+}
+
+
+.input {
+    border: 1px solid red;
+}
+
+.input1 {
+    border: 1px solid red;
+}
+
+.field-icon {
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+}
+
+.alerta{
+    padding: 5px;
+    border-radius: 5px;
+}
+.td {
+    font-size: 12px;
+}
+.table-sm,th,td {
+        padding: .3em !important;
+}
+
+
+.cta {
+    position: relative;
+    margin: auto;
+    padding: 19px 22px;
+    transition: all 0.2s ease;
+}
+
+.cta:before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: block;
+    border-radius: 28px;
+    background: rgba(255, 171, 157, 0.5);
+    color: #ffffff;
+    width: 56px;
+    height: 36px;
+    transition: all 0.3s ease;
+}
+
+.mar{
+    margin-left: 30px!important;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.cta span {
+    position: relative;
+    font-size: 10px;
+    line-height: 18px;
+    font-weight: 900;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.cta svg {
+    position: relative;
+    top: 0;
+    margin-left: 10px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: #111;
+    stroke-width: 2;
+    transform: translateX(-5px);
+    transition: all 0.3s ease;
+}
+
+.cta:hover:before {
+    width: 100%;
+    background: #ffab9d;
+}
+
+.cta:hover svg {
+    transform: translateX(0);
+}
+
+.cta:active {
+    transform: scale(0.96);
+}
+
+
+
+
+.mas{
+   margin-top: 13px;
+  
+}

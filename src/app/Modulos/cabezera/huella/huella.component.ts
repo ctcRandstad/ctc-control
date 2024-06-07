@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { LoadingComponent } from 'src/app/Modales/loading/loading.component';
 import { ConfigService } from 'src/app/Services/config.service';
@@ -18,6 +19,7 @@ export class HuellaComponent implements OnInit {
     private _config:ConfigService,
     private _alerta:NotificacionService,
     private modalService: MdbModalService,
+    private ruta: Router,
   ) { }
   idServicio:any;
   tipoUsuario:any;
@@ -26,8 +28,12 @@ export class HuellaComponent implements OnInit {
    
     let ser:any = localStorage.getItem(btoa('servicio'));
     this.idServicio = atob(ser);
-    let tipoUsuario:any = localStorage.getItem(btoa('rol'));
+    let tipoUsuario:any = localStorage.getItem('rol');
     this.tipoUsuario = atob(tipoUsuario);
+    if (this.tipoUsuario == 'E2020') {
+      this.ruta.navigate(['Empleados']);
+      return;
+    }
   }
 
 

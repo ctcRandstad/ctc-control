@@ -96,40 +96,7 @@ mdb-breadcrumb {
     border-right: 2pt dashed rgb(64, 224, 64) !important;
 }
 
-.scrollbar-deep-purple::-webkit-scrollbar-track {
-    background-color: #F5F5F5;
-    border-radius: 10px;
-}
 
-.scrollbar-deep-purple::-webkit-scrollbar {
-    width: 12px;
-    background-color: #F5F5F5;
-}
-
-.scrollbar-deep-purple::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: #512da8;
-}
-
-.scrollbar-cyan::-webkit-scrollbar-track {
-    background-color: #F5F5F5;
-    border-radius: 10px;
-}
-
-.scrollbar-cyan::-webkit-scrollbar {
-    width: 12px;
-    background-color: #F5F5F5;
-}
-
-.scrollbar-cyan::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: hsl(357, 100%, 42%);
-}
-
-.scrollbar-dusty-grass::-webkit-scrollbar-track {
-    background-color: #F5F5F5;
-    border-radius: 10px;
-}
 
 .cursor {
     cursor: pointer;
@@ -143,10 +110,6 @@ mdb-breadcrumb {
 }
 
 
-/* .alert-danger {
-    background: hsl(0, 88%, 50%);
-    color: #ffff;
-} */
 
 .bajo {
     font-size: 11px!important;
@@ -249,7 +212,9 @@ $light: #e5ecf2;
 .hr{
     border: 0.2px solid #850F8D;
 }
-
+.hrs{
+    border: 0.2px solid hwb(0 87% 13%);
+}
 .animate__animated.animate__fadeIn {
     --animate-duration: 2s;
   }

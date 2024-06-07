@@ -4,8 +4,6 @@
 <section class="top animate__animated animate__fadeIn" id="arriba">
 
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" *ngIf="!verEmpleado && tipoUsuario == 'A2020'">
-
-       
         <a class="btn text-white btn-lg btn-floating" routerLink="../Add-Empleados" style="background-color: #ac2bac;" href="#!" role="button"  mdbRipple>
             <i class="fas fa-folder-plus"></i>
           </a>
@@ -13,7 +11,7 @@
 
     <div class="main" *ngIf="!verEmpleado">
         <div class="row">
-            <div class="col-md-5 tops" *ngIf="tipoUsuario == 'A2020'">
+            <div class="col-md-6 tops" *ngIf="tipoUsuario == 'A2020'">
                 <app-menu-s></app-menu-s>
             </div>
             <div class="col-md-2 tops">
@@ -26,17 +24,17 @@
 
             </div>
 
-            <div class="col-md-2 tops" *ngIf="tipoUsuario == 'A2020'">
-                <button (click)="exportAsXLSX('admin')" class="btn btn-outline-success" mdbRipple rippleColor="dark">
-                    DESCARGAR LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
-                 </button>
-            </div>
+           
             <div class="col-md-2 tops" *ngIf="tipoUsuario == 'E2020'">
                 <button (click)="excelencar(encar)" class="btn btn-outline-success" mdbRipple rippleColor="dark">
-                    DESCARGAR LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
+                    DESCARGAR  LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
                  </button>
             </div>
-            <div class="col-md-3 tops" *ngIf="tipoUsuario == 'A2020'">
+            <div class="col-md-4 tops" *ngIf="tipoUsuario == 'A2020'">
+                <button (click)="exportAsXLSX('admin')" class="btn btn-outline-success" mdbRipple rippleColor="dark">
+                 DESCARGAR   LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
+                </button>
+                &nbsp;
                 <a href="{{url}}calendario/documentosO.php?idServicio={{idServicio}}&ruta=Qtryuuidsdd458" target="_blank" class="btn btn-outline-secondary" mdbRipple rippleColor="dark">
                 DOCUMENTOS   <i class="fas fa-search"></i>
                 </a>

@@ -23,8 +23,16 @@
 
             <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
             <div class="col-md-2 top1">
-                <button [disabled]="action.invalid" type="submit" mdbBtn c class=" btn btn-primary btn-sm" mdbWavesEffect>
+                <button *ngIf="!mostrarBtn" [disabled]="action.invalid" type="submit" mdbBtn c class=" btn btn-primary btn-sm" mdbWavesEffect>
                     <i class="fas fa-search"></i>
+                </button>
+                <button *ngIf="mostrarBtn" disabled type="submit" mdbBtn c class=" btn btn-primary btn-sm" mdbWavesEffect>
+                    <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Loading...</span>
                 </button>
                 &nbsp;
                 <button *ngIf="datas" type="button" (click)="reload()" mdbBtn  class="btn btn-secondary btn-sm" mdbWavesEffect>
@@ -98,8 +106,9 @@
                         </select>
                     </td>
                     <td  class="cursor" (dblclick)="changeTurnoDia(item.idPlantilla, item.descripcionPuesto,item.nombre,item.apellidos, item.turnoDia,item.turno)">{{ item.turno}}</td>
-                    <td  [ngClass]="{'text-danger ': item.horario == 'V' || item.horario == 'F'}" class="cursor text-primary" *ngIf="!item.justificacion" (dblclick)="changeTurno(item ,'fpHorario')">{{ item.horario }} </td>
-                    <td  [ngClass]="{'text-danger ': item.horario == 'V' || item.horario == 'F'}" class="cursor text-primary" *ngIf="item.justificacion" (dblclick)="changeTurno1(item ,'fpHorario1')">{{ item.horario }} </td>
+
+                    <td  [ngClass]="{'text-danger ': item.horario == 'V' || item.horario == 'F'}" class="cursor text-primary" *ngIf="!item.justificacion" (dblclick)="changeTurno(item )">{{ item.horario }} </td>
+                    <td  [ngClass]="{'text-danger ': item.horario == 'V' || item.horario == 'F'}" class="cursor text-primary" *ngIf="item.justificacion" (dblclick)="changeTurno1(item )">{{ item.horario }} </td>
 
 
                     <td (dblclick)="editarHoras(is)" colspan="10" class="text-center h4 text-danger cursor" *ngIf="item.justificacion && item.justificacion != 100 && is != indice ">ESTE TRABAJADOR HOY NO ESTÁ DISPONIBLE</td>

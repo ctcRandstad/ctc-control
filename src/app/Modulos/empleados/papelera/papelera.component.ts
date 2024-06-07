@@ -21,10 +21,16 @@ export class PapeleraComponent implements OnInit {
 
   ) { }
   idServicio:any;
-  
+  tipoUsuario:any;
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
     this.idServicio = atob(ser);
+    let tipoUsuario:any = localStorage.getItem('rol');
+    this.tipoUsuario = atob(tipoUsuario);
+    if (this.tipoUsuario == 'E2020') {
+      this.ruta.navigate(['Empleados']);
+      return;
+    }
     this.getEmpleadosActivos();
   }
 

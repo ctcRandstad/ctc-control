@@ -1,8 +1,7 @@
 <app-menu></app-menu>
-<section class="top animated fadeIn ">
+<section class="top animate__animated animate__fadeIn">
 
     <section class="mt-lg-5 container-fluid" *ngIf="tipoUsuario== 'A2020'">
-
         <div class="row">
             <div class="col-xl-4 col-md-6 mb-r">
                 <div cascade="true" class="cascading-admin-card card">
@@ -92,7 +91,7 @@
         <hr>
         <div class="row animated fadeIn">
             <div class="col-md-4  top border-end">
-                <form #data="ngForm" (ngSubmit)="searchTurno(data, demoBasic)" class="form-inline">
+                <form #data="ngForm" (ngSubmit)="searchTurno(data)" class="form-inline">
                     <div class="input-group mb-3">
                         <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         <input type="date" name="today" ngModel class="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
@@ -169,7 +168,6 @@
 
 
     <section class="container" *ngIf="tipoUsuario == 'E2020'">
-
         <div class="jumbotron text-center hoverable p-4">
             <div class="row">
                 <div class="col-md-4 offset-md-1 mx-3 my-3">
@@ -203,15 +201,3 @@
 
 </section>
 
-<div mdbModal #demoBasic="" class="modal" id="basicExample" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered animated fadeIn" role="document">
-        <div class="row">
-            <div class="col">
-                <img class="margen animetd fadeIn" src="assets/img/807.gif" alt="CTC">
-            </div>
-            <div class="col">
-                <div class="h4 text-white salto">Cargando información... </div>
-            </div>
-        </div>
-
-    </div>

@@ -1,0 +1,197 @@
+<div class="" *ngIf="param == 1">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title text-uppercase" id="exampleModalLabel">
+          {{apellidos}}, {{nombre}}
+      </h5>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="comentEmp" class=" text-uppercase alert alert-primary">
+            {{ comentEmp }}
+        </div>
+        <div *ngIf="!comentEmp" class=" text-uppercase text-danger text-center">
+            sin comentario asignado.
+        </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+  </div>
+  </div>
+
+
+
+  <div class="" *ngIf="param == 2">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title text-uppercase" id="exampleModalLabel">
+        <p class="pt-3 pr-2 h4" *ngIf="!habilitarE"><strong> ¿Qué campo desea editar? </strong></p>
+        <p class="pt-3 pr-2" *ngIf="habilitarE">Está seguro de queres<strong> BLOQUEAR los campos horarios de los empleados </strong>?</p>
+      </h5>
+    </div>
+    <div class="modal-body">
+      
+        <div class="col-md-12 text-center">
+        
+            <a type="button" *ngIf="!habilitarE1"  class=" btn btn-sm btn-success" mdbWavesEffect (click)="siEditar1()">HORA NORMAL
+                <i class="fas fa-unlock"></i>
+            </a>
+            <a type="button" *ngIf="habilitarE1"  class="btn btn-sm btn-outline-success" mdbWavesEffect (click)="siEditar1()">BLOQ. HORA NORMAL
+               <i class="fas fa-lock-open"></i>
+          </a>
+            <a type="button" *ngIf="!habilitarE"  class=" btn btn-sm btn-warning" mdbWavesEffect (click)="siEditar()">HORA EXTRA
+                <i class="fas fa-unlock"></i>
+                        </a>
+            <a type="button" *ngIf="habilitarE"  class=" btn btn-sm btn-outline-warning" mdbWavesEffect (click)="siEditar()">BLOQ. hora extra
+                          <i class="fas fa-lock-open"></i>
+                    </a>
+            <a type="button" *ngIf="!habilitarE11" mdbBtn type="button" class="btn btn-sm btn-secondary" mdbWavesEffec (click)="siEditar11()">Justificante
+                <i class="fas fa-lock-open"></i>
+            </a>
+            <a type="button" *ngIf="habilitarE11" mdbBtn class="btn  btn-outline-secondary" mdbWavesEffect (click)="siEditar11()">BLOQ. JUSTIFICANTE
+           <i class="fas fa-lock-open"></i>
+             </a> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+
+        </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="no()" type="reset" class="btn btn-outline-primary"> <i class="fas fa-sign-in-alt"></i> No, gracias</button>
+  </div>
+  </div>
+
+
+
+  <!-- informe de error -->
+  <div class="" *ngIf="param == 3">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title text-uppercase" id="exampleModalLabel">
+        Informe de error
+      </h5>
+    </div>
+    <div class="modal-body">
+        <form #infoError="ngForm" (ngSubmit)="addInfoError(infoError)">
+            <div class="row">
+                <div class="col-md-6">
+                    Fecha
+                    <input class="form-control" type="date" name="fecha" [(ngModel)]="fechaF" required>
+                </div>
+                <div class="col-md-6">
+                    Seleccionar Empleado
+                    <select class="form-select" name="operario" [(ngModel)]="empleadoF">
+                        <option selected>Seleccionar Empleado</option>
+                        <option [value]="item.nEmpleado" *ngFor="let item of empleadoList">{{ item.apellidos}} {{ item.nombre}}</option>
+                      </select>
+                </div>
+                <div class="col-md-6">
+                    <div class="md-form">
+                        <mdb-icon fas icon="pencil-alt" class="prefix"></mdb-icon>
+                        <textarea required minlength="5" id="form8" class="md-textarea form-control" mdbInput name="observacion" [(ngModel)]="comentF"></textarea>
+                        <label for="form8">Observaciones  <small class="text-danger">( mínimo 5 carecteres)</small></label>
+                    </div>
+                </div>
+                <div class="col-md-6 top12">
+                    Seleccionar Turno
+                    <select class="form-select" name="turnoE" ngModel required>
+                        <option selected>Seleccionar Turno</option>
+                        <option value="M">MAÑANA</option>
+                        <option value="T">TARDE</option>
+                        <option value="N">NOCHE</option>
+                      </select>
+                </div>
+                <input type="hidden" required name="idServicio" [(ngModel)]="idServicio">
+
+                <div class="col-md-4 ">
+                </div>
+                </div>
+            <div class="modal-footer">
+                <button type="submit" [disabled]="infoError.invalid" class="btn btn-primary " mdbWavesEffect>Enviar error</button>
+            <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+        </div>
+     </form>
+</div>
+  </div>
+
+  <div class="" *ngIf="param == 4">
+    <div class="modal-header text-primary text-center">
+      <h5 class="modal-title text-uppercase " id="exampleModalLabel">
+        Listado de Validados al {{ fecha | date :'fullDate' }}
+      </h5>
+      <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modalRef.close()"
+  ></button>
+    </div>
+    <div class="modal-body">
+      
+            <div class="table-responsive" >
+                <table class="table datatable-table table-striped"
+                mdbTable
+                mdbTableSort
+                #table="mdbTable"
+                #sort="mdbTableSort"
+                [dataSource]="visua"
+                [sort]="sort">
+                    <thead class="tablaHead te text-white">
+                        <!-- <thead class="grey lighten-1"> -->
+                        <tr class="">
+                            <!-- <td>Fecha</td> -->
+                            <th class="text-white">Sección</th>
+                            <th class="text-white">Código</th>
+                            <th class="text-white">Empleado</th>
+                            <th class="text-white">Justificación</th>
+                            <th class="text-white">Hora normal</th>
+                            <th class="text-white">Horas ausentes</th>
+                            <th class="text-white" *ngFor="let item of horas">
+                                {{ item.descripcion}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let item of table.data" class="datatable-body">
+                        <tr *ngIf="!item.justificacion || item.validadoEncargadoJ == 1">
+                            <td class="td">{{ item.descripcionPuesto}}</td>
+                            <td class="td">{{ item.nEmpleado}}</td>
+                            <td class="td cursor" >{{ item.apellidos }} {{ item.nombre}}</td>
+                            <td class="text-center td">{{ item.justificacion}}</td>
+                            <td class="text-center td">{{ item.normal}}</td>
+                            <td class="text-center td">{{ item.horasAusentes}}</td>
+
+                            <!-- {{ item.columna}} -->
+
+                            <td *ngIf="hora1" class="td">{{ item.hora1}}</td>
+                            <td *ngIf="hora2" class="td">{{ item.hora2}}</td>
+                            <td *ngIf="hora3" class="td">{{ item.hora3}}</td>
+                            <td *ngIf="hora4" class="td">{{ item.hora4}}</td>
+                            <td *ngIf="hora5" class="td">{{ item.hora5}}</td>
+                            <td *ngIf="hora6" class="td">{{ item.hora6}}</td>
+                            <td *ngIf="hora7" class="td">{{ item.hora7}}</td>
+                            <td *ngIf="hora8" class="td">{{ item.hora8}}</td>
+                            <td *ngIf="hora9" class="td">{{ item.hora9}}</td>
+                            <td *ngIf="bolsa1" class="td">{{ item.bolsa1}}</td>
+                            <td *ngIf="bolsa2" class="td">{{ item.bolsa2}}</td>
+                            <td *ngIf="bolsa3" class="td">{{ item.bolsa3}}</td>
+                            <td *ngIf="bolsa4" class="td">{{ item.bolsa4}}</td>
+                            <td *ngIf="bolsa5" class="td">{{ item.bolsa5}}</td>
+                            <td *ngIf="plus1 && item.plus1 == 'B'" class="td">{{ item.plus1}}</td>
+                            <td *ngIf="plus1 && item.plus1 != 'B'" class="td text-danger">-------</td>
+                            <td *ngIf="plus2" class="td">{{ item.plus2}}</td>
+                            <td *ngIf="plus3" class="td">{{ item.plus3}}</td>
+                        </tr>
+                        </tbody>
+                </table>
+           </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="input-group mb-4">
+            <input  type="text" id="advanced-search" class="form-control" id="search-input" #searchInput placeholder="Buscar empleado"/>
+            <button class="btn btn-primary ripple-surface"  id="advanced-search-button"  type="button" (click)="advancedSearch(searchInput.value)">
+                <i class="fa fa-search"></i>
+            </button>
+    </div>
+    </div>
+  </div>
+  <!-- <div class="modal-footer">
+    <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+  </div> -->
+  </div>
+
+

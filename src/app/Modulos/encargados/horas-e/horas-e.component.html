@@ -1,5 +1,214 @@
 
 <app-menu></app-menu>
 <section class="top animate__animated animate__fadeIn ">
-<p>Horas para los Encargados!</p>
+    
+    <div class="top animated fadeIn" *ngIf="mostrarData" id="top-section">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="alert alert-secondary">
+                    RESPONSABLE: <span class="text-dark text-uppercase"> &nbsp; {{ encargado }}</span>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+    
+                    </div>
+                    <div class="col-md-11">
+                        <div class="alert alert-danger" *ngIf="addEmpleadoNuevo">
+                            <p>Operario agregado. Antes de validarlo, recuerda incluir las horas trabajadas y los pluses correspondientes.</p>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-md-3 topB">
+                <button mdbBtn (click)="refresh()" type="button" class="btn btn-info"  mdbWavesEffect>
+                    <i class="fas fa-sync"></i> Refrescar
+                              
+                            </button>&nbsp; &nbsp;
+                <button mdbBtn (click)="habilitarEdit()" type="button" class="btn btn-dark" mdbWavesEffect>
+                    <i class="fas fa-edit"></i>
+                  
+                </button> &nbsp; &nbsp;
+                <button mdbBtn (click)="show = !show" type="button" class="btn btn-dark" mdbWavesEffect>
+                  <i *ngIf="!show" class="fas fa-plus"></i>
+                  <i *ngIf="show" class="fas fa-minus"></i>
+                </button>
+    
+                <!-- <button>{{show ? 'hide' : 'show'}}</button> -->
+                <br>
+            </div>
+    
+            <div *ngIf="show" class="col-md-3 topB">
+                <select name="" id="" class="form-select" (change)="onChange($event)">
+                    <option  value="5" selected>Agregar Empleados</option>
+                    <option [value]="i.nEmpleado"  *ngFor="let i of datas"> {{ i.apellidos}} {{i.nombre}}</option>
+                    
+                </select>
+            </div>
+    
+            <div *ngIf="show" class="col-md-2 topB">
+    
+                <form #addE="ngForm" (ngSubmit)="addEmpl(addE)">
+    
+                    <button class="btn btn-dark" type="submit">Agregar</button>
+    
+                    <input type="hidden" name="nEmpleado" [(ngModel)]="nEmpleado">
+                    <input type="hidden" name="fechaTrabajo" required [(ngModel)]="fecha">
+                </form>
+            </div>
+    
+        </div>
+        <br>
+    
+        <table class="table datatable-table table-sm"
+            mdbTable
+            mdbTableSort
+            #table="mdbTable"
+            #sort="mdbTableSort"
+            [dataSource]="data"
+            [sort]="sort">
+            <thead class="grey lighten-1  text-white">
+                <tr>
+    
+                    <td class="cursor" [mdbTableSort]="data" sortBy="descripcionPuesto" width="110">Sección
+                        <mdb-icon fas icon="sort"></mdb-icon>
+                    </td>
+    
+                    <td *ngIf="!addEmpleadoNuevo">Validar</td>
+                    <td class="cursor" [mdbTableSort]="data" sortBy="apellidos">Empleado
+                        <mdb-icon fas icon="sort"></mdb-icon>
+                    </td>
+                    <td width="20">Tur</td>
+                    <td width="70">Justifi.</td>
+                    <td width="98">Hora normal</td>
+                    <td *ngFor="let item of horas" scope="col">
+                        {{ item.descripcion}}
+                    </td>
+                </tr>
+            </thead>
+    
+            <tbody *ngIf="!loading" class="datatable-body" >
+                <tr *ngFor="let item of data ; let is = index">
+    
+                    <td width="110" class="cursor" (dblclick)="func2(item.idPlantilla,'fp' , item.descripcionPuesto,item.nombre,item.apellidos, item.horario)" mdbTooltip="Editar puesto doble click." placement="right">{{ item.descripcionPuesto}}</td>
+    
+                    <td width="60" class="text-center  cursor text-primary" (click)="validar(item ,'frame','frame1')" *ngIf="!addEmpleadoNuevo">
+                        <i class="far fa-save fa-lg"></i>
+    
+                    </td>
+                    <td width="110" class="cursor" (dblclick)="verCom(item,'modal')">{{ item.apellidos }} {{ item.nombre}}</td>
+                    <td width="32" class="cursor" mdbTooltip="{{ item.desTurno }}" placement="top" (dblclick)="changeTurno(item.idPlantilla, item.descripcionPuesto,item.nombre,item.apellidos, item.turnoDia ,'turChange')">{{ item.turnoDia}}</td>
+                    <td class="text-center " width="70">
+                        <!-- {{ item.normal}} -->
+                        <!-- <input type="number" [disabled]="!habilitarE11" onkeydown="return event.keyCode !== 69" class="form-control" #justificante (change)="justi(justificante,item.idPlantilla)" [(ngModel)]="item.justificacion"> -->
+                        <select [disabled]="!habilitarE11" class="form-select" name="justificacion" (change)="justi($event,item.idPlantilla, 'justif', item , 'basicModal')" [(ngModel)]="justiF">
+                          
+                            <option class="text-uppercase" [value]="item.idJustificacion" *ngFor="let item of justifi"> {{item.detallesJ}}</option>
+                        </select>
+                    </td>
+                    <td class="text-center " width="80">
+                        <!-- {{ item.normal}} -->
+                        <input width="80" type="number" [disabled]="!habilitarE1" onkeydown="return event.keyCode !== 69" class="form-control" #nNormal (change)="hNormal(nNormal,item.idPlantilla,is,item.horario)" [(ngModel)]="item.normal">
+                    </td>
+    
+                    <!-- Input -->
+    
+    
+                    <!-- <input width="70" [disabled]="!habilitarE" type="text" class="form-control" #datos (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, i.columna,item.idPlantilla,is) "> -->
+                    <td *ngIf="hora1" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos name="uno" [(ngModel)]="item.hora1" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, 'hora1',item.idPlantilla,is) ">
+                    </td>
+                    <td *ngIf="hora2" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos1 name="dos" [(ngModel)]="item.hora2" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos1, 'hora2',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="hora3" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos name="tre" [(ngModel)]="item.hora3" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, 'hora3',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="hora4" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos name="cuatro" [(ngModel)]="item.hora4" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, 'hora4',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="hora5" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos name="cinco" [(ngModel)]="item.hora5" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, 'hora5',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="hora6" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos6 name="seis" [(ngModel)]="item.hora6" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos6, 'hora6',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="hora7" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos name="siete" [(ngModel)]="item.hora7" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, 'hora7',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="hora8" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos name="ocho" [(ngModel)]="item.hora8" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, 'hora8',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="hora9" class="td alert-darks">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #datos name="nueve" [(ngModel)]="item.hora9" (change)="onClick(item.fechaTrabajo , item.nEmpleado , datos, 'hora9',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="bolsa1" class="td alert-warnings">
+    
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #bolsa1 name="bolsa11" [(ngModel)]="item.bolsa1" (change)="onClick(item.fechaTrabajo , item.nEmpleado , bolsa1, 'bolsa1',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="bolsa2" class="td alert-warnings">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #bolsa2 name="bolsa22" [(ngModel)]="item.bolsa2" (change)="onClick(item.fechaTrabajo , item.nEmpleado , bolsa2, 'bolsa2',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="bolsa3" class="td alert-warnings">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #bolsa3 name="bolsa33" [(ngModel)]="item.bolsa3" (change)="onClick(item.fechaTrabajo , item.nEmpleado , bolsa3, 'bolsa3',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="bolsa4" class="td alert-warning">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #bolsa4 name="bolsa44" [(ngModel)]="item.bolsa4" (change)="onClick(item.fechaTrabajo , item.nEmpleado , bolsa4, 'bolsa4',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="bolsa5" class="td alert-warning">
+                        <input width="70" [disabled]="!habilitarE" type="number" class="form-control" #bolsa5 name="bolsa55" [(ngModel)]="item.bolsa5" (change)="onClick(item.fechaTrabajo , item.nEmpleado , bolsa5, 'bolsa5',item.idPlantilla,is) ">
+    
+                    </td>
+                    <td *ngIf="plus1" class="">
+                        <input width="70" type="text" [disabled]="!habilitarE" class="form-control " #plus1 name="plus11" [(ngModel)]="item.plus1" (blur)="onClick(item.fechaTrabajo , item.nEmpleado , plus1, 'plus1',item.idPlantilla,$event) ">
+    
+    
+                    </td>
+                    <td *ngIf="plus2" class="">
+                        <input width="70" type="text" [disabled]="!habilitarE" class="form-control " #plus2 name="plus22" [(ngModel)]="item.plus2" (blur)="onClick(item.fechaTrabajo , item.nEmpleado , plus2, 'plus2',item.idPlantilla,$event) ">
+    
+                    </td>
+                    <td *ngIf="plus3" class="">
+                        <input width="70" type="text" [disabled]="!habilitarE" class="form-control " #plus3 name="plus33" [(ngModel)]="item.plus3" (blur)="onClick(item.fechaTrabajo , item.nEmpleado , plus3, 'plus3',item.idPlantilla,$event) ">
+    
+                    </td>
+    
+    
+    
+                </tr>
+            </tbody>
+            <tbody *ngIf="sinData">
+                <td colspan="17" class="text-center h2 text-warning">Todo validado</td>
+            </tbody>
+
+        </table>
+        <ng-container *ngIf="loading">
+            <div class="datatable-loader bg-light">
+              <span class="datatable-loader-inner">
+                <span class="datatable-progress bg-primary"></span>
+              </span>
+            </div>
+            <p class="text-center text-muted my-4">Cargando resultados...</p>
+          </ng-container>
+        <div class="row" id="up-section" *ngIf="!loading">
+            <div class="col-md-6 offset-md-5">
+                <button type="button" mdbBtn class="btn btn-success" (click)="visuValidados('visuValidado')" mdbWavesEffect>Visualizar validación</button> &nbsp; &nbsp; &nbsp;
+                <button type="button" mdbBtn class="btn btn-warning" (click)="visuErrores()" mdbWavesEffect>Informa de error</button>
+            </div>
+        </div>
+    </div>
+    
 </section>

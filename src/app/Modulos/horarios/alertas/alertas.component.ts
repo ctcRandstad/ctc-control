@@ -1233,8 +1233,37 @@ addH(horario:any){
         this.horasAusentes = this.valor;
         this.siValidarJust(this.horasAusentes , 0);
        } else {
-         this.modalB.show();
+        this.modalM =  this.modalService.open(HorasModalComponent, {
+          containerClass: 'right',
+          modalClass: 'modal-side modal-top-right',
+          ignoreBackdropClick: true,
+          data: {
+           param:2,
+           idPlantillaF:this.idPlantillaF,
+           nEmpledo:this.nEmpledo,
+           horasNormales:this.horasNormales,
+           horasAusentes:this.horasAusentes,
+           fechaTrabajo:this.fechaTrabajo,
+           justiF:this.justiF,
+           idServicio:this.idServicio,
+           valor:this.valor,
         
+          },
+        });
+        this.modalM.onClose.subscribe((message: any) => {
+         
+          if(message == 'closeMessage' ||  message == 'success'){
+            this.getAlertas1();
+            this.getAlertas3();
+            this.getAlertas2();
+            this.getAlertas4();
+            this.getAlertas5();
+            if(this.alerta5){
+             this.vistoInfo5Bis( this.indice)
+           }
+            this.isN=0;
+          }
+       });
        }
        
      }

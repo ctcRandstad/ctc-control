@@ -1,0 +1,21 @@
+thead tr th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #7A726B;
+}
+
+.table-responsive {
+    height: 630px;
+    overflow-y: scroll;
+}
+
+.table-sm,th,td {
+    padding: .2em !important;
+}
+
+th,
+.td {
+    font-size: 14px;
+   
+}

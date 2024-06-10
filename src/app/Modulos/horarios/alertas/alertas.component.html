@@ -99,7 +99,7 @@
                                 <option [value]="item.idJustificacion" *ngFor="let item of justifi"> {{item.detallesJ}}</option>
                             </select> -->
                             <input type="text" class="form-control" *ngIf="item.justificacion" disabled [(ngModel)]="item.justificacion">
-                            <select *ngIf="!item.justificacion" class="form-control" name="justificacion" (change)="justiA($event,item.idPlantilla, item,'basicModal')" [(ngModel)]="item.justificacion">
+                            <select *ngIf="!item.justificacion" class="form-select" name="justificacion" (change)="justiA($event,item.idPlantilla, item,'basicModal')" [(ngModel)]="item.justificacion">
                      
                                 <option class="text-uppercase" [value]="item.idJusti" *ngFor="let item of justifi"> {{item.detallesJ}}</option>
                             </select>

@@ -23,6 +23,7 @@ import { EliminarModalComponent } from './Modales/eliminar-modal/eliminar-modal.
 import { AvisosComponent } from './Modales/avisos/avisos.component';
 import { LoadingComponent } from './Modales/loading/loading.component';
 import { HorasEComponent } from './Modulos/encargados/horas-e/horas-e.component';
+import { EncargadosModalComponent } from './Modales/encargados-modal/encargados-modal.component';
 
 
 
@@ -44,6 +45,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     EliminarModalComponent,
     AvisosComponent,
     LoadingComponent,
+    EncargadosModalComponent,
    
   ],
  

@@ -1,0 +1,10 @@
+.topB {
+    margin-top: 10px;
+}
+.td {
+    font-size: 12px;
+}
+.table-sm,th,td {
+        padding: .3em !important;
+}
+

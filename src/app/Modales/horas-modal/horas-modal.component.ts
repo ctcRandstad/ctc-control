@@ -219,7 +219,7 @@ camPuesto(changePuesto:any){
   this._control.cambioPuest(changePuesto.value)
   .subscribe(data=>{ 
       if (data == 'success') {
-        this._alerta.openToast1('COMENTARIO GUARDADO...' , 'bg-success text-white' , 'OK');
+        this._alerta.openToast1('PUESTO CAMBIADO CORRECTAMENTE ...' , 'bg-success text-white' , 'OK');
         this.modalRef.close('success');
      
     } else {

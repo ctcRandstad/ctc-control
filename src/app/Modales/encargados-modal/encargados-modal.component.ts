@@ -25,7 +25,9 @@ export class EncargadosModalComponent implements OnInit {
   fecha: any | null = null;
 
   empleadoList: any | null = null;
+  empleado: any | null = null;
   visua: any | null = null;
+  idPlantilla: any | null = null;
   constructor(
     public modalRef: MdbModalRef<PefilModalComponent>,
     public _empleados:EmpleadosService,
@@ -190,7 +192,31 @@ addInfoError(infoError:any){
      })
   }
 
+  validando:boolean=false;
+  siValidar(empleado:any ){
 
+  this.validando = true;
+        this._control.validarEmpleado(empleado.fechaTrabajo,empleado.nEmpleado, empleado.idPlantilla)
+        .subscribe(res=>{ 
+            if (res == 'success') {
+             
+              this._alerta.openToast1('Empleado validado correctamente...' , 'bg-success text-white ' , '¡OK!');
+              
+              setTimeout(()=>{
+                this.validando=false;
+                this.modalRef.close('closeMessage');
+              },500)
+            } else {
+              alert ('Error al validar!');
+              this.modalRef.close('closeMessage');
+            }
+            });
+        
+    
+    
+
+ 
+  }
   
 
 }

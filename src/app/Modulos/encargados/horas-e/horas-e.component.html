@@ -5,8 +5,8 @@
     <div class="top animated fadeIn" *ngIf="mostrarData" id="top-section">
         <div class="row">
             <div class="col-md-4">
-                <div class="alert alert-secondary">
-                    RESPONSABLE: <span class="text-dark text-uppercase"> &nbsp; {{ encargado }}</span>
+                <div class="alert alert-secondary cursor" (click)="changeEncargados()">
+                    RESPONSABLE: <span class="text-dark text-uppercase">&nbsp; <i class="fas fa-user-check"></i> &nbsp; {{ encargado }}</span> 
                 </div>
                 <div class="row">
                     <div class="col-md-2">

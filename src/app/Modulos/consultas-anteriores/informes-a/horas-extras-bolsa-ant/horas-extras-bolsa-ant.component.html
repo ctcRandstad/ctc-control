@@ -1,0 +1,126 @@
+<section class="top animate__animated animate__fadeIn row ">
+    <div class="col-md-1" *ngIf="!siAnio"></div>   
+     <div class="col-md-3" *ngIf="!siAnio">
+        <mdb-form-control>
+            <mdb-select (valueChange)="changeYear($event)">
+              <mdb-option *ngFor="let option of options" [value]="option.label">{{ option.label}}</mdb-option>
+            </mdb-select>
+            <label mdbLabel class="form-label">Seleccione el año a consultar</label>
+          </mdb-form-control>
+        
+    </div>
+    <div class="col-md-12" *ngIf="siAnio">
+        <div class="container">
+            <div class="alert alert-secondary alert-dismissible fade show text-center h5" role="alert">
+              <strong>{{anio}}&nbsp; </strong> ¡Es el año seleccionado!.
+              <button (click)="closeAlert()"  type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+          </div>
+    </div>
+
+    
+<section class="top animate__animated animate__fadeIn" id="v-pills-profile" *ngIf="!pri && siAnio">
+
+  <div class="row top" *ngIf="!pri && !loadingHoras">
+    <div class="col-md-2 top1">
+        <button (click)="exportAsXLSX()" mdbBtn class="btn btn-success" mdbWavesEffect>
+            <i class="fas fa-file-excel"></i>
+        </button>
+        &nbsp;
+        <button (click)="print('printer')" mdbBtn class="btn btn-danger" mdbWavesEffect>
+            <i class="far fa-file-pdf"></i>
+        </button>
+    </div>
+</div>
+
+
+  <div class="col-md-3 container">
+      <div class="input-group mb-3">
+          <span class="input-group-text " id="search-addon"><i class="fas fa-search"></i></span>
+          <input autocomplete="off" (keyup)="search($event)" [(ngModel)]="filterQuery" type="search" class="form-control rounded" placeholder="Buscar empleado" aria-label="Search"
+            aria-describedby="search-addon" />
+        </div>
+
+
+  </div>
+  <table class="table datatable-table table-sm"
+          mdbTable
+          mdbTableSort
+          #table="mdbTable"
+          #sort="mdbTableSort"
+          [dataSource]="data"
+          [sort]="sort"
+          [pagination]="pagination">
+    
+          <thead class="grey lighten-1  text-white">
+          <tr class="grey lighten-1  text-white">
+              <th>Apellidos</th>
+              <th>Nombre</th>
+              <th>D.N.I</th>
+              <th>Horas Extras</th>
+              <th>Horas Bolsas Horas</th>
+              <th>ResumenGlobal Horas</th>
+          </tr>
+      </thead>
+      <tbody *ngIf="!loadingHoras">
+          <tr *ngFor="let item of table.data">
+              <td> {{item.apellidos}} </td>
+              <td> {{item.nombre}} </td>
+              <td> {{item.dni}} </td>
+              <td> {{item.HorasExtras}} </td>
+              <td> {{item.HorasBolsa}} </td>
+              <td> {{item.ResumenGlabal}} </td>
+          </tr>
+      </tbody>
+      <tfoot>
+          <tr>
+              <td colspan="5">
+                  <mdb-table-pagination rowsPerPageText="Lineas por página" ofText="De" #pagination></mdb-table-pagination>
+              </td>
+          </tr>
+      </tfoot>
+  </table>
+  <ng-container *ngIf="loadingHoras">
+      <div class="datatable-loader bg-light">
+        <span class="datatable-loader-inner">
+          <span class="datatable-progress bg-primary"></span>
+        </span>
+      </div>
+      <p class="text-center text-muted my-4">Cargando resultados...</p>
+    </ng-container>
+</section>
+
+
+<!-- Impresión -->
+
+<section  id="printer" *ngIf="pri && siAnio">
+
+
+  <br><br>
+  <table class="table datatable-table table-sm">
+
+  <thead class="grey lighten-1  text-white">
+  <tr class="grey lighten-1  text-white">
+      <th>Apellidos</th>
+      <th>Nombre</th>
+      <th>D.N.I</th>
+      <th>Horas Extras</th>
+      <th>Horas Bolsas Horas</th>
+      <th>ResumenGlobal Horas</th>
+  </tr>
+</thead>
+<tbody *ngIf="!loadingHoras">
+  <tr *ngFor="let item of data">
+      <td> {{item.apellidos}} </td>
+      <td> {{item.nombre}} </td>
+      <td> {{item.dni}} </td>
+      <td> {{item.HorasExtras}} </td>
+      <td> {{item.HorasBolsa}} </td>
+      <td> {{item.ResumenGlabal}} </td>
+  </tr>
+</tbody>
+
+</table>
+</section>
+    
+    </section>

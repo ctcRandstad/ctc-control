@@ -1,3 +1,46 @@
 <app-menu-a></app-menu-a>
 
-<p>informes-a works!</p>
+
+<hr class="hr container-fluid">
+<ul class="nav nav-tabs  animate__animated animate__fadeIn">
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/HS-A']">
+            <i class="fas fa-user-clock"></i> HORAS TRABAJADA</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/HNT-A']">
+            <i class="fas fa-user-alt-slash"></i> HORAS NO  TRABAJADA</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/HE-A']">
+            <i class="fas fa-user-plus"></i> HORAS EXTRAS</a>
+
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/ABSENTISMO-A']">
+            <i class="fas fa-sign-out-alt"></i> ABSENTISMO</a>
+
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/AUSENTISMO-A']">
+            <i class="fas fa-sign-out-alt"></i> AUSENTISMO</a>
+
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/HEBOLSA-A']">
+            <i class="fas fa-shopping-bag"></i> HORAS EXTRA BOLSA</a>
+
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/horasComite-A']">
+            <i class="fas fa-industry"></i> HORAS COMITÉ</a>
+
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['../Consultas-Anteriores-Informes/validacion-fichajes-A']">
+            <i class="fas fa-fingerprint"></i> VALIDACIÓN FICHAJES</a>
+
+    </li>
+
+</ul>
+<router-outlet></router-outlet>

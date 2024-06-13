@@ -197,10 +197,7 @@ filterQuery="";
                     this.fecha1=this.dataJ[0].fechaTrabajo;
                     this._empleados.consultaProgramacionJusFNoche(this.filtarTuros,this.idServicio, this.fecha1 , 'm')
                     .subscribe((res=>{
-                   
                       this.dia1Manana = res;
-                     
-
                     }));
                     // tarde
                     this._empleados.consultaProgramacionJusFNoche(this.filtarTuros,this.idServicio, this.fecha1 , 't')
@@ -698,10 +695,10 @@ filterQuery="";
                   }
   
     
+                  this.justi = true;
                  setTimeout(()=>{
-                   this.justi = true;
                    this.mostrarBtn=false;  
-                 },5000) 
+                 },10000) 
                   
                 }
            }
@@ -716,15 +713,22 @@ filterQuery="";
       this.pri=true;
       this._alerta.openToast1('DESCARGANDO PDF, ESPERE POR FAVOR.' , 'bg-warning text-white' , 'DESCARGA...');
   setTimeout(()=>{
-    let contenido:any = document.getElementById(printer);
-    let pdf = new jsPDF(); 
-    html2canvas(contenido).then(canvas => { 
-      const pagina =  'Programación_' + '.pdf';
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 288);
-      pdf.setFontSize(15);
-      pdf.save(pagina); // Generated PDF  
-     }); 
+    const DATA:any = document.getElementById('printer');
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    const options = {
+     
+      allowTaint: true,
+      useCORS: true,
+    };
+    html2canvas(DATA, options).then(canvas => { 
+    
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('Programación.pdf');
      this.pri= false;
+    });
   },500)
       
      }

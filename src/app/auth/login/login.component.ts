@@ -53,9 +53,9 @@ fecha:any
        this.conectado=false;
      },3000)
      }else if(data == 'error'){
-       this.toastrService.openAlert('Los datos ingresados son incorrectos' , 'bg-danger text-white', 'center');
+       this.toastrService.openToast1('Los datos ingresados son incorrectos' , 'bg-danger text-white', 'ERROR');
      }else{
-      this.toastrService.openAlert('Datos correctos!' , 'bg-info text-white', 'center');
+      this.toastrService.openToast1('Datos correctos!' , 'bg-success text-white', 'OK');
         this.estado=true;
    
      

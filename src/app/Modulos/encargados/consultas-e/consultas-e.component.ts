@@ -626,14 +626,22 @@ exportAsXLSX():void {
     this.pri=true;
     this._alerta.openToast1('DESCARGANDO PDF, ESPERE POR FAVOR.' , 'bg-warning text-white' , 'DESCARGA...');
 setTimeout(()=>{
-  let contenido:any = document.getElementById(printer);
-  let pdf = new jsPDF(); 
-  html2canvas(contenido).then(canvas => { 
-    const pagina =  'Programación_' + '.pdf';
-    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 200, 158);
-    pdf.setFontSize(15);
-    pdf.save(pagina); // Generated PDF  
-   }); 
+  const DATA:any = document.getElementById('v-pills-profile');
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    const options = {
+     
+      allowTaint: true,
+      useCORS: true,
+    };
+    html2canvas(DATA, options).then(canvas => { 
+    
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('Programación.pdf');
+     this.pri= false;
+    });
    this.pri= false;
 },500)
    } else {

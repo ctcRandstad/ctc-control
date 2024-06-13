@@ -12,6 +12,14 @@ import { ConsultasComponent } from './consultas/consultas.component';
 import { ConsultaHorarioComponent } from './consulta-horario/consulta-horario.component';
 import { MenuAComponent } from './menu-a/menu-a.component';
 import { InformesAComponent } from './informes-a/informes-a.component';
+import { HorasSeccionAntComponent } from './informes-a/horas-seccion-ant/horas-seccion-ant.component';
+import { AbsentismoAntComponent } from './informes-a/absentismo-ant/absentismo-ant.component';
+import { AusentismoAntComponent } from './informes-a/ausentismo-ant/ausentismo-ant.component';
+import { FichajeValidacionAntComponent } from './informes-a/fichaje-validacion-ant/fichaje-validacion-ant.component';
+import { HorasExtrasAntComponent } from './informes-a/horas-extras-ant/horas-extras-ant.component';
+import { HorasExtrasBolsaAntComponent } from './informes-a/horas-extras-bolsa-ant/horas-extras-bolsa-ant.component';
+import { HorasNoTrabajadasAntComponent } from './informes-a/horas-no-trabajadas-ant/horas-no-trabajadas-ant.component';
+import { HorasComiteAntComponent } from './informes-a/horas-comite-ant/horas-comite-ant.component';
 
 
 @NgModule({
@@ -19,7 +27,15 @@ import { InformesAComponent } from './informes-a/informes-a.component';
     ConsultasComponent,
     ConsultaHorarioComponent,
     MenuAComponent,
-    InformesAComponent
+    InformesAComponent,
+    HorasSeccionAntComponent,
+    AbsentismoAntComponent,
+    AusentismoAntComponent,
+    FichajeValidacionAntComponent,
+    HorasExtrasAntComponent,
+    HorasExtrasBolsaAntComponent,
+    HorasNoTrabajadasAntComponent,
+    HorasComiteAntComponent,
   ],
   imports: [
     CommonModule,

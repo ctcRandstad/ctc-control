@@ -185,10 +185,13 @@
                             <!-- <div class="col-md-6">
                                 <h4>Horas inicio {{year}}: {{horasInicio}}</h4>
                             </div> -->
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <h5 class="border alert border-dark padding">Días de vacaciones disfrutados: <span class="text-primary"> {{vaciones}}</span></h5>
                             </div>
-                            <div class="col-md-2" *ngIf="pri">
+                            <div class="col-md-2 top" *ngIf="!pri">
+                             <button (click)="print('v-pills-profile' , employees.apellidos)" mdbBtn class="btn btn-danger" mdbWavesEffect *ngIf="!loadingHoras">
+                                <i class="far fa-file-pdf"></i>
+                            </button>
                             </div>
                             <div class="col-md-6  h4 text-primary" *ngIf="pri">
                                 Año {{ anio }}

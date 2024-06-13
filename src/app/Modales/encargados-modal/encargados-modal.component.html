@@ -189,9 +189,29 @@
     </div>
     </div>
   </div>
-  <!-- <div class="modal-footer">
-    <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
-  </div> -->
   </div>
 
-
+  <div class="" *ngIf="param == 5">
+    <div class="modal-header text-primary">
+      <h5 class="modal-title text-uppercase" id="exampleModalLabel">
+        <p class="pt-3 pr-2" >¿Quiere validar a  N° empleado <strong> {{ empleado.nEmpleado}}</strong>?</p>
+      </h5>
+    </div>
+    <div class="modal-body">
+        <div class=" text-uppercase alert alert-primary">
+          <strong>{{empleado.nombre}} {{ empleado.apellidos}} </strong>
+        </div>
+  </div>
+  <div class="modal-footer">
+    <button *ngIf="!validando" (click)="siValidar(empleado)" type="reset" class="btn btn-primary">Validar</button>
+    <button *ngIf="validando"  class="btn btn-primary" type="button" disabled>
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      <span class="visually-hidden">Loading...</span>
+    </button>
+    <button (click)="no()" type="reset" class="btn btn-danger">Salir</button>
+  </div>
+  </div>

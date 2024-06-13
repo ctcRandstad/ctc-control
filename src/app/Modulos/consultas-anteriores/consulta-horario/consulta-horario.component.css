@@ -1,0 +1,42 @@
+.top1 {
+    margin-top: 41px;
+}
+.margin{
+    margin-left: 2%;;
+}
+
+.list-group-item {
+    height: 200px;
+    width: 390px;
+}
+.td {
+    font-size: 12px;
+}
+.table-sm,th,td {
+        padding: .3em !important;
+}
+
+.bord {
+   
+    height: 300px;
+
+}
+
+.fecha {
+   
+    display: flex;
+    align-items: center;
+}
+
+.aling {
+    margin-left: 36%!important;
+    margin-top: 360px;
+}
+
+.alert-darks {
+    background: rgb(241, 240, 240);
+}
+
+.alert-warnings {
+    background: #f1f8e9
+}

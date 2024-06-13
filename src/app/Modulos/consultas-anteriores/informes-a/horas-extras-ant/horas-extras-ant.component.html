@@ -1,0 +1,280 @@
+<section class="top animate__animated animate__fadeIn row ">
+    <div class="col-md-1" *ngIf="!siAnio"></div>   
+     <div class="col-md-3" *ngIf="!siAnio">
+        <mdb-form-control>
+            <mdb-select (valueChange)="changeYear($event)">
+              <mdb-option *ngFor="let option of options" [value]="option.label">{{ option.label}}</mdb-option>
+            </mdb-select>
+            <label mdbLabel class="form-label">Seleccione el año a consultar</label>
+          </mdb-form-control>
+        
+    </div>
+    <div class="col-md-12" *ngIf="siAnio">
+        <div class="container">
+            <div class="alert alert-secondary alert-dismissible fade show text-center h5" role="alert">
+              <strong>{{anio}}&nbsp; </strong> ¡Es el año seleccionado!.
+              <button (click)="closeAlert()"  type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+          </div>
+    </div>
+    
+    </section>
+
+
+    <div class="row top" *ngIf="!pri && siAnio && !loading">
+      <div class="col-md-2 top1">
+  
+          <button (click)="exportAsXLSX()" mdbBtn class="btn btn-success" mdbWavesEffect>
+              <i class="fas fa-file-excel"></i>
+          </button>
+          &nbsp;
+          <button (click)="print('v-pills-profile1')" mdbBtn class="btn btn-danger" mdbWavesEffect>
+              <i class="far fa-file-pdf"></i>
+          </button>
+      </div>
+  </div>
+  
+  <section class="top animate__animated animate__fadeIn" id="v-pills-profile" *ngIf=" !pri && siAnio">
+  
+  
+      <table class="table datatable-table table-sm"
+      mdbTable
+      mdbTableSort
+      #table="mdbTable"
+      #sort="mdbTableSort"
+      [dataSource]="data"
+      [sort]="sort">
+      <thead class="grey lighten-1  text-white">
+                  <tr>
+                  <th>SECCIONES</th>
+                  <th>ID SEC. &nbsp;</th>
+                  <th>ENERO</th>
+                  <th>FEBRERO</th>
+                  <th>MARZO</th>
+                  <th>ABRIL</th>
+                  <th>MAYO</th>
+                  <th>JUNIO</th>
+                  <th>JULIO</th>
+                  <th>AGOSTO</th>
+                  <th>SEPTIEMBRE</th>
+                  <th>OCTUBRE</th>
+                  <th>NOVIEMBRE</th>
+                  <th>DICIEMBRE</th>
+              </tr>
+          </thead>
+          <tbody *ngIf="!loading">
+  
+              <tr *ngFor="let item of data">
+                  <td> {{item.seccion}} </td>
+                  <td> {{item.idPuesto}} </td>
+  
+                  <td> {{item.eneroh}} </td>
+                  <td> {{item.febreroh}} </td>           
+                  <td> {{item.marzoh}} </td>                
+                  <td> {{item.abrilh}} </td>
+                  <td> {{item.mayoh}} </td>
+                  <td> {{item.junioh}} </td>
+                  <td> {{item.julioh}} </td>
+                  <td> {{item.agostoh}} </td>
+                  <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{item.septiembreh}} </td>
+                  <td>&nbsp;&nbsp; {{item.octubreh}} </td>
+                  <td>&nbsp;&nbsp;&nbsp; {{item.noviembreh}} </td>
+                  <td>&nbsp;&nbsp;&nbsp; {{item.diciembreh}} </td>
+              </tr>
+  
+              <br><br>
+              <tr class="alert alert-warning ">
+                  <td colspan="2"> TOTALS</td>
+                  <td>{{totalEnero}}</td>
+                  <td>{{totalF}}</td>
+                  <td>{{totalM}}</td>
+                  <td>{{totalA}}</td>
+                  <td>{{totalMa}}</td>
+                  <td>{{totalJu}}</td>
+                  <td>{{totalJul}}</td>
+                  <td>{{totalAgo}}</td>
+                  <td>{{totalSep}}</td>
+                  <td>{{totalOct}}</td>
+                  <td>{{totalNo}}</td>
+                  <td>{{totalDic}}</td>
+                  <!-- <td>{{totalEnero}}</td> -->
+  
+              </tr>
+          </tbody>
+      </table>
+      <ng-container *ngIf="loading">
+          <div class="datatable-loader bg-light">
+            <span class="datatable-loader-inner">
+              <span class="datatable-progress bg-primary"></span>
+            </span>
+          </div>
+          <p class="text-center text-muted my-4">Cargando resultados...</p>
+        </ng-container>
+      <hr>
+  
+      <div class="row" *ngIf="!loading">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+              <table  class="table table-sm table-bordered container">
+              <thead>
+  
+                  <tr class="alert alert-danger">
+                      <td class="text-center">MES</td>
+                      <td class="text-center">HORA EXTRAS</td>
+                      <td class="text-center">HORA EXTRAS NOCTURNAS</td>
+                      <td class="text-center">HORA EXTRAS FESTIVAS</td>
+                  </tr>
+              </thead>
+                  <tbody>
+                      <tr *ngFor="let item of datosH">
+                          <td *ngIf="item.mes == 1">ENERO</td>
+                          <td *ngIf="item.mes == 2">FEBRERO</td>
+                          <td *ngIf="item.mes == 3">MARZO</td>
+                          <td *ngIf="item.mes == 4">ABRIL</td>
+                          <td *ngIf="item.mes == 5">MAYO</td>
+                          <td *ngIf="item.mes == 6">JUNIO</td>
+                          <td *ngIf="item.mes == 7">JULIO</td>
+                          <td *ngIf="item.mes == 8">AGOSTO</td>
+                          <td *ngIf="item.mes == 9">SEPTIEMBRE</td>
+                          <td *ngIf="item.mes == 10">OCTUBRE</td>
+                          <td *ngIf="item.mes == 11">NOVIEMBRE</td>
+                          <td *ngIf="item.mes == 12">DICIEMBRE</td>
+                          
+                          <td class="text-center" *ngIf="item.ehe">{{item.ehe}}</td>
+                          <td class="text-center" *ngIf="!item.ehe">----</td>
+                          <td class="text-center" *ngIf="item.ehen">{{item.ehen}}</td>
+                          <td class="text-center" *ngIf="!item.ehen">----</td>
+                          <td class="text-center" *ngIf="item.ehef">{{item.ehef}}</td>
+                          <td class="text-center" *ngIf="!item.ehef">----</td>
+                          
+                          
+                      </tr>
+                  </tbody>
+              </table>
+  
+          </div>
+      </div>
+  
+  </section>
+  
+  
+  
+  <!-- Impresión -->
+  
+  <section  class=" h1" id="v-pills-profile1" *ngIf="pri">
+  
+  
+      <div class="col-md-12">
+  
+          <div #alert class="alert alert-secondary alert-dismissible fade show text-center h5" role="alert">
+              <button type="button" class="close" aria-label="Close">
+          </button>Horas extras trabajadas por sección {{anio}}
+          </div>
+      </div>
+      <br><br>
+  
+      <table mdbTable hover="true">
+          <thead>
+              <tr class="grey lighten-1  text-white">
+                  <th>SECCIONES</th>
+                  <th>ID SEC. &nbsp;</th>
+                  <th>ENERO</th>
+                  <th>FEBRERO</th>
+                  <th>MARZO</th>
+                  <th>ABRIL</th>
+                  <th>MAYO</th>
+                  <th>JUNIO</th>
+                  <th>JULIO</th>
+                  <th>AGOSTO</th>
+                  <th>SEPTIEMBRE</th>
+                  <th>OCTUBRE</th>
+                  <th>NOVIEMBRE</th>
+                  <th>DICIEMBRE</th>
+              </tr>
+          </thead>
+          <tbody>
+  
+              <tr *ngFor="let item of data">
+                <td> {{item.seccion}} </td>
+                <td> {{item.idPuesto}} </td>
+
+                <td> {{item.seccion}} </td>
+                  <td> {{item.idPuesto}} </td>
+  
+                  <td> {{item.eneroh}} </td>
+                  <td> {{item.febreroh}} </td>           
+                  <td> {{item.marzoh}} </td>                
+                  <td> {{item.abrilh}} </td>
+                  <td> {{item.mayoh}} </td>
+                  <td> {{item.junioh}} </td>
+                  <td> {{item.julioh}} </td>
+                  <td> {{item.agostoh}} </td>
+                  <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{item.septiembreh}} </td>
+                  <td>&nbsp;&nbsp; {{item.octubreh}} </td>
+                  <td>&nbsp;&nbsp;&nbsp; {{item.noviembreh}} </td>
+                  <td>&nbsp;&nbsp;&nbsp; {{item.diciembreh}} </td>
+              </tr>
+  
+              <br><br>
+              <tr class="alert alert-warning ">
+                  <td colspan="2"> TOTALS</td>
+                  <td>{{totalEnero}}</td>
+                  <td>{{totalF}}</td>
+                  <td>{{totalM}}</td>
+                  <td>{{totalA}}</td>
+                  <td>{{totalMa}}</td>
+                  <td>{{totalJu}}</td>
+                  <td>{{totalJul}}</td>
+                  <td>{{totalAgo}}</td>
+                  <td>{{totalSep}}</td>
+                  <td>{{totalOct}}</td>
+                  <td>{{totalNo}}</td>
+                  <td>{{totalDic}}</td>
+                  <!-- <td>{{totalEnero}}</td> -->
+              </tr>
+          </tbody>
+      </table>
+      <hr>
+      <br>
+      <br>
+      <div class="row topMenu1">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+              <table mdbTable  class="table table-sm table-bordered container">
+  
+                  <tr class="alert alert-danger">
+                      <td class="text-center">MES</td>
+                      <td class="text-center">HORA EXTRAS</td>
+                      <td class="text-center">HORA EXTRAS NOCTURNAS</td>
+                      <td class="text-center">HORA EXTRAS FESTIVAS</td>
+                  </tr>
+  
+                  <tr *ngFor="let item of datosH">
+                      <td *ngIf="item.mes == 1">ENERO</td>
+                      <td *ngIf="item.mes == 2">FEBRERO</td>
+                      <td *ngIf="item.mes == 3">MARZO</td>
+                      <td *ngIf="item.mes == 4">ABRIL</td>
+                      <td *ngIf="item.mes == 5">MAYO</td>
+                      <td *ngIf="item.mes == 6">JUNIO</td>
+                      <td *ngIf="item.mes == 7">JULIO</td>
+                      <td *ngIf="item.mes == 8">AGOSTO</td>
+                      <td *ngIf="item.mes == 9">SEPTIEMBRE</td>
+                      <td *ngIf="item.mes == 10">OCTUBRE</td>
+                      <td *ngIf="item.mes == 11">NOVIEMBRE</td>
+                      <td *ngIf="item.mes == 12">DICIEMBRE</td>
+  
+                      <td class="text-center" *ngIf="item.ehe">{{item.ehe}}</td>
+                      <td class="text-center" *ngIf="!item.ehe">----</td>
+                      <td class="text-center" *ngIf="item.ehen">{{item.ehen}}</td>
+                      <td class="text-center" *ngIf="!item.ehen">----</td>
+                      <td class="text-center" *ngIf="item.ehef">{{item.ehef}}</td>
+                      <td class="text-center" *ngIf="!item.ehef">----</td>
+  
+  
+                  </tr>
+              </table>
+  
+          </div>
+      </div>
+  
+  </section>

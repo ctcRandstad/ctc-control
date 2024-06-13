@@ -16,10 +16,7 @@
   align-items: center;
   padding: 15px;
   background: #9053c7;
-  background: -webkit-linear-gradient(-135deg, hsl(130, 66%, 52%), hsl(230, 62%, 57%));
-  background: -o-linear-gradient(-135deg, hsl(130, 66%, 52%), hsl(230, 62%, 57%));
-  background: -moz-linear-gradient(-135deg, hsl(130, 66%, 52%), hsl(230, 62%, 57%));
-  background: linear-gradient(-135deg, hsl(130, 66%, 52%), hsl(230, 62%, 57%));
+ 
 }
 
 .wrap-login100 {
@@ -64,7 +61,7 @@
 .login100-form-title {
   font-family: Poppins-Bold;
   font-size: 24px;
-  color: #333333;
+  /* color: #333333; */
   line-height: 1.2;
   text-align: center;
   width: 100%;
@@ -85,8 +82,8 @@
 .input100 {
   font-family: Poppins-Medium;
   font-size: 15px;
-  line-height: 1.5;
-  color: #666666;
+  /* line-height: 1.5; */
+  /* color: #666666; */
   display: block;
   width: 100%;
   background: #e6e6e6;
@@ -168,5 +165,6 @@
 
 .login100-form-btn:hover {
   background: #333333;
+  cursor: pointer;
 }
 

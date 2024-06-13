@@ -1,0 +1,148 @@
+<section class="top animate__animated animate__fadeIn row ">
+  <div class="col-md-1" *ngIf="!siAnio"></div>   
+   <div class="col-md-3" *ngIf="!siAnio">
+      <mdb-form-control>
+          <mdb-select (valueChange)="changeYear($event)">
+            <mdb-option *ngFor="let option of options" [value]="option.label">{{ option.label}}</mdb-option>
+          </mdb-select>
+          <label mdbLabel class="form-label">Seleccione el año a consultar</label>
+        </mdb-form-control>
+      
+  </div>
+  <div class="col-md-12" *ngIf="siAnio && !pri">
+      <div class="container">
+          <div class="alert alert-secondary alert-dismissible fade show text-center h5" role="alert">
+            <strong>{{anio}}&nbsp; </strong> ¡Es el año seleccionado!.
+            <button (click)="closeAlert()"  type="button" class="btn-close" aria-label="Close"></button>
+          </div>
+        </div>
+  </div>
+  
+  </section>
+
+  
+<section class="top animate__animated animate__fadeIn" id="v-pills-profile" *ngIf=" !pri && siAnio">
+&nbsp;
+&nbsp;
+&nbsp;
+<button (click)="print('v-pills-profile1')" mdbBtn class="btn btn-danger" mdbWavesEffect *ngIf="!loadingHoras">
+  <i class="far fa-file-pdf"></i>
+</button>
+<hr>
+<table class="table datatable-table table-sm"
+mdbTable
+mdbTableSort
+#table="mdbTable"
+#sort="mdbTableSort"
+[dataSource]="data"
+[sort]="sort">
+
+<thead class="grey lighten-1  text-white">
+        <tr class="grey lighten-1  text-white">
+            <!-- <th>ABSENTISMO</th> -->
+            <!-- <th>ID SEC. &nbsp;</th> -->
+            <th>ENERO</th>
+            <th>FEBRERO</th>
+            <th>MARZO</th>
+            <th>ABRIL</th>
+            <th>MAYO</th>
+            <th>JUNIO</th>
+            <th>JULIO</th>
+            <th>AGOSTO</th>
+            <th>SEPTIEMBRE</th>
+            <th>OCTUBRE</th>
+            <th>NOVIEMBRE</th>
+            <th>DICIEMBRE</th>
+        </tr>
+    </thead>
+    <tbody *ngIf=" !loadingHoras" class="datatable-body" >
+
+        <tr>
+            <td > {{totalEnero | number}} </td>
+            <td> {{totalF | number}} </td>
+            <td > {{totalM | number}} </td>
+            <td > {{totalA | number}} </td>
+            <td > {{totalMa | number}} </td>
+            <td > {{totalJu | number}} </td>
+            <td > {{totalJul | number}} </td>
+            <td> {{totalAgo | number}} </td>
+            <td> {{totalSep | number}} </td>
+            <td > {{totalOct | number}} </td>
+            <td > {{totalNo | number}} </td>
+            <td> {{totalDic | number}} </td>
+        </tr>
+    </table>
+    <ng-container *ngIf="loadingHoras && siAnio">
+        <div class="datatable-loader bg-light">
+          <span class="datatable-loader-inner">
+            <span class="datatable-progress bg-primary"></span>
+          </span>
+        </div>
+        <p class="text-center text-muted my-4">Cargando resultados...</p>
+      </ng-container>
+<hr>
+
+
+</section>
+
+
+
+<!-- Impresión -->
+
+<section  id="v-pills-profile1" *ngIf="pri && siAnio">
+
+<div class="col-md-12">
+
+    <div #alert class="alert alert-secondary alert-dismissible fade show text-center h5" role="alert"> INFORME DE ABSENTISMO <strong>{{anio}}&nbsp; </strong> </div>
+</div>
+<br><br>
+
+
+
+<table mdbTable hover="true">
+    <thead>
+        <tr class="grey lighten-1  text-white">
+            <!-- <th>ABSENTISMO</th> -->
+            <!-- <th>ID SEC. &nbsp;</th> -->
+            <th>ENERO</th>
+            <th>FEBRERO</th>
+            <th>MARZO</th>
+            <th>ABRIL</th>
+            <th>MAYO</th>
+            <th>JUNIO</th>
+            <th>JULIO</th>
+            <th>AGOSTO</th>
+            <th>SEPTIEMBRE</th>
+            <th>OCTUBRE</th>
+            <th>NOVIEMBRE</th>
+            <th>DICIEMBRE</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <!-- <tr *ngFor="let item of data">
+            <td> {{item.enero}} </td>
+        </tr> -->
+
+        <tr>
+          <td > {{totalEnero | number}} </td>
+          <td> {{totalF | number}} </td>
+          <td > {{totalM | number}} </td>
+          <td > {{totalA | number}} </td>
+          <td > {{totalMa | number}} </td>
+          <td > {{totalJu | number}} </td>
+          <td > {{totalJul | number}} </td>
+          <td> {{totalAgo | number}} </td>
+          <td> {{totalSep | number}} </td>
+          <td > {{totalOct | number}} </td>
+          <td > {{totalNo | number}} </td>
+          <td> {{totalDic | number}} </td>
+        </tr>
+    </tbody>
+</table>
+<hr>
+
+
+
+
+</section>

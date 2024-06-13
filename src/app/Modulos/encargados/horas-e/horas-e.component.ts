@@ -332,7 +332,7 @@ this.ejecuter();
 
 
 
-  encargado:any='Jefe de turno';
+  encargado:any;
   fecha:any;
   data:any;
   hora:any;
@@ -408,6 +408,9 @@ loading:boolean = true;
              this.mostrarData = true;
           
         } else{
+          setTimeout(()=>{
+            this.loading=false;
+           },3000);
           this.sinData = true;
           this.mostrarData = true;
           let encargados = localStorage.getItem('turnoEncargados');
@@ -874,62 +877,103 @@ loading:boolean = true;
   puest:any=[];
   idPlantilla?:number;
   validar(item:any ,frame:any,datros:any){
+    console.log(item);
+    
     this.idPlantilla = item.idPlantilla;
     let turno = item.horario.toLowerCase()
 
 if (turno == 'p') {
   this.empleado = item;
     this.em = true
-      frame.show();
-}
-   else if (turno != this.tur) {
-      datros.show();
-
-  this._emple.getPuestos(this.idServicio)
-  .subscribe(puest=>{ 
-  this.puest = puest;
+      this.modalM =  this.modalService.open(EncargadosModalComponent, {
+      containerClass: 'right',
+      modalClass: 'modal-side modal-top-right',
+      ignoreBackdropClick: true,
+      data: {
+       param:5,
+       empleado:this.empleado,
+       idPlantilla:this.idPlantilla
+       
       
-  });
+   
+      },
+    });
+    this.modalM.onClose.subscribe((message: any) => {
+      if(message){
+       this.getContolEmpleados();
+      }
+    });
+}else if (turno != this.tur) {
+      // datros.show(); agregar puestos
+
+      this.modalM =  this.modalService.open(HorasModalComponent, {
+        containerClass: 'right',
+        modalClass: 'modal-side modal-top-right',
+        ignoreBackdropClick: true,
+        data: {
+         param:6,
+         idPlantillaF:this.idPlantilla,
+         idServicio:this.idServicio,
+         usuario:this.usuario,
+         name:item.nombre,
+         lastName:item.apellidos,
+         puestos: item.puestos
+      
+        },
+      });
+      this.modalM.onClose.subscribe((message: any) => {
+       
+        if(message == 'closeMessage' ||  message == 'success'){
+           
+           setTimeout(() => {
+            this.modalM =  this.modalService.open(EncargadosModalComponent, {
+              containerClass: 'right',
+              modalClass: 'modal-side modal-top-right',
+              ignoreBackdropClick: true,
+              data: {
+               param:5,
+               empleado:item,
+              },
+            });
+            this.modalM.onClose.subscribe((message: any) => {
+              if(message){
+               this.getContolEmpleados();
+              }
+            });
+            
+           }, 1000);
+        }
+     });
       
     } else {
       
     this.empleado = item;
     this.em = true
-      frame.show();
+         this.modalM =  this.modalService.open(EncargadosModalComponent, {
+      containerClass: 'right',
+      modalClass: 'modal-side modal-top-right',
+      ignoreBackdropClick: true,
+      data: {
+        param:5,
+       empleado:this.empleado,
+       idPlantilla:this.idPlantilla
+      
+   
+      },
+    });
+    this.modalM.onClose.subscribe((message: any) => {
+
+      if(message){
+        
+        this.getContolEmpleados();
+      }
+    });
       
       
     }
     
   }
 
-  validando:boolean=false;
-
-  siValidar(empleado:any ,frame:any){
-
-  this.validando = true;
-        this._control.validarEmpleado(empleado.fechaTrabajo,empleado.nEmpleado, empleado.idPlantilla)
-        .subscribe(res=>{ 
-            if (res == 'success') {
-              this.getContolEmpleados();    
-             
-              this._alerta.openToast1('Empleado validado correctamente...' , 'bg-success text-white' , 'OK');
-              this.habilitarE11=false;
-              this.habilitarE = false;
-              this.habilitarE1=false;
-              setTimeout(()=>{
-                this.validando=false;
-                frame.hide();
-              },500)
-            } else {
-              alert ('Error al validar!');
-            }
-            });
-        
-    
-    
-
- 
-  }
 
   siValidar1(empleado:any, frame1:any){
     this._control.validarEmpleadoAdd(empleado.value)
@@ -1162,5 +1206,18 @@ verCom( item:any , modal:any){
 }
 
 
+changeEncargados(){
+  
+
+  let promp:any = prompt('Agregar turno (Solo números)');
+
+ if (promp > 0 && promp < 6) {
+   localStorage.setItem('turnoEncargadosTarde' , promp);
+   location.reload();
+ }else{
+  alert('Solo acepta números del 1 al 5');
+ }
+
+}
 
 }

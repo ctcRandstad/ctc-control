@@ -1,6 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { EmpleadosRoutingModule } from './empleados-routing.module';
 import { EmpleadosComponent } from './empleados/empleados.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +15,8 @@ import { MdbSelectModule } from 'mdb-angular-ui-kit/select';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { PerfilComponent } from './papelera/perfil/perfil.component';
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
+import { FiltroEmpleado } from 'src/app/pipes/filtro-empleado';
+
 
 @NgModule({
     declarations: [
@@ -25,9 +26,9 @@ import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
         SolicitudesComponent,
         MenuSComponent,
         AddEmpleadosComponent,
-        PerfilComponent
+        PerfilComponent,
+        FiltroEmpleado
     ],
-    schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     imports: [
         CommonModule,
         EmpleadosRoutingModule,
@@ -39,6 +40,7 @@ import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
         ReactiveFormsModule,
         MdbTabsModule,
         MdbAccordionModule,
-    ]
+        ],
+    schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
 })
 export class EmpleadosModule { }

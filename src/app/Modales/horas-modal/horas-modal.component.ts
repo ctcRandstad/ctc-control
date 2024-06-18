@@ -85,8 +85,10 @@ export class HorasModalComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this._empleados.getPuestos1(this.idServicio)
+    this._empleados.getPuestos(this.idServicio)
     .subscribe(data=>{
+      console.log(data);
+      
      
       if (data != 'error') {
         this.puestos = data;

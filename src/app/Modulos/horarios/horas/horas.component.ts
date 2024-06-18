@@ -353,7 +353,8 @@ for (let i = 0; i < this.horas.length; i++) {
      usuario:this.usuario,
      name:this.name,
      lastName:this.lastName,
-     puestos: this.puestos
+     puestos: this.puestos,
+     puesto:  this.puesto
   
     },
   });
@@ -387,8 +388,8 @@ for (let i = 0; i < this.horas.length; i++) {
      usuario:this.usuario,
      name:this.name,
      lastName:this.lastName,
-     puestos: this.puestos
-  
+     puestos: this.puestos,
+     puesto:  this.puesto
     },
   });
   this.modalM.onClose.subscribe((message: any) => {

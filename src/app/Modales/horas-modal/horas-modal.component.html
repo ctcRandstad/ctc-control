@@ -164,7 +164,7 @@
         <div class="modal-body py-1">
             <mdb-form-control>
                 <mdb-select (ngModelChange)="pu($event)" [(ngModel)]="selectedValue">
-                  <mdb-option *ngFor="let option of puestos" [value]="option.value">{{ option.label  }}</mdb-option>
+                  <mdb-option *ngFor="let option of puestos" [value]="option.idPuesto">{{ option.descripcionPuesto  }}</mdb-option>
                 </mdb-select>
                 <label mdbLabel class="form-label">Seleccione un puesto</label>
               </mdb-form-control>

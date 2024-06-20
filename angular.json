@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "CTC-PRODUCTION:build:production"
+              "buildTarget": "CTC-PRODUCTION:build:production"
             },
             "development": {
-              "browserTarget": "CTC-PRODUCTION:build:development"
+              "buildTarget": "CTC-PRODUCTION:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "CTC-PRODUCTION:build"
+            "buildTarget": "CTC-PRODUCTION:build"
           }
         },
         "test": {

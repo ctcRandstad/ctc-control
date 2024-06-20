@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { NotificacionService } from 'src/app/Services/notificacion.service';
-import { PageService } from 'src/app/Services/page.service';
-import { PefilModalComponent } from '../pefil-modal/pefil-modal.component';
 import { EmpleadosService } from 'src/app/Services/empleados.service';
 
 @Component({
@@ -64,14 +62,16 @@ cargar:boolean=false;
     if (this.archivo.nombreArchivo == null || this.archivo.nombreArchivo == undefined) {
       alert ('Archivo vacio.');
     } else {
+      if(this.archivo.caducidad != ""){
+        if(this.archivo.caducidad < this.archivo.fechaSubido){
+            return  alert ('Error de fechas.');
+        }
 
-      if(this.archivo.caducidad < this.archivo.fechaSubido){
-          return  alert ('Error de fechas.');
       }
 
       this._empleados.uploadFile(this.archivo)
       .subscribe(res=> {
-        
+       
         if (res == 'success') {
           this.cargar = true;
           // this.getDocu(this.archivo.nombre);

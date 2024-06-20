@@ -8,7 +8,7 @@ import { MdbNotificationModule } from 'mdb-angular-ui-kit/notification';
 import { MdbTableModule } from 'mdb-angular-ui-kit/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptorService } from './auth-interceptor.service';
 import localeEs from '@angular/common/locales/es';
 import { ToastComponent } from './Component/Services/toast/toast.component';
@@ -34,49 +34,41 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    ToastComponent,
-    PefilModalComponent,
-    UbicarModalComponent,
-    AlertaModalComponent,
-    BajaModalComponent,
-    EliminarModalComponent,
-    AvisosComponent,
-    LoadingComponent,
-    EncargadosModalComponent,
-   
-  ],
- 
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MdbNotificationModule,
-    MdbTableModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [ HttpClient ]
-      }
-    })
-  ],
-  providers: [
-     AuthInterceptorService,
-    { provide: LOCALE_ID, useValue: 'es-Es', },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass:AuthInterceptorService,
-      multi:true
-    },
-  ],
-  bootstrap: [AppComponent],
-  schemas: [ NO_ERRORS_SCHEMA,CUSTOM_ELEMENTS_SCHEMA ],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        ToastComponent,
+        PefilModalComponent,
+        UbicarModalComponent,
+        AlertaModalComponent,
+        BajaModalComponent,
+        EliminarModalComponent,
+        AvisosComponent,
+        LoadingComponent,
+        EncargadosModalComponent,
+    ],
+    bootstrap: [AppComponent],
+    schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA], imports: [FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MdbNotificationModule,
+        MdbTableModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })], providers: [
+        AuthInterceptorService,
+        { provide: LOCALE_ID, useValue: 'es-Es', },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorService,
+            multi: true
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule { }
 registerLocaleData(localeEs, 'es');

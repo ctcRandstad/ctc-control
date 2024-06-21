@@ -712,25 +712,30 @@ filterQuery="";
     print(printer:any) : void{
       this.pri=true;
       this._alerta.openToast1('DESCARGANDO PDF, ESPERE POR FAVOR.' , 'bg-warning text-white' , 'DESCARGA...');
+      let DATA: any = document.getElementById('htmlData');
+      const options = {
+        dpi: 400,
+        scale: 3,
+       
+      };
+      let PDF = new jsPDF('p', 'mm', 'a4');
+      PDF.setFont('helvetica','bold');
+      PDF.setFontSize(20);
   setTimeout(()=>{
-    const DATA:any = document.getElementById('printer');
-    const pdf = new jsPDF('p', 'pt', 'a4');
-    const options = {
-     
-      allowTaint: true,
-      useCORS: true,
-    };
-    html2canvas(DATA, options).then(canvas => { 
-    
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    html2canvas(DATA,options).then((canvas) => {
+      let fileWidth = 208;
+      let fileHeight = (canvas.height * fileWidth) / canvas.width;
 
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('Programación.pdf');
-     this.pri= false;
+      const FILEURI = canvas.toDataURL('image/jpeg');
+      let position = 0;
+      PDF.addImage(FILEURI, 'JPEG', 0, position, fileWidth, fileHeight, 'FAST');
+
+      PDF.save('Programación.pdf');
     });
-  },500)
+   
+  },1500)
       
      }
+
 
 }

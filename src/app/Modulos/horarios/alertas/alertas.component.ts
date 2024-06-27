@@ -1391,6 +1391,32 @@ fecha(){
     this.apellidos = item.apellidos,
     this.fechaTrabajo = item.fechaTrabajo
     this.edi = true;
+    this.modalM =  this.modalService.open(HorasModalComponent, {
+      containerClass: 'right',
+      modalClass: 'modal-side modal-top-right',
+      ignoreBackdropClick: true,
+      data: {
+       param:5,
+       nEmpleado:this.nEmpleado,
+       fechaTrabajo:this.fechaTrabajo,
+       idServicio:this.idServicio,
+       name:this.nombre,
+       lastName:this.apellidos,
+       comentF: this.comentF
+    
+      },
+    });
+    this.modalM.onClose.subscribe((message: any) => {
+     
+      if(message == 'closeMessage' ||  message == 'success'){
+        this.getAlertas1();
+        this.getAlertas3();
+        this.getAlertas2();
+        this.getAlertas4();
+        this.getAlertas5();
+        this.getAlertas6();
+      }
+   });
   }
 
   addComent(cometario:any,errores:any){

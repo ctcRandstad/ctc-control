@@ -290,3 +290,55 @@
   </button>
 </div>
 </div>
+
+
+<div class="" *ngIf="eliminar == 9">
+  <div class="modal-header text-primary text-uppercase">
+    <h5 class="modal-title " id="exampleModalLabel"></h5>
+   Borrado exepcional. 
+  </div>
+  <div class="modal-body text-uppercase">
+    <i class="far fa-trash-alt text-danger fa-1x "></i>   ¿Quiere eliminar la justificación selecccionada.?
+    <hr class="hr">
+    <div class="alert alert-primary text-center" role="alert">
+      {{nombre}} {{apellidos}}
+    </div>
+
+    <form #ac="ngForm" (ngSubmit)="borrarAhora1(ac)">
+      <div class="modal-body">
+          <div class="md-form">
+
+              <textarea required minlength="10" name="coment" [(ngModel)]="coment" type="text" id="form7" class="md-textarea form-control" mdbInput></textarea>
+
+              <label for="form7">Justificar <small>(mínimo 10 caracteres)</small></label>
+          </div>
+          <input type="hidden" name="idJE" [(ngModel)]="idJE">
+
+          <input type="hidden" name="nEmpleado" [(ngModel)]="nEmpleado">
+
+          <input type="hidden" name="fechaInicioJ" [(ngModel)]="fechaInicioJ" required>
+
+          <input type="hidden" name="fechaFinJ" [(ngModel)]="fechaFinJ" required>
+
+          <input type="hidden" name="idServicio" [(ngModel)]="idServicio" required>
+
+      </div>
+      <div class="modal-footer">
+        <button (click)="no()" type="reset" class="btn btn-outline-primary">Salir</button>
+
+          <button *ngIf="!si" [disabled]="ac.invalid" type="submit"mdbBtn  class="btn btn-primary" mdbWavesEffect>Guardar cambios</button>
+          <button *ngIf="si"  class="btn btn-primary" type="button" disabled>
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </button>
+
+      </div>
+
+  </form>
+</div>
+
+</div>

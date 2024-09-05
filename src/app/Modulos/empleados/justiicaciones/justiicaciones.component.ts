@@ -180,7 +180,7 @@ export class JustiicacionesComponent implements OnInit {
 
 
 
-  borar(nEmpleado:any,fechaInicioJ:any , fechaFinJ:any,nombre:any,apellidos:any,idJE:any  ,basicModal:any){
+ borrar(nEmpleado:any,fechaInicioJ:any , fechaFinJ:any,nombre:any,apellidos:any,idJE:any  ,basicModal:any){
     this.nEmpleado = nEmpleado;
     this.fechaInicioJ = fechaInicioJ;
     this.fechaFinJ = fechaFinJ;
@@ -210,58 +210,32 @@ export class JustiicacionesComponent implements OnInit {
 
   
   
-  
-  borrarAhora(nEmpleado:any , fechaInicioJ:any,fechaFinJ:any ,idJE:any){
-    this._empleados.borrarJust(nEmpleado , fechaInicioJ,fechaFinJ ,idJE)
-    .subscribe(data=>{ 
-      console.log(data);
-      
-      if (data == 'success') {
-        this._alerta.openToast1('JUSTIFICACIÓN ELIMINADA CORRECTAMENTE' , 'bg-success text-white' , 'OK');
-        this.basicModal.hide();
-        this.getJustifEmpleados(1);
-      } else if(data == 'no'){
-        this._alerta.openToast1('ERROR: LA FECHA DE ALTA ES MENOR A LA DE HOY.' , 'bg-danger text-white' , 'Error');
-        
-      }else{
-        this._alerta.openToast1('ERROR AL ELIMINAR LA JUSTIFICACIÓN' , 'bg-danger text-white' , 'Error');
-        
-      }
-    });
-  }
 
 
-  coment:string='';
-  borrarAhora1(ac:any , borrar:any){
 
-    
-    this._empleados.borrarJust1(ac.value)
-    .subscribe(data=>{ 
-      console.log(data);
-      
-      
-      if (data == 'success') {
-        alert('Borrado excepcional. Por favor revisa al trabajador, si todo está correcto.');
-        this._alerta.openToast1('JUSTIFICACIÓN ELIMINADA CORRECTAMENTE' , 'bg-success text-white' , 'OK');
-            borrar.hide();
-        this.getJustifEmpleados(0);
-        this.coment='';
-      } else if(data == 'Distinto'){
-        this._alerta.openToast1('ERROR: NO PUEDE BORRAR UN JUSTIFICACIÓN QUE NO SEA DEL AÑO EN CURSO.', 'bg-danger text-white' , 'Error');
-        
-      }else{
-        this._alerta.openToast1('ERROR AL ELIMINAR LA JUSTIFICACIÓN', 'bg-danger text-white' , 'Error');
-        
-      }
-    });
-  }
-
-      borar1(nEmpleado:any,idJE:any,fechaInicioJ:any , fechaFinJ:any  ,borrar:any){
+      borar1(nEmpleado:any,idJE:any,fechaInicioJ:any , fechaFinJ:any  ,nombre:any, apellidos:any){
         this.idJE = idJE;
         this.nEmpleado = nEmpleado;
         this.fechaInicioJ = fechaInicioJ;
         this.fechaFinJ = fechaFinJ;
-        borrar.show();
+        this.modalService.open(EliminarModalComponent, {
+          containerClass: 'right',
+          modalClass: 'modal-side modal-top-right',
+          ignoreBackdropClick: true,
+          data: {
+            eliminar:9,
+           
+            nombre: nombre,
+            apellidos:  apellidos,
+            nEmpleado:  nEmpleado,
+            fechaInicioJ:  fechaInicioJ,
+            fechaFinJ:  fechaFinJ,
+            idJE:  idJE,
+            idServicio:  this.idServicio,
+           
+           
+          },
+        });
       }
   
   just:any;

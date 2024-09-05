@@ -100,6 +100,7 @@ export class MenuComponent implements OnInit {
    
   }
   
+  
   minuto:any;
   segundo:any;
   horaImprimible:any;

@@ -198,4 +198,29 @@ bajaE(){
   }
 
 
+  coment:string='';
+  borrarAhora1(ac:any ){
+    this.si = true;
+    
+    this._empleados.borrarJust1(ac.value)
+    .subscribe(data=>{ 
+      console.log(data);
+      
+      
+      if (data == 'success') {
+        alert('Borrado excepcional. Por favor revisa al trabajador, si todo está correcto.');
+        this._alerta.openToast1('JUSTIFICACIÓN ELIMINADA CORRECTAMENTE' , 'bg-success text-white' , 'OK');
+        location.reload();
+        this.coment='';
+      } else if(data == 'Distinto'){
+        this._alerta.openToast1('ERROR: NO PUEDE BORRAR UN JUSTIFICACIÓN QUE NO SEA DEL AÑO EN CURSO.', 'bg-danger text-white' , 'Error');
+        this.si = false;
+      }else{
+        this._alerta.openToast1('ERROR AL ELIMINAR LA JUSTIFICACIÓN', 'bg-danger text-white' , 'Error');
+        this.si = false;
+      }
+    });
+  }
+
+
 }

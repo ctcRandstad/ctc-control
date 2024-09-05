@@ -87,9 +87,6 @@ export class HorasEComponent implements OnInit {
     this.getEmpleadosActivos();
 }
 
-    // setInterval(()=>{
-    //   this.getContolEmpleados();
-    // },10000)
 
 
   habilitarE?:boolean;

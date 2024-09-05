@@ -953,22 +953,13 @@ url:any;
       dataE:any;
      
       exportAsXLSX(admin:any):void {
-        this.excelService.exportAsExcelFile( this.dataSource, 'Empleados');
-        // this._empleados.getContratosA(this.idServicio)
-        // .subscribe(data=>{
-        
-        //   if (data != 'error') {
-        //     this.contratos1 = data;
-           
-           
-        //     admin.show();
-        //   } else {
-        //     alert('Error en los  contratos.')
-        //   }
-          
-        // })
-         
-       }
+     this._empleados.getEmplaedosActivosE(this.idServicio)
+     .subscribe(data=>{
+      this.dataE=data;
+
+       this.excelService.exportAsExcelFile( this.dataE, 'Empleados');
+     })         
+  }
   
        contratosE:any;
        dataExcelContrato:any[]=[];

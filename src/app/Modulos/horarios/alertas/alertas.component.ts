@@ -330,6 +330,7 @@ plus3?:boolean;
        telefono:this.telefono,
        name:item.nombre,
        lastName:item.apellidos,
+       evento: this.nombreEvento
       },
     });
     this.modalM.onClose.subscribe((message: any) => {

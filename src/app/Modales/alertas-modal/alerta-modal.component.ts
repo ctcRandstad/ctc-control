@@ -39,6 +39,7 @@ export class AlertaModalComponent implements OnInit {
     idEvento:number | null = null;
     estado:number | null = null;
     telefono:any | null = null;
+    evento:any | null = null;
 
 
     

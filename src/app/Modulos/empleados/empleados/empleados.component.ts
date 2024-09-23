@@ -1,3 +1,4 @@
+import { supportsScrollBehavior } from '@angular/cdk/platform';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { MdbTableDirective } from 'mdb-angular-ui-kit/table';
@@ -96,9 +97,16 @@ url:any;
 
 
 
-   search(event: Event): void {
+  search(event: Event): void {
     const searchTerm = (event.target as HTMLInputElement).value;
-    this.table.search(searchTerm);
+    this._empleados.buscador(searchTerm)
+    .subscribe(data =>{
+      if (data != 'error') {
+        this.dataSource = data;
+      }
+     
+    })
+    
   }
 
 

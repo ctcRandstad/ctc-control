@@ -18,7 +18,7 @@
 
                 <div class="input-group mb-3">
                     <span class="input-group-text " id="search-addon"><i class="fas fa-search"></i></span>
-                    <input autocomplete="off" (keyup)="search($event)" [(ngModel)]="filterQuery" type="search" class="form-control rounded" placeholder="Buscar empleado" aria-label="Search"
+                    <input autocomplete="off" #searchInput (keyup)="search($event)"  type="text" class="form-control rounded" placeholder="Buscar empleado" aria-label="Search"
                       aria-describedby="search-addon" />
                   </div>
 
@@ -26,7 +26,7 @@
 
            
             <div class="col-md-2 tops" *ngIf="tipoUsuario == 'E2020'">
-                <button (click)="excelencar(encar)" class="btn btn-outline-success" mdbRipple rippleColor="dark">
+                <button (click)="exportAsXLSX(encar)" class="btn btn-outline-success" mdbRipple rippleColor="dark">
                     DESCARGAR  LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
                  </button>
             </div>
@@ -61,7 +61,8 @@
             #sort="mdbTableSort"
             [dataSource]="dataSource"
             [sort]="sort"
-            [pagination]="pagination">
+            [pagination]="pagination"
+           >
       
             <thead class="grey lighten-1  text-white">
                 <tr>
@@ -77,7 +78,7 @@
                 </tr>
             </thead>
             <tbody *ngIf="dataTotal > 0 && !loading" class="datatable-body" >
-                <tr *ngFor="let item of table.data | dataFiltro:filterQuery">
+                <tr *ngFor="let item of table.data" >
                     <td>{{item.nEmpleado}}</td>
                     <td class="text-uppercase">{{item.empresa}}</td>
                     <td class="text-uppercase">{{item.dni}}</td>

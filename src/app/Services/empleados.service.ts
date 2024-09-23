@@ -376,6 +376,14 @@ export class EmpleadosService {
           }));
         }
 
+        buscador( parametro:any):Observable<any>{
+          return this.http.post(this.url +"consultas/consultas.php?id=buscador", {'parametro' : parametro})
+          .pipe(
+            map((e)=> {  
+            return e;
+          }));
+        }
+
 
         consultaEmpleado( nEmpleado:number):Observable<any>{
           return this.http.post(this.url +"empleados/empleados.php?id=consultaEmpleado", {'nEmpleado' : nEmpleado})

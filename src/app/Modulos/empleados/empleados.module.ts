@@ -18,6 +18,7 @@ import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { FiltroEmpleado } from 'src/app/pipes/filtro-empleado';
 
 
+
 @NgModule({
     declarations: [
         EmpleadosComponent,
@@ -27,7 +28,8 @@ import { FiltroEmpleado } from 'src/app/pipes/filtro-empleado';
         MenuSComponent,
         AddEmpleadosComponent,
         PerfilComponent,
-        FiltroEmpleado
+        FiltroEmpleado,
+      
     ],
     imports: [
         CommonModule,

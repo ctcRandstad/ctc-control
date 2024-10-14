@@ -89,9 +89,7 @@ export class AlertasComponent implements OnInit {
       this.usuario = atob(rol);
       
       this.idServicio = atob(ser);
-    if (this.usuario != 'admin') {
-      this.ruta.navigate(['principal/control-horas']);
-    }
+   
     this.getAlertas1();
     this.getAlertas3();
     this.getAlertas2();

@@ -16,7 +16,7 @@ export class EmpleadosService {
  url = environment.url;
 
  getEmplaedosActivos(idServicio:any){
-  return this.http.post(this.url +"empleados/empleados.php?id=getEmpleadosWeb12Activos",{'idServicio':idServicio})
+  return this.http.post(this.url +"empleados/empleados.php?id=getEmpleadosActivosControl",{'idServicio':idServicio})
   .pipe(
     map((e)=> {
       return e

@@ -22,7 +22,7 @@ export class LoginService {
 
 
  isLogged(usuario:Usuario): Observable<any>{
-  return this.http.post(this.url +"login/login.php?id=getUsuarios" , usuario)
+  return this.http.post(this.url +"login/loginUser.php?id=getUserLogin" , usuario)
   .pipe(
     map((e)=> { 
 
@@ -30,8 +30,16 @@ export class LoginService {
     }));
 }
 
-sesionOut(nombreUsuario:string){
-  return this.http.post(this.url +"login/login.php?id=sesionOut",{'nombreUsuario': nombreUsuario})
+sesionOut(nombreUsuario:string,id:any){
+  return this.http.post(this.url +"login/loginUser.php?id=sesionOut",{'nombreUsuario': nombreUsuario, 'id':id})
+  .pipe(
+    map((e)=> {
+      return e
+    }));
+}
+
+loginUrl(id:any,ruta:any, rol:any){
+  return this.http.post(this.url +"login/loginUser.php?id=loginUrl",{'id': id , 'ruta':ruta, 'rol':rol})
   .pipe(
     map((e)=> {
       return e

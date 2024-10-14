@@ -38,10 +38,6 @@ export class AusentismoComponent implements OnInit {
     this.usuario = atob(usuario);
     this.tipoUsuario = atob(tipoUsuario);
 
-    if (this.usuario != 'admin') {
-      this.ruta.navigate(['principal/control-horas']);
-    }
-
 
     var today = new Date();
     this.anio = today.getFullYear();

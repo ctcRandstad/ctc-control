@@ -46,7 +46,9 @@ fecha:any
     
    this._service.isLogged(this.user)
    .subscribe(data=>{
-   
+    console.log(data);
+    
+  
      if (data == 'conectado') {
      this.conectado = true;
      setTimeout(()=>{
@@ -61,14 +63,21 @@ fecha:any
      
        localStorage.setItem('token', data.token);
        localStorage.setItem('rol', btoa(data.rol));
+       localStorage.setItem('rols', data.rols);
        localStorage.setItem('usuario', btoa(data.nombreUsuario));
        localStorage.setItem('ultima', data.ultimaVez);
        localStorage.setItem('id', data.idUsuario);
         localStorage.setItem(btoa('servicio'), btoa(data.idServicio));
        localStorage.setItem('foto', data.foto);
-       setTimeout(()=>{
-         this.ruta.navigate(['./Main']);
-       
+       setTimeout(()=>{ 
+        if (data.rol == 'E2020') {
+          this.ruta.navigate(['./Empleados']);
+          
+        }else{
+
+          this.ruta.navigate(['./Main']);
+        }
+
        },2000)
 
      }

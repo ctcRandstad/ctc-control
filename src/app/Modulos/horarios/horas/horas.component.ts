@@ -44,10 +44,6 @@ export class HorasComponent implements OnInit {
     this.usuario = atob(rol);
    
     this.idServicio = atob(ser);
-    if (this.usuario != 'admin') {
-      this.ruta.navigate(['principal/control-horas']);
-    }
-    
     this.getT();
     this.getJustificaciones();
    
@@ -139,9 +135,11 @@ mostrarBtn:boolean=false;
     this.getContolHoras();
     this.getJustificaciones();
     this.showAndHideModal();
+ 
+
     this._empleados.consultaProgramacionAdmin(action.value)
     .subscribe(data=>{ 
-     
+    
       if (data == 'no') {
       this.datas=false;
       // this.loading=false;
@@ -739,6 +737,8 @@ changeTurno1(item:any  ){
 
 dataExcel:any;
 exportAsXLSX():void {
+  console.log(this.datosConsulta);
+  
   this._empleados.consultaProgramacionAdminExcel(this.datosConsulta)
   .subscribe(data=>{ 
   

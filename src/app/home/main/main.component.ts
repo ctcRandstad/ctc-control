@@ -26,11 +26,7 @@ export class MainComponent implements OnInit {
    
     this.idServicio = atob(ser);
     this.tipoUsuario = atob(rol);
-    if (this.tipoUsuario == 'E2020') {
-      this.ruta.navigate(['Empleados']);
-      return;
-    }
-    
+   
     var today = new Date();
     this.anio = today.getFullYear();
     this.mes = today.getMonth() + 1;

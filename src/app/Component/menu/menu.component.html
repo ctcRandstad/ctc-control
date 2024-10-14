@@ -31,22 +31,21 @@
 
     <!-- Right elements -->
     <ul class="navbar-nav flex-row">
-      <li class="nav-item" *ngIf="tipoUsuario == 'A2020'">
+      <li class="nav-item" *ngIf="userRuler">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Huellas']" class="nav-link waves-light text-white" mdbWavesEffect>
           <i class="fas fa-fingerprint"></i>
        </a> 
       </li>
-      <li class="nav-item" *ngIf="tipoUsuario == 'A2020'">
+      <li class="nav-item" *ngIf="userRuler">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Mensajes']" class="nav-link waves-light text-white" mdbWavesEffect>
-          <i class="far fa-envelope"></i>  <span class="badge rounded-pill badge-notification bg-danger animated tada  infinite" alt="Notifications" *ngIf="mensajes > 0 && tipoUsuario == 'A2020'">{{mensajes}}</span>
+          <i class="far fa-envelope"></i>  <span class="badge rounded-pill badge-notification bg-danger animated tada  infinite" alt="Notifications" *ngIf="mensajes > 0 && userRuler">{{mensajes}}</span>
        </a> 
       </li>
-      <li class="nav-item" *ngIf="tipoUsuario == 'A2020'">
+      <li class="nav-item" *ngIf="userRuler">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Config']" class="nav-link waves-light text-white" mdbWavesEffect>
         <i class="fas fa-cogs"></i>
        </a> 
       </li>
-
       <li mdbDropdown class="nav-item dropdown me-3 me-lg-1 ">
         <a
           class="nav-link dropdown-toggle hidden-arrow"
@@ -58,7 +57,7 @@
         >
           <i class="fas fa-bell fa-lg text-white"></i>
           <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad && tipoUsuario != 'A2020'">{{cantidad }}</span>
-          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad + canti > 0 && tipoUsuario == 'A2020'">{{cantidad + canti}}</span>
+          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad + canti > 0 && userRuler">{{cantidad + canti}}</span>
         </a>
         <ul
           mdbDropdownMenu
@@ -79,7 +78,7 @@
          
       </div>
      
-      <span *ngIf="tipoUsuario == 'A2020'">
+      <span *ngIf="userRuler">
         <div class="list-group list-group-flush" *ngFor="let item of canty">
             <a class="list-group-item list-group-item-action flex-column align-items-start ">
                 <div class="d-flex w-100 justify-content-between">
@@ -120,8 +119,7 @@
             </a>
             <ul mdbDropdownMenu class="dropdown-menu dropdown-menu1" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <!-- <a class="dropdown-item cursor" [routerLink]="['../../Cabezeras/Informes']"><i class="far fa-file-alt"></i> Informes</a> -->
-                <a *ngIf="tipoUsuario == 'A2020'" class="dropdown-item cursor" [routerLink]="['../../Consultas/Consultas-Anteriores']"><i class="far fa-folder-open"></i> Consultas</a>
+                <a *ngIf="userRuler" class="dropdown-item cursor" [routerLink]="['../../Consultas/Consultas-Anteriores']"><i class="far fa-folder-open"></i> Consultas</a>
                 <a  class="dropdown-item cursor" (click)="salir()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
               </li>
             </ul>
@@ -148,23 +146,23 @@
               <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Empleados']"> EMPLEADOS <i class="fas fa-user-friends"></i></a>
           </li>
 
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'E2020'">
-              <a  mdbBtn class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Encargados/Control-horas-total?-encargados']">CONTROL HORARIO <i class="fas fa-user-clock"></i></a>
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="!userRuler">
+              <a  mdbBtn class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Encargados/Control-horas-total-encargados']">CONTROL HORARIO <i class="fas fa-user-clock"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'E2020'">
-              <a  mdbBtn class="nav-link btn btn-outline-primary text-uppercase" routerLinkActive="actives1"  [routerLink]="['../../Encargados/Consultas-year?-**']">Consultas años anteriores <i class="fas fa-search"></i></a>
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="!userRuler">
+              <a  mdbBtn class="nav-link btn btn-outline-primary text-uppercase" routerLinkActive="actives1"  [routerLink]="['../../Encargados/Consultas-year-**']">Consultas años anteriores <i class="fas fa-search"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'A2020'">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler">
               <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Horas/Control-horas-total']">CONTROL HORARIO <i class="fas fa-user-clock"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'A2020' || tipoUsuario == 'J2020'">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler || tipoUsuario == 'J2020'">
               <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Horas/Control-Programacion']">PROGRAMACIÓN <i class="fas fa-tasks"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'A2020'">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler">
               <a class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Horas/Alertas']">ALERTAS
                       <span pill="true" color="red" class="badge badge-danger alerta animate__animated animate__bounceIn animate__infinite" *ngIf="aler">
                       &nbsp;  <i class="fas fa-bell"></i>  &nbsp;
@@ -174,7 +172,7 @@
                     </span>
                </a>
           </li>
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="tipoUsuario == 'A2020' || tipoUsuario == 'J2020'">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler || tipoUsuario == 'J2020'">
             <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Cabezeras/Informes']">INFORMES <i class="fas fa-download"></i></a>
         </li>
 

@@ -12,13 +12,14 @@ import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { MainComponent } from './main/main.component';
 import { MenuModule } from '../Component/menu/menu.module';
 import { FormsModule } from '@angular/forms';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 
 
 @NgModule({
   declarations: [
     MainComponent,
-    
+    ForbiddenComponent
   ],
   imports: [
     MenuModule,

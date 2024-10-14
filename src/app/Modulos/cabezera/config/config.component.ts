@@ -61,10 +61,6 @@ export class ConfigComponent implements OnInit {
       this.usuario = atob(rol);
       this.idServicio = atob(ser);
 
-      if (this.usuario != 'admin') {
-        this.ruta.navigate(['Empleados']);
-        return;
-      }
       
       this.getEmpleadosActivos();
       this.getServicio();

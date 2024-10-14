@@ -20,7 +20,6 @@ export class AuthGuard  {
      
          if (!this.token) {
           localStorage.clear();
-        
           this.ruta.navigate(['/auth']);
           return false;
         }

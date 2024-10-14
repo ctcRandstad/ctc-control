@@ -7,8 +7,8 @@ const routes: Routes = [
   {
     path:'',
     children: [
-      { path: 'Control-horas-total?-encargados' ,  component: HorasEComponent },
-      { path: 'Consultas-year?-**' ,  component: ConsultasEComponent },
+      { path: 'Control-horas-total-encargados' ,  component: HorasEComponent },
+      { path: 'Consultas-year-**' ,  component: ConsultasEComponent },
       { path: '**' ,  redirectTo: 'Control-horas-total-encargados' }
     ]
   }

@@ -31,13 +31,7 @@ export class ProgramacionComponent implements OnInit {
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
     let rol:any = localStorage.getItem('usuario')
-    this.usuario = atob(rol);
-    if (this.usuario != 'admin') {
-      this.ruta.navigate(['Empleados']);
-      return;
-    }
-    
-    
+    this.usuario = atob(rol);  
     this.idServicio = atob(ser);
     
   }

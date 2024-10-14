@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigService } from 'src/app/Services/config.service';
 import { LoginService } from 'src/app/Services/login.service';
+import { NotificacionService } from 'src/app/Services/notificacion.service';
 
 
 @Component({
@@ -18,34 +19,23 @@ export class MenuComponent implements OnInit {
     private ruta:Router,
     private _ser: LoginService,
     private _config: ConfigService,
+    private _alerta: NotificacionService,
    
     ) {
-     this.setColor= localStorage.getItem('color');
-    
-      if (this.setColor == null) {
-        this.setColor = 'green';
-      }
-
-      setTimeout(()=>{
-        this.showAndHideModal(1);
-  
-      },800)
+      let rol:any = localStorage.getItem('rols');
+       this._ser.loginUrl(localStorage.getItem('id') , this.ruta.url, rol)
+       .subscribe(data=>{
+        if (data == 'err') {
+          this._alerta.openToast1('NO TIENE ACCESO A LA SECCIÓN QUE INTENTA ENTRAR.', 'bg-danger text-white', 'ERROR');
+          this.ruta.navigate(['./Main/403'])
+        }
         
+       }
 
-     
+       )
      }
 
-     showAndHideModal(n:any) {
-      //  this.demoBasic.show();
-       
-       setTimeout(() => {
-        if (n == 11) {
-          location.reload();
-        }
-        // this.demoBasic.hide();
-      }, 300);
 
-}
 
   tipoUsuario:any;
   usuario:any;
@@ -55,6 +45,7 @@ export class MenuComponent implements OnInit {
   public href: string = "";
   clase:boolean=false;
   idServicio:any;
+  userRuler:boolean=false;
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
     let rol:any = localStorage.getItem('rol');
@@ -65,6 +56,13 @@ export class MenuComponent implements OnInit {
     this.tipoUsuario = atob(rol);
     
     this.usuario =  atob(this.usuario);
+    if (this.tipoUsuario == 'A2020') {
+      this.userRuler=true;
+      
+    }else{
+      this.userRuler=false;
+    }
+
     this.getCaducidadDocumentos();
 
     this._config.getServicio(this.idServicio)
@@ -90,11 +88,11 @@ export class MenuComponent implements OnInit {
     
     salir(){
   
-      this._ser.sesionOut(this.usuario)
+      this._ser.sesionOut(this.usuario,localStorage.getItem('id'))
       .subscribe(data=>{
         if (data == 'success') {
-          localStorage.removeItem('token');
-          this.ruta.navigate(['./auth']);
+          localStorage.clear();
+          location.reload();
         }
       })
    
@@ -160,6 +158,7 @@ export class MenuComponent implements OnInit {
   getCaducidadDocumentos(){
     this._ser.getCaducidadDocumentos(this.idServicio)
     .subscribe(data=>{ 
+    
       if (data != 'error') {
         this.cant = data ;
         this.cantidad = this.cant.length;       

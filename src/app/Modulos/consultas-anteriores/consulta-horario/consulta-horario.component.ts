@@ -48,10 +48,7 @@ export class ConsultaHorarioComponent implements OnInit {
     this.usuario = atob(rol);
    
     this.idServicio = atob(ser);
-    if (this.usuario != 'admin') {
-      this.ruta.navigate(['principal/control-horas']);
-    }
-    
+  
     this.getT();
     this.getJustificaciones();
     var today = new Date();

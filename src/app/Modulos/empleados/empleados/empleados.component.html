@@ -472,11 +472,12 @@
                                             <td class=" text-danger" *ngIf="item.dif < 60  && !item.caducidad">--------</td>
                                             <td class="a cursor" *ngIf="tipoUsuario == 'A2020'">
                                                 <a class="a" [href]="item.ruta" target="_blank" rel="noopener noreferrer">
-                                                    <i class="fas fa-cloud-download-alt"></i> Descargar
+                                                    <i class="fas fa-cloud-download-alt text-primary fa-2x"></i> 
                                                 </a>
                                             </td>
                                             <td class="a cursor" (click)="borrar(item)" *ngIf="tipoUsuario == 'A2020'">
-                                                <i class="fas fa-trash-restore-alt"></i> Borrar
+                                                <i class="fas fa-trash-restore-alt  text-danger fa-2x"></i> 
+
                                             </td>
         
         

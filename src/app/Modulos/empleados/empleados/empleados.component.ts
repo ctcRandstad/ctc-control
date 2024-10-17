@@ -1139,6 +1139,7 @@ url:any;
      if (a) {
        this._empleados.borrarPdf(item.nEmpleado, item.nombreDocumento,item.id)
        .subscribe(data=>{ 
+  console.log(data);
   
          if (data == 'success') {
            this.getDocu(item.nEmpleado);

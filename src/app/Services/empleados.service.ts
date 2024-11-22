@@ -445,6 +445,14 @@ export class EmpleadosService {
             return e;
           }));
         }
+        
+        asignarApp( apellidos:any, nombre:any, nEmpleado:number,dni:any,app_:number, tabla:any):Observable<any>{
+          return this.http.post(this.url +"empleados/empleados.php?id=asignarApp", {'apellidos' : apellidos , 'nombre':nombre , 'nEmpleado':nEmpleado, 'dni':dni , 'app_':app_, 'tabla':tabla})
+          .pipe(
+            map((e)=> {  
+            return e;
+          }));
+        }
 
         borrarJust1(data:any):Observable<any>{
           return this.http.post(this.url +"empleados/empleados.php?id=borrarJust1", data)

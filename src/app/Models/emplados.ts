@@ -27,4 +27,6 @@ export interface Empleado{
     comentario:string;
     idTurno:number;
     idServicio:number;
+    app_calendario:number
+    app_production:number
  }

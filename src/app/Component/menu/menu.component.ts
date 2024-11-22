@@ -76,10 +76,10 @@ export class MenuComponent implements OnInit {
     this.getVacaciones();  
     this.getAlertas();
     this.getComentarios();
-    setInterval(()=>{
-      this.mueveReloj();
+    // setInterval(()=>{
+    //   this.mueveReloj();
     
-    },1000)
+    // },1000)
     this.fecha();
 
 

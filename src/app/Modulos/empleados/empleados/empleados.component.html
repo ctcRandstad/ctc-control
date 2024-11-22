@@ -151,15 +151,21 @@
                     <!-- <small class="text-danger" *ngIf="!employees.categoriaE">{{employees.categoriaE}}  </small> -->
     
                 </div>
-                <div class="col-md-4" [ngClass]="{'h4 text-danger ':coment}">
+                <div class="col-md-3" [ngClass]="{'h4 text-danger ':coment}">
                     <span class="padding text-uppercase" [ngClass]="{'alert alert-primary':coment}">{{coment}}</span>
                 </div>
     
                 <div class="col-md-2 top">
                     <!-- <button type="button" mdbBtn outline="true" color="warning" size="sm" class="waves-effect"> Nueva consulta</button> -->
-                    <a routerLink="../empleados" class="btn btn-outline-success" role="button" (click)="salir()">
+                    <a routerLink="../empleados" class="btn btn-secondary" role="button" (click)="salir()">
                         <i class="fas fa-arrow-circle-left"></i> Nueva consulta</a>
                 </div>
+                <div class="col-md-2 container">
+                   <span class="mio"> Aplicaciones asignadas</span>
+                    <span (click)="asignar(employees.apellidos, employees.nombre, employees.nEmpleado,employees.dni,employees.app_calendario, 'app_calendario')" class="badge cursor" [ngClass]="{'badge-success': employees.app_calendario == 1, 'badge-danger': employees.app_calendario != 1 }" >Calendario</span>
+                    &nbsp;
+                    <span (click)="asignar(employees.apellidos, employees.nombre, employees.nEmpleado,employees.dni,employees.app_production, 'app_production')" class="badge cursor" [ngClass]="{'badge-success': employees.app_production == 1, 'badge-danger': employees.app_production != 1 }" >Production</span>
+             </div>
             </div>
             <br>
             <!-- Menu vertical -->

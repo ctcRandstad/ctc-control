@@ -48,7 +48,6 @@ fecha:any
    .subscribe(data=>{
     console.log(data);
     
-  
      if (data == 'conectado') {
      this.conectado = true;
      setTimeout(()=>{

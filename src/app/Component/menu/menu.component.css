@@ -50,11 +50,11 @@
 }
 
 .alert-danger {
-   padding: 1px;
+   padding: 6px;
    padding-left: 10px;
    padding-right: 10px;
    border-radius: 5px;
-   background: #bdbdbd;
+   background: #CB9DF0;
    color: #ffffff;
 }
 

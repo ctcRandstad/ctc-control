@@ -196,7 +196,7 @@ url:any;
       
   this.verEmpleado=true;
   this.employees = item;
-  
+ 
       this._empleados.consultaEmpleadoHoras(this.employees.nEmpleado)
       .subscribe(data=>{ 
       this.horasInicio = data.horasTeoricas ;
@@ -1139,8 +1139,6 @@ url:any;
      if (a) {
        this._empleados.borrarPdf(item.nEmpleado, item.nombreDocumento,item.id)
        .subscribe(data=>{ 
-  console.log(data);
-  
          if (data == 'success') {
            this.getDocu(item.nEmpleado);
          }
@@ -1342,6 +1340,44 @@ url:any;
   
     }
   
+    asignar(apellidos:any, nombre:any, nEmpleado:number,dni:any,app_:number, tabla:any){
+      if (tabla == 'app_calendario') {
+        this._alerta.openToast1('CALENDARIO NO SE PUEDE DESASIGNAR.' , 'bg-danger text-white' , 'ERROR ');
+      }else{
+
+        let mensaje;
+    
+        if (app_ == 1) {
+         mensaje = '¿Quire deshabilitar la aplicacion ' + tabla + ' ?';
+         app_ =0;
+        }else{
+           mensaje = '¿Quire habilitar la aplicacion ' + tabla + ' ?'
+           app_=1;
+        }
+        let confirmar = confirm(mensaje);
+        if (confirmar) {
+          this._empleados.asignarApp(apellidos, nombre, nEmpleado,dni.toLowerCase(),app_, tabla)
+          .subscribe(data=>{ 
+          console.log(data);
+          
+            if (data == 'success') {
+              this._alerta.openToast1('Asignación borrada...' , 'bg-success text-white' , 'OK');
+              if (tabla == 'app_calendario' ) {
+                this.employees.app_calendario =app_;
+              }else{
+                this.employees.app_production =app_;
+  
+              }
+              this.empleado(this.employees)
+            } else {
+              this._alerta.openToast1('Error al borrar asignación' , 'bg-danger text-white' , 'OK');
+            }
+          });
+        }
+      }
+
+
+    }
 
   
   }

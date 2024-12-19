@@ -46,8 +46,7 @@ fecha:any
     
    this._service.isLogged(this.user)
    .subscribe(data=>{
-    console.log(data);
-    
+   
      if (data == 'conectado') {
      this.conectado = true;
      setTimeout(()=>{

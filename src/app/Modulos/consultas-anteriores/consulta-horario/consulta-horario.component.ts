@@ -59,11 +59,11 @@ export class ConsultaHorarioComponent implements OnInit {
   }
 
   panel:boolean=false;
-  pass= 'ctc-control';
+  passw= 'ctc-control';
 
   ingresar(pass:any){
    
-   if (pass.value === this.pass) {
+   if (pass.value === this.passw) {
      this.panel = true;
    } else {
      this.panel = false;

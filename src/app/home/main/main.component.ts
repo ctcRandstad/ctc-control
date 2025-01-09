@@ -187,7 +187,7 @@ dataTotalE:any;
       this.daySearch= data.value.today;
       this._empleados.viewTurno(data.value.idServicio,data.value.today)
       .subscribe(data=>{ 
-       
+      
         if (data == 'error') {
           this.viewPanel=false;
           this._alerta.openAlert('No hay información disponible en la fecha seleccionada.' , 'bg-danger text-white', 'center')
@@ -197,9 +197,7 @@ dataTotalE:any;
             // demoBasic.hide();
           },1500)
           this.dataTurno.push(... data) ;
-          console.log(this.dataTurno);
-          
-          
+         
         }
       });
      

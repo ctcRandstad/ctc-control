@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-9 mx-auto">
             <div class=" alert alert-secondary">
-                    INTRODUCE LA CONTRASEÑA PARA PODER MODIFICAR LOS HORARIOS.
+                    INTRODUCE LA CONTRASEÑA PARA PODER MODIFICAR LOS HORARIOS. "ctc-control"
             </div>
         </div>
         <div class="col-md-4 mx-auto top">
@@ -13,8 +13,8 @@
                 <label class="visually-hidden" for="inlineFormInputGroupUsername">Username</label>
                     <div class="input-group">
                         <div class="input-group-text"><i class="fas fa-unlock"></i></div>
-                        <input  (keyup.enter)="ingresar(pass)" type="password" #pass name="pass" ngModel    class="form-control"  id="inlineFormInputGroupUsername"  placeholder="Username"  />
-                        <button (click)="ingresar(pass)" mdbRipple type="submit" class="btn btn-primary">Submit</button>
+                        <input  (keyup.enter)="ingresar(pass)" type="text" #pass name="pass" [(ngModel)]="passw"    class="form-control"  id="inlineFormInputGroupUsername"  placeholder="ctc-control"  />
+                        <button (click)="ingresar(pass)" mdbRipple type="submit" class="btn btn-primary">Aceptar</button>
                     </div>
             </div>
         </div>

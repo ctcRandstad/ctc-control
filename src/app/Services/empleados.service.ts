@@ -447,7 +447,7 @@ export class EmpleadosService {
         }
         
         asignarApp( apellidos:any, nombre:any, nEmpleado:number,dni:any,app_:number, tabla:any):Observable<any>{
-          return this.http.post(this.url +"empleados/empleados.php?id=Torras", {'apellidos' : apellidos , 'nombre':nombre , 'nEmpleado':nEmpleado, 'dni':dni , 'app_':app_, 'tabla':tabla})
+          return this.http.post(this.url +"empleados/empleados.php?id=asignarApp", {'apellidos' : apellidos , 'nombre':nombre , 'nEmpleado':nEmpleado, 'dni':dni , 'app_':app_, 'tabla':tabla})
           .pipe(
             map((e)=> {  
             return e;

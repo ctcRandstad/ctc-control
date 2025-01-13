@@ -40,8 +40,8 @@ export class AuthInterceptorService  implements HttpInterceptor {
     
    
     if(error.error['text'] == 'Failed'){
-      // localStorage.clear();
-      //  location.reload();
+      localStorage.clear();
+       location.reload();
     }
     if(error.error['text'] == 'Mal'){
       //  localStorage.clear();

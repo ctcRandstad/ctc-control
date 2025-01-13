@@ -874,8 +874,7 @@ loading:boolean = true;
   puest:any=[];
   idPlantilla?:number;
   validar(item:any ,frame:any,datros:any){
-    console.log(item);
-    
+ 
     this.idPlantilla = item.idPlantilla;
     let turno = item.horario.toLowerCase()
 

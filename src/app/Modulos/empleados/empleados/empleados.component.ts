@@ -1328,6 +1328,8 @@ url:any;
     borrarAsignacion(idEPuesto:number,nEmpleado:number){
     this._empleados.borrarPestoAsignadoConsulta(nEmpleado,idEPuesto)
     .subscribe(data=>{ 
+      console.log(data);
+      
     
       if (data == 'success') {
         this._alerta.openToast1('Asignación borrada...' , 'bg-success text-white' , 'OK');

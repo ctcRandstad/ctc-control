@@ -170,11 +170,17 @@ url:any;
     horasInicio:number=0;
     vaciones:number=0;
     vacionesT:number=0;
+    vacacionesTotal:number=0;
+    resVacaciones:number=0;
     fechas:any;
     edad:any;
     emp_numero:number=0;
+    suma:number=0;
+    minimo:number=0;
+    maximo:number=0;
     ape:string='';
     coment:string='';
+    estado:boolean=false;
     empleado(item:any){
      this.emp_numero = item.nEmpleado;
      this.getDocu(this.emp_numero);
@@ -185,8 +191,22 @@ url:any;
           this._empleados.getDiasVacaciones(item.nEmpleado) 
            .subscribe(resp=>{ 
             if (resp) {
+              console.log(resp);
+              
               this.vaciones = resp.vacaciones;
               this.vacionesT = resp[1];
+              this.vacacionesTotal = resp[2];
+              this.maximo = resp[3];
+              this.minimo = resp[4];
+            
+              this.resVacaciones = this.vacacionesTotal - this.vacionesT;
+              this.resVacaciones = this.resVacaciones * 8;
+             this.suma =   this.totalHTeoricas - this.horaConvenios + this.totalHTrabajadasBolsa - this.resVacaciones
+             if (this.suma > this.minimo && this.suma < this.maximo) {
+              this.estado =false;
+             }else{
+              this.estado =true;
+             }
              
             } else {
               this.vaciones = 0;

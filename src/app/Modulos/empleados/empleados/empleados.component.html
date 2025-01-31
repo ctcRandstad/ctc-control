@@ -238,11 +238,14 @@
                         </mdb-tab>
                         <mdb-tab title="Profile"><ng-template mdbTabTitle><span><i class="fas fa-stopwatch"></i> Horas</span></ng-template>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <h5 class="border alert k padding">Días de vacaciones disfrutados: <span class="text-primary"> {{vaciones}}</span></h5>
+                                <div class="col-md-4">
+                                    <h5 class="border alert k padding">Vacaciones a disfrutar: <span class="badge badge-danger"> {{vacacionesTotal}}</span></h5>
                                 </div>
-                                <div class="col-md-6">
-                                    <h5 class="border alert k padding">Días de vacaciones asignadas: <span class="text-primary"> {{vacionesT}}</span></h5>
+                                <div class="col-md-4">
+                                    <h5 class="border alert k padding">Vacaciones asignadas: <span class="badge badge-primary"> {{vacionesT}}</span></h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 class="border alert k padding">Vacaciones disfrutados: <span class="badge badge-success"> {{vaciones}}</span></h5>
                                 </div>
                             </div>
 
@@ -421,7 +424,16 @@
                                             </tr>
                                         </tbody>
                                         <tfoot>
-                                            <td class="text-center text-primary h4">{{ totalHTeoricas - horaConvenios + totalHTrabajadasBolsa}}</td>
+                                            <!-- <td class="text-center text-primary h4">{{ totalHTeoricas - horaConvenios + totalHTrabajadasBolsa }}</td>
+                                            <br> -->
+                                            <td class="text-center text-success h4" *ngIf="!estado">{{ suma }}</td>
+
+                                            <td class="text-center" *ngIf="estado">
+                                                <span class="text-danger h4">{{ suma }}</span> 
+                                                <span class="text-warning" *ngIf="suma < 0 "> hay  {{ suma + maximo }} hs de más</span>
+                                                <span class="text-warning" *ngIf="suma > 0 "> hay  {{ suma - maximo }} hs de más</span>
+                                            </td>
+                                           
                                             <!-- <td class="text-center text-primary h4">{{ totalHTeoricas}}</td>
                                             <td class="text-center text-primary h4">{{ horaConvenios }}</td> -->
                                             <tr>

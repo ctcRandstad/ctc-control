@@ -140,8 +140,26 @@ verVacaciones(idServicio:number){
 }
 
 
+
+getAlertasBolsa(idServicio:number){
+  return this.http.post(this.url +"login/login.php?id=getAlertasBolsa",{'idServicio': idServicio })
+  .pipe(
+    map((e)=> {
+      return e
+    }));
+}
+
+
 eliAlarma(idAV:number){
   return this.http.post(this.url +"login/login.php?id=eliAlarma" ,{'idAV': idAV })
+  .pipe(
+    map((e)=> {
+      return e
+    }));
+}
+
+eliAlarmaHoras(id_alerta_bolsa:number){
+  return this.http.post(this.url +"login/login.php?id=eliAlarmaHoras" ,{'id_alerta_bolsa': id_alerta_bolsa })
   .pipe(
     map((e)=> {
       return e

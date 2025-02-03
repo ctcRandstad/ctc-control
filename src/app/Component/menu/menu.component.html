@@ -31,6 +31,42 @@
 
     <!-- Right elements -->
     <ul class="navbar-nav flex-row">
+      <li mdbDropdown class="nav-item dropdown me-3 me-lg-1 ">
+        <a
+          class="nav-link dropdown-toggle hidden-arrow"
+       
+          id="navbarDropdownMenuLink"
+          role="button"
+          mdbDropdownToggle
+          aria-expanded="false"
+        >
+          <i class="fas fa-bell fa-lg text-white"></i>
+          <span class="badge rounded-pill badge-notification bg-danger" >{{cantiAlerta }}</span>
+        </a>
+        <ul
+          mdbDropdownMenu
+          class="dropdown-menu dropleft"
+          aria-labelledby="navbarDropdownMenuLink"
+        >
+        <div class="list-group list-group-flush text-muted border-bottom " *ngFor="let item of cantyAlerta">
+          <a [routerLink]="['../../Empleados']" class="list-group-item list-group-item-action flex-column align-items-start ">
+              <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1 text-uppercase text-primary">{{ item.apellidos}} {{item.nombre}}</h6>
+                  <h5 class=" badge badge-secondary">Días de más {{item.dias_pasados}}</h5>
+              </div>
+              <p class="text-muted doc">Actualizado el {{item.fecha_alerta | date: 'dd/MM/yyyy'}} </p>
+              <p class="text-muted doc"><button (click)="alarmaHoras(item.id_alerta_bolsa)"  class="btn" style="background-color: hsl(293, 81%, 51%); color:#fff;" size="sm" mdbWavesEffect>ELIMINAR AVISO</button>
+              </p>
+                 
+          </a>
+         
+      </div>
+     </ul>
+   </li>
+
+
+
+
       <li class="nav-item" *ngIf="userRuler">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Huellas']" class="nav-link waves-light text-white" mdbWavesEffect>
           <i class="fas fa-fingerprint"></i>

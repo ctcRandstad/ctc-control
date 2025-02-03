@@ -76,6 +76,7 @@ export class MenuComponent implements OnInit {
     this.getVacaciones();  
     this.getAlertas();
     this.getComentarios();
+    this.getAlertasHoras()
     // setInterval(()=>{
     //   this.mueveReloj();
     
@@ -180,12 +181,45 @@ export class MenuComponent implements OnInit {
     if (data != 'error') {
       this.canty = data;
       this.canti = this.canty.length;
-
-     
     }else{
       this.canti = 0;
     }
   });
+  
+}
+
+  
+cantiAlerta:number=0;
+cantyAlerta:any;
+getAlertasHoras(){
+  this._ser.getAlertasBolsa(this.idServicio)
+  .subscribe(data=>{ 
+    console.log(data);
+    
+  if (data != 'error') {
+    this.cantyAlerta = data;
+    this.cantiAlerta = this.cantyAlerta.length;
+  }else{
+    this.cantiAlerta = 0;
+  }
+});
+
+}
+
+alarmaHoras(item:any){
+ 
+  let con = confirm('¿Eliminar la alarma?');
+
+  if (con) {
+    this._ser.eliAlarmaHoras(item)
+    .subscribe(res=>{
+      if (res == 'success') {
+        alert('Alarma Eliminada');
+      }else{
+        alert('Error en el servidor');
+      }
+    })
+  }
   
 }
 

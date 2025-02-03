@@ -191,8 +191,7 @@ url:any;
           this._empleados.getDiasVacaciones(item.nEmpleado) 
            .subscribe(resp=>{ 
             if (resp) {
-              console.log(resp);
-              
+          
               this.vaciones = resp.vacaciones;
               this.vacionesT = resp[1];
               this.vacacionesTotal = resp[2];

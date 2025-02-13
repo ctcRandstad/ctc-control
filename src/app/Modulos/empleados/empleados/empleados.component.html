@@ -236,7 +236,7 @@
                                 </tfoot>
                             </div>
                         </mdb-tab>
-                        <mdb-tab title="Profile"><ng-template mdbTabTitle><span><i class="fas fa-stopwatch"></i> Horas</span></ng-template>
+                        <mdb-tab title="Profile"  ><ng-template mdbTabTitle ><span><i class="fas fa-stopwatch"></i> Horas</span></ng-template>
                             <div class="row">
                                 <div class="col-md-4">
                                     <h5 class="border alert k padding">Vacaciones a disfrutar: <span class="badge badge-danger"> {{vacacionesTotal}}</span></h5>
@@ -439,7 +439,8 @@
                                             <tr>
     
                                                 <blockquote class="blockquote">
-                                                    <p class="mb-0">{{texto}}</p>
+                                                    <p class="mb-0" *ngIf="!datosText">{{texto}}</p>
+                                                    <p class="mb-0" *ngIf="datosText">{{datosText}}</p>
                                                 </blockquote>
                                                 <!-- <cite>BOLSA HORAS = HORAS TEÓRICAS - HORAS CONVENIO + BOLSA DE HORAS</cite> -->
     

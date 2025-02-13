@@ -156,7 +156,50 @@ url:any;
   }
   
 
-  
+  totalDias:number=0;
+  datosText!:string;
+  getHoras(){
+    this._empleados.antiguedad(this.emp_numero) 
+    .subscribe(data=>{ 
+         this.hoy = data.meses / 12 ;
+         this._empleados.getDiasVacaciones(this.emp_numero) 
+          .subscribe(resp=>{ 
+           if (resp) {
+         console.log(resp);
+         
+             this.vaciones = resp.vacaciones;
+             this.vacionesT = resp[1];
+             this.vacacionesTotal = resp[2];
+             this.maximo = resp[3];
+             this.minimo = resp[4];
+             this.totalDias = resp[5];
+             
+             if (this.totalDias >= 365) {
+              
+               this.resVacaciones = this.vacacionesTotal - this.vacionesT;
+               this.resVacaciones = this.resVacaciones * 8;
+               this.suma =   this.totalHTeoricas - this.horaConvenios + this.totalHTrabajadasBolsa - this.resVacaciones
+             
+              if (this.suma > this.minimo && this.suma < this.maximo) {
+               this.estado =false;
+              }else{
+               this.estado =true;
+              }
+             }else{
+             
+              this.suma =   Math.round(this.totalDias * this.horaConvenios / 365 );
+              this.datosText = "No tienes el año completo del calendario, por lo tanto, tu cálculo es el siguiente: Horas proporcionales= " + this.totalDias +  " * 1744 / 365 - horas trabajadas, Luego " + this.totalHTeoricas +" - " + this.suma
+              this.suma = this.totalHTeoricas - this.suma
+             }
+           
+            
+           } else {
+             this.vaciones = 0;
+           }
+          });  
+    }); 
+     
+  }
   
   
 
@@ -185,56 +228,33 @@ url:any;
      this.emp_numero = item.nEmpleado;
      this.getDocu(this.emp_numero);
      this.ape = item.apellidos;
-     this._empleados.antiguedad(item.nEmpleado) 
-     .subscribe(data=>{ 
-          this.hoy = data.meses / 12 ;
-          this._empleados.getDiasVacaciones(item.nEmpleado) 
-           .subscribe(resp=>{ 
-            if (resp) {
-          
-              this.vaciones = resp.vacaciones;
-              this.vacionesT = resp[1];
-              this.vacacionesTotal = resp[2];
-              this.maximo = resp[3];
-              this.minimo = resp[4];
-            
-              this.resVacaciones = this.vacacionesTotal - this.vacionesT;
-              this.resVacaciones = this.resVacaciones * 8;
-             this.suma =   this.totalHTeoricas - this.horaConvenios + this.totalHTrabajadasBolsa - this.resVacaciones
-             if (this.suma > this.minimo && this.suma < this.maximo) {
-              this.estado =false;
-             }else{
-              this.estado =true;
-             }
-             
-            } else {
-              this.vaciones = 0;
-            }
-           });  
-     }); 
-      
-  this.verEmpleado=true;
-  this.employees = item;
+
+    this.verEmpleado=true;
+    this.employees = item;
  
-      this._empleados.consultaEmpleadoHoras(this.employees.nEmpleado)
-      .subscribe(data=>{ 
-      this.horasInicio = data.horasTeoricas ;
-      this.year=data[1];
-      });
-      this.getTeoricas();
+          this._empleados.consultaEmpleadoHoras(this.employees.nEmpleado)
+          .subscribe(data=>{ 
+          this.horasInicio = data.horasTeoricas ;
+          this.year=data[1];
+          });
+          this.getTeoricas();
   
     // console.log( this.employees.fechaNacimiento);
-    let momentoActual = new Date();
-    this.fechas = momentoActual.getFullYear() + '-' + (momentoActual.getMonth()+ 1) + '-' + momentoActual.getDate();
-    // console.log(this.fechas);
-    let fecha1 = new Date(this.employees.fechaNacimiento);
-  let fecha2 = new Date()
-  let resta = fecha2.getTime() - fecha1.getTime()
-   this.edad = Math.trunc(resta/ (1000*60*60*24*365));
+        let momentoActual = new Date();
+        this.fechas = momentoActual.getFullYear() + '-' + (momentoActual.getMonth()+ 1) + '-' + momentoActual.getDate();
+        // console.log(this.fechas);
+        let fecha1 = new Date(this.employees.fechaNacimiento);
+      let fecha2 = new Date()
+      let resta = fecha2.getTime() - fecha1.getTime()
+      this.edad = Math.trunc(resta/ (1000*60*60*24*365));
    
       this.fecha();
       this.getCom(this.employees.nEmpleado , this.anio);
       this.getPuestosAsignados(this.employees.nEmpleado);
+      setTimeout(()=>{
+        this.getHoras();
+      },2000)
+     
     }
   
     

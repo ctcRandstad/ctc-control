@@ -40,7 +40,7 @@
           mdbDropdownToggle
           aria-expanded="false"
         >
-          <i class="fas fa-bell fa-lg text-white"></i>
+          <i class="fas fa-exclamation-circle fa-lg text-white"></i>
           <span class="badge rounded-pill badge-notification bg-danger" >{{cantiAlerta }}</span>
         </a>
         <ul
@@ -52,7 +52,7 @@
           <a [routerLink]="['../../Empleados']" class="list-group-item list-group-item-action flex-column align-items-start ">
               <div class="d-flex w-100 justify-content-between">
                   <h6 class="mb-1 text-uppercase text-primary">{{ item.apellidos}} {{item.nombre}}</h6>
-                  <h5 class=" badge badge-secondary">Días de más {{item.dias_pasados}}</h5>
+                  <h5 class=" badge badge-secondary">Horas de más {{item.dias_pasados}}</h5>
               </div>
               <p class="text-muted doc">Actualizado el {{item.fecha_alerta | date: 'dd/MM/yyyy'}} </p>
               <p class="text-muted doc"><button (click)="alarmaHoras(item.id_alerta_bolsa)"  class="btn" style="background-color: hsl(293, 81%, 51%); color:#fff;" size="sm" mdbWavesEffect>ELIMINAR AVISO</button>

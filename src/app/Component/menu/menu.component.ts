@@ -194,8 +194,7 @@ cantyAlerta:any;
 getAlertasHoras(){
   this._ser.getAlertasBolsa(this.idServicio)
   .subscribe(data=>{ 
-    console.log(data);
-    
+ 
   if (data != 'error') {
     this.cantyAlerta = data;
     this.cantiAlerta = this.cantyAlerta.length;

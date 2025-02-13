@@ -47,7 +47,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         EncargadosModalComponent,
     ],
     bootstrap: [AppComponent],
-    schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA], imports: [FormsModule,
+    schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+    imports: [FormsModule,
         ReactiveFormsModule,
         BrowserModule,
         AppRoutingModule,
@@ -60,7 +61,8 @@ export function HttpLoaderFactory(http: HttpClient) {
                 useFactory: HttpLoaderFactory,
                 deps: [HttpClient]
             }
-        })], providers: [
+        })], 
+        providers: [
         AuthInterceptorService,
         { provide: LOCALE_ID, useValue: 'es-Es', },
         {

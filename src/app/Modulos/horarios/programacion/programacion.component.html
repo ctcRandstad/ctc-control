@@ -74,43 +74,45 @@
       
           <!-- Mostrar los turnos agrupados por horario -->
           
-          <!-- Turnos de la mañana -->
           <div class="card col" *ngIf="tieneTurnosPorHorario(fecha.key, 'M')">
             <div class="card-header">
-              <h4>Turnos de la mañana</h4>
-              <p>{{ getTurnosPorHorario(fecha.key, 'M') | joinMap: 'turno_dia' }} (M)</p>
+              <h4 class="text-center text-success">MAÑANA</h4>
+              <p class="text-success">{{ getTurnosPorHorario(fecha.key, 'M') | joinMap: 'turno_dia' }} (M)</p>
             </div>
             <div class="card-body">
               <ul>
                 <li *ngFor="let turm of getTurnosPorHorario(fecha.key, 'M')">
-                  <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
-                  <ul>
-                    <li *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'M', turm.turno_dia)">
-                      {{ programacion.apellidos }}, {{ programacion.nombre }}
+                  <ng-container *ngIf="getPersonasPorTurno(fecha.key, 'M', turm.turno_dia).length > 0">
+                    <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
+                    <span *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'M', turm.turno_dia); let last = last">
+                      <br /> &nbsp;&nbsp; *{{ programacion.apellidos }}, {{ programacion.nombre }}
                       <span *ngIf="programacion.horasAusentes > 0"> - HS A{{ programacion.horasAusentes }}</span>
-                    </li>
-                  </ul>
+                      <span *ngIf="!last">, </span>
+                    </span>
+                  </ng-container>
                 </li>
               </ul>
             </div>
           </div>
       
+      
           <!-- Turnos de la tarde -->
           <div class="card col" *ngIf="tieneTurnosPorHorario(fecha.key, 'T')">
             <div class="card-header">
-              <h4>Turnos de la tarde</h4>
-              <p>{{ getTurnosPorHorario(fecha.key, 'T') | joinMap: 'turno_dia' }} (T)</p>
+              <h4 class="text-center text-primary">Tarde</h4>
+              <p class="text-primary">{{ getTurnosPorHorario(fecha.key, 'T') | joinMap: 'turno_dia' }} (T)</p>
             </div>
             <div class="card-body">
               <ul>
                 <li *ngFor="let turm of getTurnosPorHorario(fecha.key, 'T')">
-                  <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
-                  <ul>
-                    <li *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'T', turm.turno_dia)">
-                      {{ programacion.apellidos }}, {{ programacion.nombre }}
+                  <ng-container *ngIf="getPersonasPorTurno(fecha.key, 'T', turm.turno_dia).length > 0">
+                    <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
+                    <span *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'T', turm.turno_dia); let last = last">
+                      <br /> &nbsp;&nbsp; *{{ programacion.apellidos }}, {{ programacion.nombre }}
                       <span *ngIf="programacion.horasAusentes > 0"> - HS A{{ programacion.horasAusentes }}</span>
-                    </li>
-                  </ul>
+                      <span *ngIf="!last">, </span>
+                    </span>
+                  </ng-container>
                 </li>
               </ul>
             </div>
@@ -119,19 +121,20 @@
           <!-- Turnos de la noche -->
           <div class="card col" *ngIf="tieneTurnosPorHorario(fecha.key, 'N')">
             <div class="card-header">
-              <h4>Turnos de la noche</h4>
-              <p>{{ getTurnosPorHorario(fecha.key, 'N') | joinMap: 'turno_dia' }} (N)</p>
+              <h4 class="text-center text-secondary">Noche</h4>
+              <p class="text-secondary">{{ getTurnosPorHorario(fecha.key, 'N') | joinMap: 'turno_dia' }} (N)</p>
             </div>
             <div class="card-body">
               <ul>
                 <li *ngFor="let turm of getTurnosPorHorario(fecha.key, 'N')">
-                  <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
-                  <ul>
-                    <li *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'N', turm.turno_dia)">
-                      {{ programacion.apellidos }}, {{ programacion.nombre }}
+                  <ng-container *ngIf="getPersonasPorTurno(fecha.key, 'N', turm.turno_dia).length > 0">
+                    <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
+                    <span *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'N', turm.turno_dia); let last = last">
+                      <br /> &nbsp;&nbsp; *{{ programacion.apellidos }}, {{ programacion.nombre }}
                       <span *ngIf="programacion.horasAusentes > 0"> - HS A{{ programacion.horasAusentes }}</span>
-                    </li>
-                  </ul>
+                      <span *ngIf="!last">, </span>
+                    </span>
+                  </ng-container>
                 </li>
               </ul>
             </div>

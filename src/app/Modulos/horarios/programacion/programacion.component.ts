@@ -76,23 +76,27 @@ export class ProgramacionComponent implements OnInit {
     'V': 5   // Vacaciones
   };
 
-  getColor(horario: string): string {
-    switch (horario) {
-      case 'M': return 'blue';
-      case 'T': return 'green';
-      case 'N': return 'red';
-      case 'P': return 'orange';
-      case 'V': return 'purple';
-      default: return 'black';
-    }
+
+  validarRangoFechas(): boolean {
+    const fechaInicio = new Date(this.fechasData.fechaInicio);
+    const fechaFinal = new Date(this.fechasData.fechaFinal);
+  
+    // Calculamos la diferencia en milisegundos y la convertimos a días
+    const diferenciaDias = (fechaFinal.getTime() - fechaInicio.getTime()) / (1000 * 60 * 60 * 24);
+  
+    return diferenciaDias <= 7; // Retorna true si la diferencia es 7 o menor
   }
 
   loadingPerfil: boolean = false;
   buscar(action: any) {
+    this.fechasData = action.value;
+    if (this.validarRangoFechas() === false) {
+      this._alerta.openToast1('EL RANGO DE FECHAS NO PUEDE SER MAYOR A 7 DÍAS', 'bg-danger text-white', 'OK');
+      return;
+    }
     this.loadingPerfil = true;
     this.mostrarBtn = true;
 
-    this.fechasData = action.value;
 
     this._empleados.consultaProgramacionJusFNoche(this.fechasData)
       .subscribe(
@@ -148,25 +152,11 @@ export class ProgramacionComponent implements OnInit {
   }
 
   pri?: boolean;
-  // print(printer: any): void {
-  //   const printContent = document.getElementById('htmlData');
-  //   if (printContent) {
-  //     const originalContent = document.body.innerHTML;
-  //     document.body.innerHTML = printContent.innerHTML;
-  //     window.print();
-  //     document.body.innerHTML = originalContent;
-  //   } else {
-  //     console.error("El elemento con el ID 'programacionParaImprimir' no se encuentra.");
-  //   }
-  // }
-
-
   print(printer:any) : void{
     this.pri=true;
     this._alerta.openToast1('DESCARGANDO PDF, ESPERE POR FAVOR.' , 'bg-warning text-white' , 'DESCARGA...');
     
     let DATA: any = document.getElementById('htmlData');
-    
     const options = {
       dpi: 300,
       scale: 3,
@@ -176,7 +166,7 @@ export class ProgramacionComponent implements OnInit {
 
     const PDF = new jsPDF('p', 'mm', 'a4');
     PDF.setFont('helvetica', 'bold');
-    PDF.setFontSize(20);
+    PDF.setFontSize(30);
 
     html2canvas(DATA, options).then((canvas) => {
       let fileWidth = 208;
@@ -195,7 +185,7 @@ export class ProgramacionComponent implements OnInit {
         }
       }
 
-      PDF.save('Programación.pdf');
+      PDF.save('Programación' + this.fechasData.fechaInicio +'_' + this.fechasData.fechaFinal + '.pdf');
     }).catch(error => {
       console.error('Error generando el PDF:', error);
     });

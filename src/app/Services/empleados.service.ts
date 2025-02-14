@@ -638,8 +638,8 @@ export class EmpleadosService {
             return e;
           }));
         }
-        consultaProgramacionJusFNoche(filtarTuros:any,idServicio:number, fecha:any , horario:any):Observable<any>{
-          return this.http.post(this.url +"empleados/empleados.php?id=consultaProgramacionJusFechaNoche",{'filtarTuros':filtarTuros, 'idServicio':idServicio,'fecha':fecha , 'horario': horario})
+        consultaProgramacionJusFNoche(data:any):Observable<any>{
+          return this.http.post(this.url +"empleados/empleados.php?id=consultaProgramacionJusFechaNoche",data)
           .pipe(
             map((e)=> {    
        
@@ -647,8 +647,8 @@ export class EmpleadosService {
           }));
         }
 
-        consultaTurnoTotales( fecha:any , idServicio:number ):Observable<any>{
-          return this.http.post(this.url +"empleados/empleados.php?id=consultaTurnoTotales",{ 'fecha':fecha,'idServicio':idServicio })
+        consultaTurnoTotales( data:any ):Observable<any>{
+          return this.http.post(this.url +"empleados/empleados.php?id=consultaTurnoTotales",data)
           .pipe(
             map((e)=> {                
             return e;
@@ -663,31 +663,15 @@ export class EmpleadosService {
           }));
         }
 
-        horasMensual( mes:any,nEmpleado:number):Observable<any>{
-          return this.http.post(this.url +"empleados/empleados.php?id=horasMensualWeb", {'mes' : mes,'nEmpleado':nEmpleado})
+        horasMensual( nEmpleado:number):Observable<any>{
+          return this.http.post(this.url +"empleados/empleados.php?id=horasMensualWeb", {'nEmpleado':nEmpleado})
           .pipe(
             map((e)=> {  
       
             return e;
           }));
         }
-        
-        horasMensualTrabajada( nEmpleado:number ,mes:any):Observable<any>{
-          return this.http.post(this.url +"empleados/empleados.php?id=horasMensualTrabajadasWeb", {'nEmpleado':nEmpleado , 'mes':mes})
-          .pipe(
-            map((e)=> {  
-          
-            return e;
-          }));
-        }
-        horasMensualTrabajadaBolsa( nEmpleado:number):Observable<any>{
-          return this.http.post(this.url +"empleados/empleados.php?id=horasMensualTrabajadasBolsaWeb", {'nEmpleado':nEmpleado})
-          .pipe(
-            map((e)=> {  
-          
-            return e;
-          }));
-        }
+
 
         paroAnoAnterior( nEmpleado:number):Observable<any>{
           return this.http.post(this.url +"empleados/empleados.php?id=paroAnoAnterior" , {'nEmpleado':nEmpleado})

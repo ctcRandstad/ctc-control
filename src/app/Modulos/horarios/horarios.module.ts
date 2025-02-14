@@ -13,6 +13,7 @@ import { HorasModalComponent } from 'src/app/Modales/horas-modal/horas-modal.com
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { DataFilterPipe } from 'src/app/pipes/data-filter.pipe';
+import { JoinMapPipe } from 'src/app/pipes/join-map.pipe';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { DataFilterPipe } from 'src/app/pipes/data-filter.pipe';
     HorasComponent,
     AlertasComponent,
     HorasModalComponent,
-    DataFilterPipe
+    DataFilterPipe,
+    JoinMapPipe,
   ],
   imports: [
     CommonModule,

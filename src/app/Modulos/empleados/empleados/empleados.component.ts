@@ -11,6 +11,7 @@ import { EmpleadosService } from 'src/app/Services/empleados.service';
 import { ExcelService } from 'src/app/Services/excel.service';
 import { NotificacionService } from 'src/app/Services/notificacion.service';
 
+
 @Component({
   selector: 'app-empleados',
   templateUrl: './empleados.component.html',
@@ -59,6 +60,7 @@ verEmpleado:boolean=false;
   dataSource:any;
   dataTotal:any;
   loading:boolean = true;
+  loadingPerfil:boolean = false;
   getEmpleadosActivos(){
    this._empleados.getEmplaedosActivos(this.idServicio)
    .subscribe(resp=>{
@@ -165,17 +167,13 @@ url:any;
          this._empleados.getDiasVacaciones(this.emp_numero) 
           .subscribe(resp=>{ 
            if (resp) {
-         console.log(resp);
-         
              this.vaciones = resp.vacaciones;
-             this.vacionesT = resp[1];
-             this.vacacionesTotal = resp[2];
-             this.maximo = resp[3];
-             this.minimo = resp[4];
-             this.totalDias = resp[5];
-             
+             this.vacionesT = resp.vacacionesT;
+             this.vacacionesTotal = resp.totalVacaciones;
+             this.maximo = resp[0];
+             this.minimo = resp[1];
+             this.totalDias = resp.totalDias;
              if (this.totalDias >= 365) {
-              
                this.resVacaciones = this.vacacionesTotal - this.vacionesT;
                this.resVacaciones = this.resVacaciones * 8;
                this.suma =   this.totalHTeoricas - this.horaConvenios + this.totalHTrabajadasBolsa - this.resVacaciones
@@ -188,17 +186,27 @@ url:any;
              }else{
              
               this.suma =   Math.round(this.totalDias * this.horaConvenios / 365 );
-              this.datosText = "No tienes el año completo del calendario, por lo tanto, tu cálculo es el siguiente: Horas proporcionales= " + this.totalDias +  " * 1744 / 365 - horas trabajadas, Luego " + this.totalHTeoricas +" - " + this.suma
-              this.suma = this.totalHTeoricas - this.suma
+              this.datosText = "No tienes el año completo del calendario, por lo tanto, tu cálculo es el siguiente: Días trabajados= " + this.totalDias +  " * 1744 / 365 - horas trabajadas, Luego " + this.totalHTeoricas +" - " + this.suma
+              this.suma = this.totalHTeoricas - this.suma;
+              this.vacacionesTotal = this.totalDias * this.vacacionesTotal / 365;
+              if (this.suma > this.minimo && this.suma < this.maximo) {
+                this.estado =false;
+               }else{
+                this.estado =true;
+               }
              }
            
-            
+             setTimeout(()=>{
+              this.loadingPerfil=false;
+                  },500)
+                   
            } else {
              this.vaciones = 0;
            }
           });  
-    }); 
-     
+    });
+    
+
   }
   
   
@@ -225,6 +233,7 @@ url:any;
     coment:string='';
     estado:boolean=false;
     empleado(item:any){
+      this.loadingPerfil=true;
      this.emp_numero = item.nEmpleado;
      this.getDocu(this.emp_numero);
      this.ape = item.apellidos;
@@ -408,6 +417,8 @@ url:any;
           //  console.log(this.employees);
            
            this.getEmpleadosActivos();
+            this.bot=false;
+
          } else {
            alert('Error en editar al trabajador!')
          }
@@ -603,377 +614,42 @@ url:any;
       this.verEmpleado=false;
       this.filterQuery="";
       this.totalHTeoricas=0;
-      this.mes=[];
       this.totalHTrabajadas=0;
       this.totalHTrabajadasBolsa=0;
-      this.mesTraBolsa=[];
-      this.totalParoAnterior=0;
-      this.totalParoActual=0;
-      this.mesTra=[];
-      this.mesFe=[];
-      this.mesMar=[];
-      this.mesAbr=[];
-      this.mesMay=[];
-      this.mesJun=[];
-      this.mesJul=[];
-      this.mesAgo=[];
-      this.mesSet=[];
-      this.mesOct=[];
-      this.mesNov=[];
-      this.mesDic=[];
-      // teóricas
-     this.mesTra1=[];
-     this.mesFe1=[];
-     this.mesMar1=[];
-     this.mesAbr1=[];
-     this.mesMay1=[];
-     this.mesJun1=[];
-     this.mesJul1=[];
-     this.mesAgo1=[];
-     this.mesSet1=[];
-     this.mesOct1=[];
-     this.mesNov1=[];
-     this.mesDic1=[];
       this.controlB = false;
       // console.log(this.mes);
     }
   
-    //control horario..a
-     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-  mes:any[]=[];
-  mesTraBolsa:any[]=[];
+    
   totalHTeoricas:number=0;
   totalHTrabajadas:number=0;
   totalHTrabajadasBolsa:number=0;
-  totalParoAnterior:number=0;
-  totalParoActual:number=0;
-  paroAnterior:any[]=[];
-  paroActual:any[]=[];
-  // horas trabajadas
-  
-  mesTra:any[]=[];
-  mesFe:any[]=[];
-  mesMar:any[]=[];
-  mesAbr:any[]=[];
-  mesMay:any[]=[];
-  mesJun:any[]=[];
-  mesJul:any[]=[];
-  mesAgo:any[]=[];
-  mesSet:any[]=[];
-  mesOct:any[]=[];
-  mesNov:any[]=[];
-  mesDic:any[]=[];
-  
+
   // horas teóricas
-  
-  mesTra1:any[]=[];
-  mesFe1:any[]=[];
-  mesMar1:any[]=[];
-  mesAbr1:any[]=[];
-  mesMay1:any[]=[];
-  mesJun1:any[]=[];
-  mesJul1:any[]=[];
-  mesAgo1:any[]=[];
-  mesSet1:any[]=[];
-  mesOct1:any[]=[];
-  mesNov1:any[]=[];
-  mesDic1:any[]=[];
-  
+
   // boolean
   
   
-  mesTraB:boolean=false;
-  mesFeB:boolean=false;
-  mesMarB:boolean=false;
-  mesAbrB:boolean=false;
-  mesMayB:boolean=false;
-  mesJunB:boolean=false;
-  mesJulB:boolean=false;
-  mesAgoB:boolean=false;
-  mesSetB:boolean=false;
-  mesOctB:boolean=false;
-  mesNovB:boolean=false;
-  mesDicB:boolean=false;
+ 
+  dataNew:any=[];
      getTeoricas(){
       this.totalHTeoricas=0;
-      this.mes=[];
       this.totalHTrabajadas=0;
       this.totalHTrabajadasBolsa=0;
-      this.mesTra=[];
-      this.mesTraBolsa=[];
-      this.totalParoAnterior=0;
-      this.totalParoActual=0;
-    
-      var Navidad = new Date();
-      var mes = Navidad.getMonth();
-        this._empleados.horasMensual(1,this.employees.nEmpleado)
-        .subscribe(data=>{ 
      
-           if (mes >= data[0].mes) {
-             this.mesTraB = true;
-           }
-      
-        
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesTra1=data;
-         
-        });  
-  
-          
-        this._empleados.horasMensual(2,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-         if (mes >= data[0].mes) {
-             this.mesFeB = true;
-          }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesFe1=data;
-         
-        });  
-  
-          
-        this._empleados.horasMensual(3,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          if (mes >= data[0].mes) {
-            this.mesMarB = true;
-         }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesMar1=data;
-         
-        });  
-  
-        this._empleados.horasMensual(4,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          if (mes >= data[0].mes) {
-            this.mesAbrB = true;
-         }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesAbr1=data;
-         
-        });  
-  
-        this._empleados.horasMensual(5,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          if (mes >= data[0].mes) {
-            this.mesMayB = true;
-          }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesMay1=data;
-         
-        }); 
-  
-        this._empleados.horasMensual(6,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          if (mes >= data[0].mes) {
-            this.mesJulB = true;
-          }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesJun1=data;
-         
-        }); 
-  
-        this._empleados.horasMensual(7,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          if (mes >= data[0].mes) {
-            this.mesJulB = true;
-          }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesJul1=data;
-         
-        }); 
-  
-        this._empleados.horasMensual(8,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          if (mes >= data[0].mes) {
-            this.mesAgoB = true;
-          }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesAgo1=data;
-         
-        }); 
-  
-        this._empleados.horasMensual(9,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          if (mes >= data[0].mes) {
-            this.mesSetB = true;
-          }
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesSet1=data;
-         
-        }); 
-  
-        this._empleados.horasMensual(10,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesOct1=data;
-          if (mes >= data[0].mes) {
-            this.mesOctB = true;
-          }
-        }); 
-        
-        this._empleados.horasMensual(11,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-          
-          this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesNov1=data;
-          if (mes >= data[0].mes) {
-            this.mesNovB = true;
-          }
-        }); 
-        
-        this._empleados.horasMensual(12,this.employees.nEmpleado)
-        .subscribe(data=>{ 
-        
-           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
-          this.mesDic1=data;
-          if (mes >= data[0].mes) {
-            this.mesDicB = true;
-          }
-        }); 
-        
-        
-    
-      
-        
-  
-        // 
-        // 
-        //  horas trabajada mensuales
-        // 
-        // 
-        this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 1)
-        .subscribe(res=>{ 
-          
-          if (res) {
-            this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-            
-            this.mesTra= res;
-    
-      
-             
-            }
-         });
-  
-         this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 2)
-         .subscribe(res=>{ 
-           if (res) {
-             this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-             this.mesFe= res;
-  
-             }
-          });
-  
-          this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 3)
-          .subscribe(res=>{ 
-            if (res) {
-              this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-              this.mesMar= res;
-   
-              }
-           });
-           this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 4)
-           .subscribe(res=>{ 
-             if (res) {
-               this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-               this.mesAbr= res;
-    
-               }
-            });
-            this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 5)
-            .subscribe(res=>{ 
-              if (res) {
-                this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                this.mesMay= res;
      
-                }
-             });
-             this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 6)
-             .subscribe(res=>{ 
-               if (res) {
-                 this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                 this.mesJun= res;
-      
-                 }
-              });
-              this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 7)
-              .subscribe(res=>{ 
-                if (res) {
-                  this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                  this.mesJul= res;
-       
-                  }
-               });
-               this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 8)
-               .subscribe(res=>{ 
-                 if (res) {
-                   this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                   this.mesAgo= res;
-        
-                   }
-                });
-                this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 9)
-                .subscribe(res=>{ 
-                  if (res) {
-                    this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                    this.mesSet= res;
-         
-                    }
-                 });
-                 this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 10)
-                 .subscribe(res=>{ 
-                   if (res) {
-                     
-                     this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                     this.mesOct= res;
-                     
-                     }
-                    });
-                    this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 11)
-                    .subscribe(res=>{ 
-                      if (res) {
-                        this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                        this.mesNov= res;
-           
-                      }
-                    });
-                    this._empleados.horasMensualTrabajada(this.employees.nEmpleado , 12)
-                   .subscribe(res=>{ 
-                     if (res) {
-                      //  console.log(res);
-                       this.totalHTrabajadas=this.totalHTrabajadas+res[0].mesHora;
-                       this.mesDic= res;
-                       
-                      }
-                    });
-  
-         
-       
-   // 
-        // 
-        //  horas trabajada mensuales
-        // 
-        // 
-  
-       
-       this._empleados.horasMensualTrabajadaBolsa(this.employees.nEmpleado)
-       .subscribe(res=>{ 
-        //  console.log(res);
-         if (res) {
-           
-           this.mesTraBolsa=res;
-           
-           for (let i = 0; i < this.mesTraBolsa.length; i++) {
-             this.totalHTrabajadasBolsa=this.totalHTrabajadasBolsa+this.mesTraBolsa[i].mesBolsa ;
-            //  this.mesTra.push(0);
-            }
-              let a = this.meses.length - this.mesTraBolsa.length
-            for (let i = 0; i < a; i++) {
-              // this.totalHTrabajadas=this.totalHTrabajadas+this.mesTra[i].horasTeoricas;
-              this.mesTraBolsa.push({mes:0});
-             }
-             
-           }
-          // console.log(res);
-       });
+       this._empleados.horasMensual(this.employees.nEmpleado)
+       .subscribe(data=>{
+        if (data != 'error') {
+          this.dataNew = data
+          for (let i = 0; i < this.dataNew.length; i++) {
+            this.totalHTeoricas = this.totalHTeoricas + this.dataNew[i].horasTeoricasTotal;
+            this.totalHTrabajadasBolsa = this.totalHTrabajadasBolsa + this.dataNew[i].totalBolsas;
+            this.totalHTrabajadas = this.totalHTrabajadas + this.dataNew[i].horasTeoricasValidado;
+          }
+        }
+       })
+     
   
     this.bolsas();
        

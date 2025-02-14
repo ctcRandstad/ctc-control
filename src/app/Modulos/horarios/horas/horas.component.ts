@@ -136,6 +136,8 @@ mostrarBtn:boolean=false;
     this.getJustificaciones();
     this.showAndHideModal();
  
+console.log(action.value);
+return;
 
     this._empleados.consultaProgramacionAdmin(action.value)
     .subscribe(data=>{ 

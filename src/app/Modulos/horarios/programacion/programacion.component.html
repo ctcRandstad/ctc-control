@@ -1,8 +1,18 @@
 
 <app-menu></app-menu>
-<section class="top animate__animated animate__fadeIn ">
+
+<div class="loading-modal" *ngIf="loadingPerfil">
+  <div class="dots-loader">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <p>Cargando...</p>
+</div>
+
+<section class="top animate__animated animate__fadeIn " *ngIf="!loadingPerfil">
     &nbsp;
-    <form class="margin" #action="ngForm" (ngSubmit)="buscar1(action)">
+    <form class="margin" #action="ngForm" (ngSubmit)="buscar(action)">
         <div class="row form-row">
             <div class="col-md-2">
                 <p class="text-center text-primary">Fecha Inicio</p>
@@ -19,9 +29,7 @@
             </div>
 
             <input type="hidden" name="idServicio" [(ngModel)]="idServicio">
-            <input type="hidden" name="filter" [(ngModel)]="filter">
-            <input type="hidden" name="filtro" [(ngModel)]="filtro">
-            <input type="hidden" name="turno" [(ngModel)]="turno">
+            <input type="hidden" name="turnos" [(ngModel)]=" this.filtarTuros">
             <div class="col-md-2 tops" *ngIf="mos">
                 <button *ngIf="!mostrarBtn" [disabled]="action.invalid" type="submit" mdbBtn c class=" btn btn-primary btn-sm" mdbWavesEffect>
                     <i class="fas fa-search"></i>
@@ -36,7 +44,7 @@
                 </button>
             </div>
             &nbsp;
-            <div class="col-md-2 tops" *ngIf="justi && !mostrarBtn">
+            <div class="col-md-2 tops" *ngIf="justi">
                 <button type="button" (click)="print('printer')" mdbBtn class="btn btn-danger" mdbWavesEffect>
                     <i class="far fa-file-pdf"></i>
                 </button>
@@ -53,808 +61,85 @@
         </div>
         <p class="text-center text-muted my-4">Cargando resultados...</p>
       </ng-container>
-    <!-- <div class="d-flex justify-content-center animate__animated animate__fadeIn" *ngIf="mostrarBtn">
-       
-        <div class="spinner-grow text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+  
+ 
+      <ng-template #noData>
+        <p>No hay programaciones disponibles.</p>
+      </ng-template>
+     <div *ngIf="justi" class="" id="htmlData" style="border: 1px solid black; padding: 10px;">
+
+      <div class="containers" *ngIf="programacionesPorFecha && !mostrarBtn; else noData" id="htmlData">
+        <div *ngFor="let fecha of programacionesPorFecha | keyvalue" class="fecha row">
+          <h3 class="text-center text-capitalize ">{{ fecha.key | date: 'fullDate' }}</h3>
+      
+          <!-- Mostrar los turnos agrupados por horario -->
+          
+          <!-- Turnos de la mañana -->
+          <div class="card col" *ngIf="tieneTurnosPorHorario(fecha.key, 'M')">
+            <div class="card-header">
+              <h4>Turnos de la mañana</h4>
+              <p>{{ getTurnosPorHorario(fecha.key, 'M') | joinMap: 'turno_dia' }} (M)</p>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li *ngFor="let turm of getTurnosPorHorario(fecha.key, 'M')">
+                  <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
+                  <ul>
+                    <li *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'M', turm.turno_dia)">
+                      {{ programacion.apellidos }}, {{ programacion.nombre }}
+                      <span *ngIf="programacion.horasAusentes > 0"> - HS A{{ programacion.horasAusentes }}</span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="spinner-grow text-secondary" role="status">
-            <span class="visually-hidden">Loading...</span>
+      
+          <!-- Turnos de la tarde -->
+          <div class="card col" *ngIf="tieneTurnosPorHorario(fecha.key, 'T')">
+            <div class="card-header">
+              <h4>Turnos de la tarde</h4>
+              <p>{{ getTurnosPorHorario(fecha.key, 'T') | joinMap: 'turno_dia' }} (T)</p>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li *ngFor="let turm of getTurnosPorHorario(fecha.key, 'T')">
+                  <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
+                  <ul>
+                    <li *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'T', turm.turno_dia)">
+                      {{ programacion.apellidos }}, {{ programacion.nombre }}
+                      <span *ngIf="programacion.horasAusentes > 0"> - HS A{{ programacion.horasAusentes }}</span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="spinner-grow text-success" role="status">
-            <span class="visually-hidden">Loading...</span>
+      
+          <!-- Turnos de la noche -->
+          <div class="card col" *ngIf="tieneTurnosPorHorario(fecha.key, 'N')">
+            <div class="card-header">
+              <h4>Turnos de la noche</h4>
+              <p>{{ getTurnosPorHorario(fecha.key, 'N') | joinMap: 'turno_dia' }} (N)</p>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li *ngFor="let turm of getTurnosPorHorario(fecha.key, 'N')">
+                  <strong>{{ turm.turno_dia }} ({{ turm.horario }})</strong>
+                  <ul>
+                    <li *ngFor="let programacion of getPersonasPorTurno(fecha.key, 'N', turm.turno_dia)">
+                      {{ programacion.apellidos }}, {{ programacion.nombre }}
+                      <span *ngIf="programacion.horasAusentes > 0"> - HS A{{ programacion.horasAusentes }}</span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="spinner-grow text-danger" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div class="spinner-grow text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div class="spinner-grow text-info" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div class="spinner-grow text-light" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div class="spinner-grow text-dark" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-    </div> -->
-    <div class="row top " *ngIf="justi" id="htmlData">
-
-        <div class="col-md-2 border" *ngIf="fecha1">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3 ">
-                  
-                         {{fecha1 | date}}
-                </span>
-            </div>
+      
         </div>
-
-        <div class="col-md-3 border" *ngIf="fecha1">
-        
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha1 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                     
-                        {{ dat.idTurno}}  &nbsp;&nbsp;
-                </span>
-
-                </span>
-                <hr>
-                <li *ngFor="let item of dia1Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha1">
-           
-            <div class="bord h3">
-
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha1 == dat.fechaTrabajo && dat.horario != 'N'  && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}  &nbsp;&nbsp;
-                </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia1Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia1Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 border" *ngIf="fecha1">
-
-            <div class="bord  h3">
-                <span class="text-primary tex-center" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha1 == dat.fechaTrabajo && dat.horario == 'N' ">
-                        
-                        {{ dat.idTurno}}
-                    </span>
-
-                </span>
-                <hr>
-                <div *ngFor="let item of dia1Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-
-        <!-- dia 2 -->
-
-        <div class="col-md-2 border" *ngIf="fecha2">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-                    
-                                 {{fecha2 | date}}
-                        </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha2">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha2 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}  &nbsp;&nbsp;
-                </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia2Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia2Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha2">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha2 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}  &nbsp;&nbsp;
-                </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia2Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia2Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha2">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha2 == dat.fechaTrabajo && dat.horario == 'N'">
-                        
-                        {{ dat.idTurno}} &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia2Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia2Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- dia 3 -->
-
-        <div class="col-md-2 border " *ngIf="fecha3">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-            
-                         {{fecha3 | date}}
-                </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha3">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha3 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}} &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia3Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia3Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha3">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha3 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}} &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia3Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia3Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha3">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha3 == dat.fechaTrabajo && dat.horario == 'N' ">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia3Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia3Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <!-- dia1 4 -->
-
-        <div class="col-md-2 border " *ngIf="fecha4">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-                    
-                                 {{fecha4 | date}}
-                        </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha4">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha4 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia4Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia4Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha4">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha4 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia4Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia4Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha4">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha4 == dat.fechaTrabajo && dat.horario == 'N' ">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia4Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia4Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- dia 5 -->
-
-        <div class="col-md-2 border " *ngIf="fecha5">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-            
-                         {{fecha5 | date}}
-                </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha5">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha5 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia5Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia5Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha5">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha5 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia5Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia5Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha5">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha5 == dat.fechaTrabajo && dat.horario == 'N'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia5Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia5Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-        <!-- dia 6 -->
-
-        <div class="col-md-2 border " *ngIf="fecha6">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-            
-                         {{fecha6 | date}}
-                </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha6">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha6 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia6Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia6Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha6">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha6 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia6Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <div *ngFor="let item of dia6Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha6">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha6 == dat.fechaTrabajo && dat.horario == 'N'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia6Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia6Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-        <!-- dia 7 -->
-
-        <div class="col-md-2 border " *ngIf="fecha7">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-            
-                         {{fecha7 | date}}
-                </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha7">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha7 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia7Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia7Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha7">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha7 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia7Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia7Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha7">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha7 == dat.fechaTrabajo && dat.horario == 'N'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia7Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia7Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-        <!--dia  8 -->
-
-        <div class="col-md-2 border " *ngIf="fecha8">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-            
-                         {{fecha8 | date}}
-                </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha8">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha8 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia8Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia8Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha8">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha8 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia8Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia8Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha8">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha8 == dat.fechaTrabajo && dat.horario == 'N'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia8Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia8Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <!-- dia 9 -->
-
-        <div class="col-md-2 border " *ngIf="fecha9">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-                    
-                                 {{fecha9 | date}}
-                        </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha9">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha9 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia9Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia9Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha9">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha9 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia9Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia9Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha9">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha9 == dat.fechaTrabajo && dat.horario == 'N'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia9Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia9Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <!-- dia10 -->
-
-        <div class="col-md-2 border " *ngIf="fecha10">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-                    
-                                 {{fecha10 | date}}
-                        </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha10">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha10 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia10Manana" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia10Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha10">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha10 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia10Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia10Tarde" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha10">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha10 == dat.fechaTrabajo && dat.horario == 'N'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia10Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia10Noche" class="h6 text-dark">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <!-- dia 11 -->
-
-        <div class="col-md-2 border " *ngIf="fecha11">
-            <div class="bord text-center fecha">
-                <span class="dark-text  h3  ">
-                    
-                                 {{fecha11 | date}}
-                        </span>
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border" *ngIf="fecha11">
-            <ul class="bord h3">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha11 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'T'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <!-- <li *ngFor="let item of dia11Manana" class="h6 text-muted">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-                <li *ngFor="let item of dia11Manana" class="h6 text-dark"><span [ngClass]="{'text-primary': item.horario == 'V'}">{{item.apellidos}} {{item.nombre}} - T {{item.turno}}</span>
-                    <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha11">
-            <div class="bord h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha11 == dat.fechaTrabajo && dat.horario != 'N' && dat.horario != 'M'">
-                        
-                        {{ dat.idTurno}}   &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia11Tarde">
-                    <li *ngIf="item.horario=='T'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}}
-                        <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} 
-                    </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia11Tarde" class="h6 text-muted">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-        <div class="col-md-3 border " *ngIf="fecha11">
-            <div class="bord  h3 ">
-                <span class="text-primary" *ngFor="let dat of todoTurnos">
-                    <span *ngIf="fecha11 == dat.fechaTrabajo && dat.horario == 'N' ">
-                        
-                        {{ dat.idTurno}}  &nbsp;&nbsp;
-                    </span>
-                </span>
-                <hr>
-                <div *ngFor="let item of dia11Noche">
-                    <li *ngIf="item.horario=='N'" class="h6 text-dark">
-                        {{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span>
-                    </li>
-                </div>
-                <!-- <li *ngFor="let item of dia11Noche" class="h6 text-muted">{{item.apellidos}} {{item.nombre}} - T {{item.turno}} <span class="text-warning" *ngIf="item.horasAusentes > 0 && item.normal > 0 "> - HS A {{ item.horasAusentes}} </span></li> -->
-            </div>
-        </div>
-
-
-
+      </div>
+      
     </div>
-
     
 </section>

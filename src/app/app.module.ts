@@ -29,6 +29,7 @@ import { EncargadosModalComponent } from './Modales/encargados-modal/encargados-
 
 
 
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -45,6 +46,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AvisosComponent,
         LoadingComponent,
         EncargadosModalComponent,
+      
     ],
     bootstrap: [AppComponent],
     schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],

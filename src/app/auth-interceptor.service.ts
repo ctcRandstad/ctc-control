@@ -44,9 +44,8 @@ export class AuthInterceptorService  implements HttpInterceptor {
        location.reload();
     }
     if(error.error['text'] == 'Mal'){
-      //  localStorage.clear();
-      //   location.reload();
-   
+      localStorage.clear();
+        location.reload();
     }
    
 

@@ -33,14 +33,6 @@ export class ControlHorasService {
     }));
   }
 
-  getControlEmpleadosTM(idServicio:number){
-    return this.http.post(this.url +"control/control.php?id=getControlEmpleadosTM", {'idServicio' : idServicio})
-    .pipe(
-      map((e)=> {
-      
-        return e
-      }));
-    }
 
     getHorasTurnos(){
       return this.http.get(this.url +"control/control.php?id=getHorasTurnos")
@@ -51,16 +43,8 @@ export class ControlHorasService {
         }));
       }
 
-    getControlEmpleadosTT(idServicio:number){
-      return this.http.post(this.url +"control/control.php?id=getControlEmpleadosTT", {'idServicio' : idServicio})
-      .pipe(
-        map((e)=> {
-        
-          return e
-        }));
-      }
-      getControlEmpleadosTN(fecha:any,idServicio:number){
-        return this.http.post(this.url +"control/control.php?id=getControlEmpleadosTN" , {'fecha':fecha,'idServicio' : idServicio})
+      getControlEmpleadosTN(idServicio:number){
+        return this.http.post(this.url +"control/control.php?id=getControlEmpleadosTN" , {'idServicio' : idServicio})
         .pipe(
           map((e)=> {
           
@@ -68,8 +52,8 @@ export class ControlHorasService {
           }));
         }
 
-        getControlEmpleadosValidados(turno:any , fechaTrabajo:any,idServicio:number){
-          return this.http.post(this.url +"control/control.php?id=getControlEmpleadosValidados" , { 'turno' : turno, 'fechaTrabajo' : fechaTrabajo,'idServicio':idServicio})
+        getControlEmpleadosValidados(idServicio:number){
+          return this.http.post(this.url +"control/control.php?id=getControlEmpleadosValidados" , { 'idServicio':idServicio})
           .pipe(
             map((e)=> {              
             
@@ -269,8 +253,8 @@ export class ControlHorasService {
             }));
           }
 
-          getInforme(idServicio:number){
-            return this.http.post(this.url +"consultas/consultas.php?id=getInforme", { 'idServicio':idServicio})
+          getInforme(anio:any,idServicio:number){
+            return this.http.post(this.url +"consultas/consultas.php?id=getInforme", { 'anio' : anio,'idServicio':idServicio})
             .pipe(
               map((e)=> {
                 return e

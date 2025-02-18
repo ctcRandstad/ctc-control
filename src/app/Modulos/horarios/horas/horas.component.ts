@@ -119,7 +119,7 @@ search1(event: Event): void {
 datas?:boolean;
 dataSource:any;
 datos:any;
-turnos='aaa';
+turnos:any;
 datosConsulta:any;
 loadingHoras:boolean=true;
 mostrarBtn:boolean=false;
@@ -135,12 +135,9 @@ mostrarBtn:boolean=false;
     this.getContolHoras();
     this.getJustificaciones();
     this.showAndHideModal();
- 
-console.log(action.value);
-return;
-
     this._empleados.consultaProgramacionAdmin(action.value)
     .subscribe(data=>{ 
+    console.log(data);
     
       if (data == 'no') {
       this.datas=false;
@@ -175,7 +172,7 @@ return;
         this.loadingHoras = false;
         this.mostrarBtn = false;
 
-        },3000);
+        },1000);
     }
     });
     

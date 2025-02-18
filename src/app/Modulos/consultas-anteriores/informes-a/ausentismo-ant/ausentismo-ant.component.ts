@@ -32,8 +32,8 @@ export class AusentismoAntComponent implements OnInit {
      },2000);
   this.anio = event;
     if (this.anio) {
-      this.getInforme();
       this.siAnio = true;
+      this.getInforme();
     }else{
       this.siAnio = false;
     }
@@ -106,41 +106,45 @@ export class AusentismoAntComponent implements OnInit {
   totalDic:number=0;
 
   getInforme(){
-this._control.getAusentismo(this.anio,this.idServicio)
-.subscribe(data=>{ 
-
-this.data = data;
-if(this.data == 'error'){
-  alert('NADA PARA MOSTRAR');
- 
-  
-}else{
-
-
-for (let i = 0; i < this.data.length; i++) {
- this.totalEnero = this.totalEnero +  this.data[i].enero;
- this.totalF = this.totalF +  this.data[i].febrero;
- this.totalM = this.totalM +  this.data[i].marzo;
- this.totalA = this.totalA +  this.data[i].abril;
- this.totalMa = this.totalMa +  this.data[i].mayo;
- this.totalJu = this.totalJu +  this.data[i].junio;
- this.totalJul = this.totalJul +  this.data[i].julio;
- this.totalAgo = this.totalAgo +  this.data[i].agosto;
- this.totalSep = this.totalSep +  this.data[i].septiembre;
- this.totalOct = this.totalOct +  this.data[i].octubre;
- this.totalNo = this.totalNo +  this.data[i].noviembre;
- this.totalDic = this.totalDic +  this.data[i].diciembre;
- 
-}
-
-
-
-
-}
-
-});
-
-  }
+    this._control.getAusentismo(this.anio,this.idServicio)
+    .subscribe(data=>{ 
+      if(this.data == 'error'){
+        alert('NADA PARA MOSTRAR');
+      }else{
+      
+        
+        this.data = data;
+        let totalMeses = Array(12).fill(0);
+        
+        // Recorrer los datos y acumular los valores por mes
+        this.data.forEach((item:any, index:any) => {
+          if (item.porcentajeAusentismo !== null) {
+            totalMeses[index] = item.porcentajeAusentismo;
+          }
+        });
+        
+        // Asignar a las variables correspondientes
+          this.totalEnero = totalMeses[0];
+          this.totalF = totalMeses[1];
+          this.totalM = totalMeses[2];
+          this.totalA = totalMeses[3];
+          this.totalMa = totalMeses[4];
+          this.totalJu = totalMeses[5];
+          this.totalJul = totalMeses[6];
+          this.totalAgo = totalMeses[7];
+          this.totalSep = totalMeses[8];
+          this.totalOct = totalMeses[9];
+          this.totalNo = totalMeses[10];
+          this.totalDic = totalMeses[11];
+          
+          setTimeout(()=>{
+            this.loadingHoras=false;
+          },1000)
+        }
+    
+        });
+    
+      }
   sort_by_key(array:any, key:any)
   {
    return array.sort(function(a:any, b:any)

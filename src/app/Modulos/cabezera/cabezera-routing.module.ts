@@ -23,6 +23,7 @@ const routes: Routes = [
       { path: 'Huellas' ,  component: HuellaComponent },
       { path: 'Informes' ,  component: InformesComponent,
           children:[
+          
             { path: 'HS' ,  component: HorasSeccinComponent },
             { path: 'HNT' ,  component: HorasNoTrabajadasComponent },
             { path: 'HE' ,  component: HorasExtrasComponent },

@@ -183,6 +183,7 @@ get_t:any=[];
         this.hoy = data.meses / 12 ;
         this._empleados.getDiasVacacionesConsultas(item.nEmpleado, this.anio) 
    .subscribe(resp=>{ 
+console.log(resp);
 
     if (resp > 0) {
       this.vaciones = resp;

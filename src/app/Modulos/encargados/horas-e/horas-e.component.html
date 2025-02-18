@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="alert alert-secondary cursor" (click)="changeEncargados()">
-                    RESPONSABLE: <span class="text-dark text-uppercase">&nbsp; <i class="fas fa-user-check"></i> &nbsp; {{ encargado }}</span> 
+                    RESPONSABLE: <span class="text-dark text-uppercase">&nbsp; <i class="fas fa-user-check"></i> &nbsp; {{ nameEncargado }}</span> 
                 </div>
                 <div class="row">
                     <div class="col-md-2">
@@ -30,7 +30,7 @@
                     <i class="fas fa-edit"></i>
                   
                 </button> &nbsp; &nbsp;
-                <button mdbBtn (click)="show = !show" type="button" class="btn btn-dark" mdbWavesEffect>
+                <button mdbBtn (click)="addEmployee(show)" type="button" class="btn btn-dark" mdbWavesEffect>
                   <i *ngIf="!show" class="fas fa-plus"></i>
                   <i *ngIf="show" class="fas fa-minus"></i>
                 </button>

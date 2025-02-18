@@ -67,72 +67,48 @@ export class AusentismoComponent implements OnInit {
   totalOct:number=0;
   totalNo:number=0;
   totalDic:number=0;
-  // ausencias
-  totalAusencia1:number=0;
-  totalAusencia2:number=0;
-  totalAusencia3:number=0;
-  totalAusencia4:number=0;
-  totalAusencia5:number=0;
-  totalAusencia6:number=0;
-  totalAusencia7:number=0;
-  totalAusencia8:number=0;
-  totalAusencia9:number=0;
-  totalAusencia10:number=0;
-  totalAusencia11:number=0;
-  totalAusencia12:number=0;
+
   datosH:any=[];
   datosHq:any=[];
   loading:boolean = true;
   getInforme(){
 this._control.getAusentismo(this.anio,this.idServicio)
 .subscribe(data=>{ 
-
- 
-this.data = data;
-if(this.data == 'error'){
-  alert('NADA PARA MOSTRAR');
- 
+  if(this.data == 'error'){
+    alert('NADA PARA MOSTRAR');
+  }else{
   
-}else{
+    
+    this.data = data;
+    let totalMeses = Array(12).fill(0);
+    
+    // Recorrer los datos y acumular los valores por mes
+    this.data.forEach((item:any, index:any) => {
+      if (item.porcentajeAusentismo !== null) {
+        totalMeses[index] = item.porcentajeAusentismo;
+      }
+    });
+    
+    // Asignar a las variables correspondientes
+      this.totalEnero = totalMeses[0];
+      this.totalF = totalMeses[1];
+      this.totalM = totalMeses[2];
+      this.totalA = totalMeses[3];
+      this.totalMa = totalMeses[4];
+      this.totalJu = totalMeses[5];
+      this.totalJul = totalMeses[6];
+      this.totalAgo = totalMeses[7];
+      this.totalSep = totalMeses[8];
+      this.totalOct = totalMeses[9];
+      this.totalNo = totalMeses[10];
+      this.totalDic = totalMeses[11];
+      
+      setTimeout(()=>{
+        this.loading=false;
+      },1000)
+    }
 
-
-for (let i = 0; i < this.data.length; i++) {
- this.totalEnero = this.totalEnero +  this.data[i].enero;
- this.totalF = this.totalF +  this.data[i].febrero;
- this.totalM = this.totalM +  this.data[i].marzo;
- this.totalA = this.totalA +  this.data[i].abril;
- this.totalMa = this.totalMa +  this.data[i].mayo;
- this.totalJu = this.totalJu +  this.data[i].junio;
- this.totalJul = this.totalJul +  this.data[i].julio;
- this.totalAgo = this.totalAgo +  this.data[i].agosto;
- this.totalSep = this.totalSep +  this.data[i].septiembre;
- this.totalOct = this.totalOct +  this.data[i].octubre;
- this.totalNo = this.totalNo +  this.data[i].noviembre;
- this.totalDic = this.totalDic +  this.data[i].diciembre;
- 
-}
-
-
-// desglose de horas extras por meses
-for (let index = 1; index < 13; index++) {
-
- 
-  this._control.getInformeConsultaHoras(this.anio , index,this.idServicio)
-  .subscribe(data=>{
-   
-    this.datosH.push(data);
-  });
-  
-}
-
-setTimeout(()=>{
-  this.datosHq = this.sort_by_key(this.datosH, 'mes');
-  this.loading=false;
-},2000)
-
-}
-
-});
+    });
 
   }
   sort_by_key(array:any, key:any)

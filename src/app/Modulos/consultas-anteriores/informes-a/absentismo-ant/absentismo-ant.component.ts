@@ -108,6 +108,9 @@ export class AbsentismoAntComponent implements OnInit {
 this._control.getAbsentismo1(this.anio,this.idServicio)
 .subscribe(data=>{ 
 
+  console.log();
+  
+
 this.data = data;
 if(this.data == 'error'){
   alert('NADA PARA MOSTRAR');
@@ -115,22 +118,29 @@ if(this.data == 'error'){
   
 }else{
 
+  let totalMeses = Array(12).fill(0);
 
-for (let i = 0; i < this.data.length; i++) {
- this.totalEnero = this.totalEnero +  this.data[i].enero;
- this.totalF = this.totalF +  this.data[i].febrero;
- this.totalM = this.totalM +  this.data[i].marzo;
- this.totalA = this.totalA +  this.data[i].abril;
- this.totalMa = this.totalMa +  this.data[i].mayo;
- this.totalJu = this.totalJu +  this.data[i].junio;
- this.totalJul = this.totalJul +  this.data[i].julio;
- this.totalAgo = this.totalAgo +  this.data[i].agosto;
- this.totalSep = this.totalSep +  this.data[i].septiembre;
- this.totalOct = this.totalOct +  this.data[i].octubre;
- this.totalNo = this.totalNo +  this.data[i].noviembre;
- this.totalDic = this.totalDic +  this.data[i].diciembre;
- 
-}
+
+  // Recorrer los datos y acumular los valores por mes
+  this.data.forEach((item:any, index:any) => {
+    if (item.porcentajeAbsentismo !== null) {
+      totalMeses[index] = item.porcentajeAbsentismo;
+    }
+  });
+  
+  // Asignar a las variables correspondientes
+  this.totalEnero = totalMeses[0];
+  this.totalF = totalMeses[1];
+  this.totalM = totalMeses[2];
+  this.totalA = totalMeses[3];
+  this.totalMa = totalMeses[4];
+  this.totalJu = totalMeses[5];
+  this.totalJul = totalMeses[6];
+  this.totalAgo = totalMeses[7];
+  this.totalSep = totalMeses[8];
+  this.totalOct = totalMeses[9];
+  this.totalNo = totalMeses[10];
+  this.totalDic = totalMeses[11];
 
 
 

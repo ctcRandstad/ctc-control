@@ -169,17 +169,17 @@
                     <a routerLink="../empleados" class="btn btn-secondary" role="button" (click)="salir()">
                         <i class="fas fa-arrow-circle-left"></i> Nueva consulta</a>
                 </div>
-                <div class="col-md-2 container">
-                   <span class="mio"> Aplicaciones asignadas</span>
-                    <span (click)="asignar(employees.apellidos, employees.nombre, employees.nEmpleado,employees.dni,employees.app_calendario, 'app_calendario')" class="badge cursor" [ngClass]="{'badge-success': employees.app_calendario == 1, 'badge-danger': employees.app_calendario != 1 }" >Calendario</span>
-                    &nbsp;
-                    <span (click)="asignar(employees.apellidos, employees.nombre, employees.nEmpleado,employees.dni,employees.app_production, 'app_production')" class="badge cursor" [ngClass]="{'badge-success': employees.app_production == 1, 'badge-danger': employees.app_production != 1 }" >Production</span>
-             </div>
             </div>
             <br>
             <!-- Menu vertical -->
             <div class="row">
                 <div class="col-12 ">
+                    <div class="col-md-2 container">
+                        <span class="mio"> Aplicaciones asignadas</span>
+                         <span (click)="asignar(employees.apellidos, employees.nombre, employees.nEmpleado,employees.dni,employees.app_calendario, 'app_calendario')" class="badge cursor" [ngClass]="{'badge-success': employees.app_calendario == 1, 'badge-danger': employees.app_calendario != 1 }" >Calendario</span>
+                         &nbsp;
+                         <span (click)="asignar(employees.apellidos, employees.nombre, employees.nEmpleado,employees.dni,employees.app_production, 'app_production')" class="badge cursor" [ngClass]="{'badge-success': employees.app_production == 1, 'badge-danger': employees.app_production != 1 }" >Production</span>
+                      </div>
                     <mdb-tabs [pills]="true" [vertical]="true" class="margin">
                         <mdb-tab class="col-2" class="home"> <ng-template mdbTabTitle><span><i class="fas fa-chalkboard-teacher"></i> Perfil</span></ng-template>
                             <div class="col-12" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">

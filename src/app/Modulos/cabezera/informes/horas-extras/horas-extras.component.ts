@@ -5,13 +5,20 @@ import { ControlHorasService } from 'src/app/Services/control-horas.service';
 import { ExcelService } from 'src/app/Services/excel.service';
 import { NotificacionService } from 'src/app/Services/notificacion.service';
 import html2canvas from 'html2canvas'; 
+import { Result } from './interfase';
 
 @Component({
   selector: 'app-horas-extras',
   templateUrl: './horas-extras.component.html',
   styleUrls: ['./horas-extras.component.css']
 })
+
+
+
+
 export class HorasExtrasComponent implements OnInit {
+
+
 
   pantalla:number;
 
@@ -36,27 +43,25 @@ export class HorasExtrasComponent implements OnInit {
   years:any;
   tipoUsuario:any;
   loader?:boolean;
-  mes:number=0;
+  currentMonth:number=0;
+  months!: number[];
   idServicio:any;
   ngOnInit() {
     const idServicios:any = localStorage.getItem(btoa('servicio'));
     const usuario:any = localStorage.getItem('usuario');
     const tipoUsuario:any = localStorage.getItem('rol');
-
-
     this.idServicio = atob(idServicios);
     this.usuario = atob(usuario);
     this.tipoUsuario = atob(tipoUsuario);
    
-    var today = new Date();
-    this.anio = today.getFullYear();
-
-    this.getInforme();
-  
     let momentoActual = new Date();
-  this.mes =   (momentoActual.getMonth()+ 1);
-
-  
+    this.currentMonth =   (momentoActual.getMonth()+ 1);
+    this.anio = momentoActual.getFullYear();
+    this.months = [];
+    for (let i = 1; i <= 12; i++) {
+      this.months.push(i);
+    }
+    this.getInforme();
   }
 
 
@@ -77,144 +82,129 @@ export class HorasExtrasComponent implements OnInit {
   totalOct:number=0;
   totalNo:number=0;
   totalDic:number=0;
-  // ausencias
-  totalAusencia1:number=0;
-  totalAusencia2:number=0;
-  totalAusencia3:number=0;
-  totalAusencia4:number=0;
-  totalAusencia5:number=0;
-  totalAusencia6:number=0;
-  totalAusencia7:number=0;
-  totalAusencia8:number=0;
-  totalAusencia9:number=0;
-  totalAusencia10:number=0;
-  totalAusencia11:number=0;
-  totalAusencia12:number=0;
   datosH:any=[];
   datosHq:any=[];
   loading:boolean = true;
   getInforme(){
-this._control.getInformeConsulta(this.anio,this.idServicio)
-.subscribe(data=>{ 
-this.data = data;
-if(this.data == 'error'){
-  alert('NADA PARA MOSTRAR');
+  this._control.getInforme(this.anio,this.idServicio)
+  .subscribe(data=>{ 
+    if(this.data == 'error'){
+      alert('NADA PARA MOSTRAR');
+  }else{
+  this.data = data;
+  this.calcularTotales(); // Llamamos a la función para sumar los totales
+    setTimeout(()=>{
+      this.loading=false;
+    },1000);
 
-  
-}else{
-
-
-for (let i = 0; i < this.data.length; i++) {
- this.totalEnero = this.totalEnero +  this.data[i].eneroh;
- this.totalF = this.totalF +  this.data[i].febreroh;
- this.totalM = this.totalM +  this.data[i].marzoh;
- this.totalA = this.totalA +  this.data[i].abrilh;
- this.totalMa = this.totalMa +  this.data[i].mayoh;
- this.totalJu = this.totalJu +  this.data[i].junioh;
- this.totalJul = this.totalJul +  this.data[i].julioh;
- this.totalAgo = this.totalAgo +  this.data[i].agostoh;
- this.totalSep = this.totalSep +  this.data[i].septiembreh;
- this.totalOct = this.totalOct +  this.data[i].octubreh;
- this.totalNo = this.totalNo +  this.data[i].noviembreh;
- this.totalDic = this.totalDic +  this.data[i].diciembreh;
- 
-}
-// desglose de horas extras por meses
-for (let index = 1; index < 13; index++) {
-
- 
-  this._control.getInformeConsultaHoras(this.anio , index,this.idServicio)
-  .subscribe(data=>{
-   
-    this.datosH.push(data);
-  });
-  
-}
-
-setTimeout(()=>{
-  this.datosHq = this.sort_by_key(this.datosH, 'mes');
-  this.loading=false;
-},2000);
-
-}
-
+  }
 });
 
-  }
-  sort_by_key(array:any, key:any)
-  {
-   return array.sort(function(a:any, b:any)
-   {
-    var x = a[key]; var y = b[key];
-    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-   });
-  }
-  
+}
 
 
-  datos:any;
-  exportAsXLSX():void {
-    
-    this._control.getInformeExcelConsultaExtras(this.anio,this.idServicio)
-    .subscribe(data=>{ 
-      
-      this.datos = data;
-      this.datos.push({' ' : ' '})
-      this.datos.push({
-        'SECCIÓN' : 'H. EXTRA DIURNA' , 
-        'ENERO' : this.datosH[0].ehe , 
-        'FEBRERO' : this.datosH[1].ehe,
-        'MARZO' : this.datosH[2].ehe,
-        'ABRIL' : this.datosH[3].ehe,
-        'MAYO' : this.datosH[4].ehe,
-        'JUNIO' : this.datosH[5].ehe,
-        'JULIO' : this.datosH[6].ehe,
-        'AGOSTO' : this.datosH[7].ehe,
-        'SEPTIEMBRE' : this.datosH[8].ehe,
-        'OCTUBRE' : this.datosH[9].ehe,
-        'NOVIEMBRE' : this.datosH[10].ehe,
-        'DICIEMBRE' : this.datosH[11].ehe,
-      })
-      this.datos.push({
-        'SECCIÓN' : 'H. EXTRA NOCTURNA' , 
-        'ENERO' : this.datosH[0].ehen , 
-        'FEBRERO' : this.datosH[1].ehen,
-        'MARZO' : this.datosH[2].ehen,
-        'ABRIL' : this.datosH[3].ehen,
-        'MAYO' : this.datosH[4].ehen,
-        'JUNIO' : this.datosH[5].ehen,
-        'JULIO' : this.datosH[6].ehen,
-        'AGOSTO' : this.datosH[7].ehen,
-        'SEPTIEMBRE' : this.datosH[8].ehen,
-        'OCTUBRE' : this.datosH[9].ehen,
-        'NOVIEMBRE' : this.datosH[10].ehen,
-        'DICIEMBRE' : this.datosH[11].ehen,
-      })
+result: { [mes: number]: Result } = {};
+mesesNombres: string[] = [
+  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+];
+agruparPorMes(): void {
+  this.data.forEach((puesto:any) => {
+    Object.keys(puesto.meses).forEach(mes => {
+      const mesNumero = parseInt(mes);
+      if (!this.result[mesNumero]) {
+        this.result[mesNumero] = {
+          hora1: 0,
+          hora2: 0,
+          hora3: 0
+        
+        };
+      }
 
-      this.datos.push({
-        'SECCIÓN' : 'H. EXTRA FESTIVA' , 
-        'ENERO' : this.datosH[0].ehef , 
-        'FEBRERO' : this.datosH[1].ehef,
-        'MARZO' : this.datosH[2].ehef,
-        'ABRIL' : this.datosH[3].ehef,
-        'MAYO' : this.datosH[4].ehef,
-        'JUNIO' : this.datosH[5].ehef,
-        'JULIO' : this.datosH[6].ehef,
-        'AGOSTO' : this.datosH[7].ehef,
-        'SEPTIEMBRE' : this.datosH[8].ehef,
-        'OCTUBRE' : this.datosH[9].ehef,
-        'NOVIEMBRE' : this.datosH[10].ehef,
-        'DICIEMBRE' : this.datosH[11].ehef,
-      })
-      
-      
-      this.excelService.exportAsExcelFile(this.datos, 'Informes_Horas-Extras' + this.anio );
-      // console.log(this.datos);
-      
-      
+      const mesData = puesto.meses[mesNumero];
+
+      // Sumamos las horas y las bolsas
+      this.result[mesNumero].hora1 += mesData.hora1;
+      this.result[mesNumero].hora2 += mesData.hora2;
+      this.result[mesNumero].hora3 += mesData.hora3;
+     
     });
-    // console.log(this.datosH);
+  });
+
+  // Aquí puedes ver los resultados consolidados por mes
+  console.log(this.result);
+}
+
+calcularTotales() {
+  this.agruparPorMes();
+    // Inicializamos los totales de cada mes en 0
+    this.totalEnero = 0;
+    this.totalF = 0;
+    this.totalM = 0;
+    this.totalA = 0;
+    this.totalMa = 0;
+    this.totalJu = 0;
+    this.totalJul = 0;
+    this.totalAgo = 0;
+    this.totalSep = 0;
+    this.totalOct = 0;
+    this.totalNo = 0;
+    this.totalDic = 0;
   
+    this.data.forEach((puestoData: any) => {
+      // Recorremos los meses y sumamos los valores
+      Object.keys(puestoData.meses).forEach((mes: any) => {
+        const mesData = puestoData.meses[mes];
+  
+        // Sumamos las horas y las bolsas relevantes para cada mes
+        const totalMes = (mesData.hora1 || 0) + (mesData.hora2 || 0) + (mesData.hora3 || 0);
+  
+        // Acumulamos los totales por mes
+        switch (mes) {
+          case '1': // Enero
+            this.totalEnero += totalMes;
+            break;
+          case '2': // Febrero
+            this.totalF += totalMes;
+            break;
+          case '3': // Marzo
+            this.totalM += totalMes;
+            break;
+          case '4': // Abril
+            this.totalA += totalMes;
+            break;
+          case '5': // Mayo
+            this.totalMa += totalMes;
+            break;
+          case '6': // Junio
+            this.totalJu += totalMes;
+            break;
+          case '7': // Julio
+            this.totalJul += totalMes;
+            break;
+          case '8': // Agosto
+            this.totalAgo += totalMes;
+            break;
+          case '9': // Septiembre
+            this.totalSep += totalMes;
+            break;
+          case '10': // Octubre
+            this.totalOct += totalMes;
+            break;
+          case '11': // Noviembre
+            this.totalNo += totalMes;
+            break;
+          case '12': // Diciembre
+            this.totalDic += totalMes;
+            break;
+        }
+      });
+    });
+  }
+  
+
+  exportAsXLSX(){
+
   }
 
   pri?:boolean;

@@ -54,7 +54,7 @@ export class HorasExtrasBolsaComponent implements OnInit {
 
     var today = new Date();
     this.anio = today.getFullYear();
-    this.getInforme();
+    // this.getInforme();
     let momentoActual = new Date();
   this.mes =   (momentoActual.getMonth()+ 1);
 

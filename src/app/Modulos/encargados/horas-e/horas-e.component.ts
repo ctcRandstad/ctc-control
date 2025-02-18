@@ -1,3 +1,4 @@
+import { supportsScrollBehavior } from '@angular/cdk/platform';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdbModalService } from 'mdb-angular-ui-kit/modal';
@@ -81,12 +82,19 @@ export class HorasEComponent implements OnInit {
     if (this.tipoUsuario != 'E2020') {
        this.ruta.navigate(['Main']);
        }
-    this.getContolHoras();
-    this.getJustificaciones();
-    this.getContolEmpleados();
-    this.getEmpleadosActivos();
+    this.getContolHoras(); // trae los nombres de las columnas
+    // this.getJustificaciones(); // trae las justidficaciones
+    this.getContolEmpleados(); // trae los horarios de los empleados
+    // this.getEmpleadosActivos(); // trae los empleados activos
 }
 
+
+addEmployee(show:boolean){
+  this.show = !show;
+  if (this.show) {
+    this.getEmpleadosActivos();
+  }
+}
 
 
   habilitarE?:boolean;
@@ -123,6 +131,7 @@ export class HorasEComponent implements OnInit {
           this.habilitarE11 = false;
         }else if(message == 'habilitarE11T'){
           this.habilitarE11 = true;
+          this.getJustificaciones();
         }
       }
     });
@@ -164,6 +173,8 @@ export class HorasEComponent implements OnInit {
   getJustificaciones(){
   this._control.getJustificaciones(this.idServicio)
   .subscribe(justifi=>{ 
+    console.log(justifi);
+    
   this.justifi = justifi;
   });
   }
@@ -173,6 +184,8 @@ export class HorasEComponent implements OnInit {
   getEmpleadosActivos(){
     this._emple.getEmplaedosActivos(this.idServicio)
     .subscribe(resp=>{
+      console.log(resp);
+      
       if (resp != 'error') {
         this.datas = resp;
         // this.dataTotal = this.data.length;
@@ -210,6 +223,8 @@ export class HorasEComponent implements OnInit {
   getContolHoras(){
   this._control.configHoras(this.idServicio)
   .subscribe(data=>{
+    console.log(data);
+    
     this.horas = data;
 
     for (let i = 0; i < this.horas.length; i++) {
@@ -273,298 +288,79 @@ export class HorasEComponent implements OnInit {
      })
   }
 
-  up(){
-    // let main = document.documentElement.querySelector('#top-section')
-      scroll(0, 0);
-  }
-
-  
-  minuto:any;
-  hor:any;
-  segundo:any;
-  horaImprimible:any;
-  mueveReloj(){
-   let momentoActual = new Date();
-   this.hor = momentoActual.getHours();
-  this.minuto = momentoActual.getMinutes();
-  this.segundo = momentoActual.getSeconds();
-  // debugger
-  if (this.hor < 10) {
-    this.hor = '0' + this.hor
-  } 
-   if (this.minuto < 10) {
-     this.minuto = '0' + this.minuto
-   } 
-   if (this.segundo < 10) {
-    this.segundo = '0' + this.segundo
-  } 
-    this.horaImprimible = this.hor + ":" + this.minuto
-    
-
-
-if (this.fecha == undefined || this.fecha == null) {
-  this.fecha = momentoActual.getFullYear() + '-' + (momentoActual.getMonth()+ 1) + '-' + momentoActual.getDate();
-
-}
-
-}
 
 refresh(){
-  
   location.reload();
-
-    this.getContolEmpleados();
-    setTimeout(()=>{
-this.ejecuter();
-    },1000)
-  }
-  
-  ejecuter(){
-    
-     this.getContolEmpleados();
-    // alert('si')
-    
-
 }
+  
 
 
 
-  encargado:any;
-  fecha:any;
-  data:any;
-  hora:any;
-  dataHorios:any;
-  tur?:string;
+
+encargado:any;
+fecha:any;
+data:any;
+hora:any;
+dataHorios:any;
+tur?:string;
 mostrarData?:boolean;
 sinData?:boolean;
-inicioM:string='';
-inicioT:string='';
-inicioN:string='';
-
-finalM:string='';
-finalT:string='';
-finalN:string='';
-turnoIdEncargados:any;
-turnoIdEncargadosTarde:any;
-turnoIdEncargadosNoche:any;
-horasTurnos:any;
 loading:boolean = true;
   getContolEmpleados(){
-    this.addEmpleadoNuevo=false;
-    this.mueveReloj();
-
-    this._control.getHorasTurnos()
-    .subscribe(data=>{ 
-     this.horasTurnos = data;
-   
-    this.inicioM = this.horasTurnos[0].inicio;
-    this.finalM = this.horasTurnos[0].final;
-
-    this.inicioT = this.horasTurnos[1].inicio;
-    this.finalT  = this.horasTurnos[1].final;
-
-        //  this.horaImprimible ='22:01'
-    
-    // traemos todo los horarios diponible
-    if (this.horaImprimible >= this.inicioM && this.horaImprimible < this.finalM ){  
-      this.tur='m';
-    localStorage.removeItem('turnoEncargadosNoche');
-    localStorage.removeItem('turnoEncargadosTarde');
-
-
-      localStorage.setItem('turno',  this.tur);
-      this._control.getControlEmpleadosTM(this.idServicio)
-      .subscribe(data=>{  
-     this.data = [];
-   
+    this.mostrarData = true;
+    this._control.getControlEmpleadosTN(this.idServicio)
+    .subscribe(data=>{
+      this.data = data;
+      //Si el encargado ya está almacenado en localStorage
+      this.encargado = localStorage.getItem('encargado');
       
-        if (data) {
-          this.mostrarData = true;
-             this.data = data;
-             setTimeout(()=>{
-              this.loading=false;
-             },3000);
-             localStorage.setItem('fecha',  this.data[0].fechaTrabajo);
-             for (let i = 0; i < this.data.length; i++) {
-               if(this.data[i].turno_id < 6){
-                this.turnoIdEncargados = this.data[i].turno_id;
-              }
-            }
-            let encargados = localStorage.getItem('turnoEncargados');
-            if(!encargados){
-              localStorage.setItem('turnoEncargados',  this.turnoIdEncargados);
-            }
-          this._control.getEncargados(encargados, this.idServicio)
-          .subscribe(data=>{ 
-     
-            if(data != 'error'){
-              this.encargado = data;
-            }
-          });
-          
-             this.mostrarData = true;
-          
-        } else{
-          setTimeout(()=>{
-            this.loading=false;
-           },3000);
-          this.sinData = true;
-          this.mostrarData = true;
-          let encargados = localStorage.getItem('turnoEncargados');
-          this._control.getEncargados(encargados,this.idServicio)
-          .subscribe(data=>{ 
-          
-            if(data != 'error'){
-              this.encargado = data;
-            }
-          });
-      }    
-    })
-
-    } else if (this.horaImprimible >= this.inicioT && this.horaImprimible < this.finalT) {
-      // turno tarde 
-      this.tur = 't';
-    localStorage.removeItem('turnoEncargados');
-    //  console.log(this.fecha);
-    localStorage.setItem('turno',  this.tur);
-     
-        this._control.getControlEmpleadosTT(this.idServicio)
-        .subscribe(data=>{  
-
-
-     this.data = [];
-   
-          
-          if (data) {
-            this.mostrarData = true;
-            this.data = data;
-            setTimeout(()=>{
-              this.loading=false;
-             },3000);
-;            localStorage.setItem('fecha',  this.data[0].fechaTrabajo);
-            for (let i = 0; i < this.data.length; i++) {
-              if(this.data[i].turno_id < 6){
-               this.turnoIdEncargadosTarde = this.data[i].turno_id;
-             }
-           }
-           let encargados = localStorage.getItem('turnoEncargadosTarde');
-           if(!encargados){
-             localStorage.setItem('turnoEncargadosTarde',  this.turnoIdEncargadosTarde);
-           }
-         this._control.getEncargados(encargados,this.idServicio)
-         .subscribe(enca=>{ 
-       
-           if(enca != 'error'){
-             this.encargado = enca;
-             this.mostrarData = true;
-           }
-         });
-         
-         
-       } else{
-        
-         let encargados = localStorage.getItem('turnoEncargadosTarde');
-         this._control.getEncargados(encargados,this.idServicio)
-         .subscribe(enca=>{ 
-          this.data = [];
-          this.sinData = true;
-          this.mostrarData = true;
-          
-          if(enca != 'error'){
-            this.encargado = enca;
-          }
-        });
-      }    
-     
-      
-    })
-  } else  {
-    // turno de noche.
-
-    localStorage.removeItem('turnoEncargados');
-    localStorage.removeItem('turnoEncargadosTarde');
-    
-    this.tur = 'n';
-    localStorage.setItem('turno',  this.tur);
-    
-    this.fecha = localStorage.getItem('fecha');
-   
-    if (!this.fecha) {
-     let a:any =  prompt('colocar fecha ej: año-mes-dia: 2022-04-28' );
-     const validar = Date.parse(a);
-    
-     if (a != null ) {
-      if (validar > 0 ) {
-        localStorage.setItem('fecha', a);
-        this.fecha = localStorage.getItem('fecha');
+    if (this.encargado) {
+      if (this.data[0].turno_id >= 1 && this.data[0].turno_id <= 5 ) {
+        if (this.encargado && this.encargado !== this.data[0].turno_id.toString()) {
+          // Si los jefes son diferentes, significa que el jefe ha cambiado
+          // Puedes realizar el proceso de cambiar el jefe aquí
+          localStorage.setItem('encargado', this.data[0].turno_id.toString());  // Actualizar localStorage
+          this.getEncargados(this.data[0].turno_id);  // Llamar la función para obtener el nuevo jefe
+        }else{
+          this.getEncargados(this.encargado);
+        }
       }
-     }
+    } else {
+      // Si no está, lo asignamos con el valor predeterminado y lo guardamos en localStorage
+      localStorage.setItem('encargado', this.data[0].turno_id);
+      // Después de guardar el valor, obtenemos el encargado
+      this.encargado = localStorage.getItem('encargado');
+      this.getEncargados(this.encargado);
     }
-    this._control.getControlEmpleadosTN(this.fecha,this.idServicio)
-    .subscribe(data=>{  
-      this.data = [];
-      
-      if (data) {
-        this.mostrarData = true;
-        this.data = data;
-        setTimeout(()=>{
-          this.loading=false;
-         },3000);
-;         
-            for (let i = 0; i < this.data.length; i++) {
-              if(this.data[i].turno_id < 6){
-               this.turnoIdEncargadosNoche = this.data[i].turno_id;
-             }
-           }
-           let encargados = localStorage.getItem('turnoEncargadosNoche');
-           if(!encargados){
-             localStorage.setItem('turnoEncargadosNoche',  this.turnoIdEncargadosNoche);
-           }
-         this._control.getEncargados(encargados,this.idServicio)
-         .subscribe(enca=>{ 
-       
-          if(enca != 'error'){
-            this.encargado = enca;
-            this.mostrarData = true;
-          }
-         });
-         
-         
-       } else{
-         let encargados = localStorage.getItem('turnoEncargadosNoche');
-         this._control.getEncargados(encargados,this.idServicio)
-         .subscribe(data=>{ 
-           
-           
-           if(data != 'error'){
-              this.data = [];
-              this.sinData = true;
-              this.mostrarData = true;
-             this.encargado = data;
-           }else{
-            this.data = [];
-            this.sinData = true;
-            this.mostrarData = true;
-           }
-         });
-     }  
-         
-   
-        })
-      }
+    if(this.data == 'empty'){
+      this.sinData=true;
+    }else{
+      this.sinData=false;
+      setTimeout(()=>{
+        this.loading = false;
+      },1500)
+    }
+    
+   })
+}
+
+nameEncargado:any;
+// Función para obtener los encargados
+getEncargados(encargado: string) {
+  this._control.getEncargados(encargado, this.idServicio)
+    .subscribe(encargado => {
+      console.log(encargado);
+      this.nameEncargado = encargado; // Asignamos el nombre del encargado a la variable
     });
- 
-    
-    }
+}
 
-
-    puesto?:string;
-    name?:string;
-    lastName?:string;
-    puestos:any;
-    idPla?:number;
-    modalM:any;
-    func2(idPalntilla:any,fp:any,puesto:any , nombre:any, apellido:any,horario:any){
+puesto?:string;
+name?:string;
+lastName?:string;
+puestos:any;
+idPla?:number;
+modalM:any;
+func2(idPalntilla:any,fp:any,puesto:any , nombre:any, apellido:any,horario:any){
       let turno = horario.toLowerCase() 
       if (turno != 'p') {
       
@@ -772,7 +568,7 @@ loading:boolean = true;
     visua:any;
     visuValidados(visuValidado:any){
       this.fecha = localStorage.getItem('fecha');
-      this._control.getControlEmpleadosValidados(this.tur, localStorage.getItem('fecha'),this.idServicio)
+      this._control.getControlEmpleadosValidados(this.idServicio)
       .subscribe(visua=>{  
         this.visua = visua;
         if (this.visua) {
@@ -850,10 +646,6 @@ loading:boolean = true;
         //  alert('dato guardado')
          this._control.editplantillasColumn(fechaTrabajo , nEmpleado , this.datosV , columna,idPlantilla,'NO' , this.idServicio)
          .subscribe(res=>{ 
-
-          console.log(res);
-          
-         
            if (res == 'success') {
              this._alerta.openToast1('Campo editado...' , 'bg-success text-white' , 'OK');
              this.habilitarE=false;
@@ -867,16 +659,16 @@ loading:boolean = true;
      
 
   show: boolean = false;
-
-
   empleado!:Empleado;
   em?:boolean;
   puest:any=[];
   idPlantilla?:number;
+
   validar(item:any ,frame:any,datros:any){
  
     this.idPlantilla = item.idPlantilla;
-    let turno = item.horario.toLowerCase()
+    let turno = item.horario.toLowerCase();
+    this.tur=item.horario.toLowerCase();
 
 if (turno == 'p') {
   this.empleado = item;

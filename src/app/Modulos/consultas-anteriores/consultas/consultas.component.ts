@@ -39,16 +39,11 @@ export class ConsultasComponent implements OnInit {
   idServicio:any;
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
-    let rol:any = localStorage.getItem('rol');
     let usuario:any = localStorage.getItem('usuario');
-    this.tipoUsuario = atob(rol);
+
     this.usuario = atob(usuario);
     this.idServicio = atob(ser);
 
-    if (this.tipoUsuario != 'A2020') {
-      this.ruta.navigate(['Empleados']);
-      return;
-    }
     
 
     var today = new Date();

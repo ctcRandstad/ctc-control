@@ -10,6 +10,7 @@ import { ControlHorasService } from 'src/app/Services/control-horas.service';
 import { EmpleadosService } from 'src/app/Services/empleados.service';
 import { ExcelService } from 'src/app/Services/excel.service';
 import { NotificacionService } from 'src/app/Services/notificacion.service';
+import { TokenService } from 'src/app/Services/token.service';
 
 
 @Component({
@@ -31,18 +32,19 @@ export class EmpleadosComponent implements OnInit {
     private _config:ConfigService,
     private _control:ControlHorasService,
     private excelService:ExcelService,
+    private authService: TokenService
+    
     ) { }
 
-tipoUsuario:any;
+    userRole:any;
 idServicio:any;
   
 verEmpleado:boolean=false;
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
-    let rol:any = localStorage.getItem('rol');
    
+    this.userRole = this.authService.getUserRole();
     this.idServicio = atob(ser);
-    this.tipoUsuario = atob(rol);
     this.getEmpleadosActivos();
     this.getTurnos();
     this.getPuesto();
@@ -240,7 +242,6 @@ url:any;
 
     this.verEmpleado=true;
     this.employees = item;
- 
           this._empleados.consultaEmpleadoHoras(this.employees.nEmpleado)
           .subscribe(data=>{ 
           this.horasInicio = data.horasTeoricas ;
@@ -617,14 +618,14 @@ url:any;
       this.totalHTrabajadas=0;
       this.totalHTrabajadasBolsa=0;
       this.controlB = false;
-      // console.log(this.mes);
+      this.bolsaParoTotal=0;
     }
   
     
   totalHTeoricas:number=0;
   totalHTrabajadas:number=0;
   totalHTrabajadasBolsa:number=0;
-
+  bolsaParoTotal:number=0;
   // horas teóricas
 
   // boolean
@@ -640,12 +641,14 @@ url:any;
      
        this._empleados.horasMensual(this.employees.nEmpleado)
        .subscribe(data=>{
+       
         if (data != 'error') {
           this.dataNew = data
           for (let i = 0; i < this.dataNew.length; i++) {
             this.totalHTeoricas = this.totalHTeoricas + this.dataNew[i].horasTeoricasTotal;
             this.totalHTrabajadasBolsa = this.totalHTrabajadasBolsa + this.dataNew[i].totalBolsas;
             this.totalHTrabajadas = this.totalHTrabajadas + this.dataNew[i].horasTeoricasValidado;
+            this.bolsaParoTotal = this.bolsaParoTotal + this.dataNew[i].bolsaParoTotal;
           }
         }
        })
@@ -661,7 +664,6 @@ url:any;
       bolsas(){
         this._empleados.getBolsa(this.idServicio)
         .subscribe(data=>{   
-        
           this.bolsa = data;
         if (this.bolsa[0] == 1) {
           this.bolsaHabilitado = true;
@@ -1075,8 +1077,7 @@ url:any;
         if (confirmar) {
           this._empleados.asignarApp(apellidos, nombre, nEmpleado,dni.toLowerCase(),app_, tabla)
           .subscribe(data=>{ 
-          console.log(data);
-          
+         
             if (data == 'success') {
               this._alerta.openToast1('Asignación borrada...' , 'bg-success text-white' , 'OK');
               if (tabla == 'app_calendario' ) {

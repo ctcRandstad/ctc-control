@@ -33,10 +33,118 @@
     margin-top: 360px;
 }
 
-.alert-darks {
+/* .alert-darks {
     background: rgb(241, 240, 240);
 }
 
 .alert-warnings {
     background: #f1f8e9
-}
+} */
+
+
+/* click derecho */
+#menuContextual {
+    position: absolute;
+    display: none;
+    background-color: white;
+    border: 1px solid #dee2e6; /* Color de borde gris claro */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    border-radius: 8px; /* Bordes redondeados */
+    min-width: 160px;
+    z-index: 1000;
+  }
+  
+  #menuContextual ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px 0;
+  }
+  
+  #menuContextual li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  }
+  
+
+
+  .fondo-gris {
+    background-color: grey; /* Cambia el color a tu preferencia */
+  }
+  
+  .resaltado {
+    font-weight: bold; /* Resalta el texto */
+    background-color: hwb(0 97% 1%); /* O algún color llamativo */
+  }
+  
+  /* Estilos generales */
+ul {
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    margin-bottom: 10px;
+  }
+  
+ /* Estilos generales para los botones */
+.button {
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  /* Estilo para el botón de enviar a la bolsa de paro */
+  .btn-bolsa-paro {
+    background-color: #ffcc00; /* Amarillo */
+    color: #333;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-bolsa-paro:hover {
+    background-color: #e6b800; /* Amarillo más oscuro en hover */
+  }
+  
+  /* Estilo para el botón de quitar de la bolsa de paro */
+  .btn-quitar-bolsa {
+    background-color: #ff4c4c; /* Rojo */
+    color: #fff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-quitar-bolsa:hover {
+    background-color: #cc3b3b; /* Rojo más oscuro en hover */
+  }
+  
+  /* Estilo para el botón de salir */
+  .btn-salir {
+    background-color: #f44336; /* Rojo */
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .btn-salir:hover {
+    background-color: #d32f2f; /* Rojo más oscuro en hover */
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-3 {
+    margin-top: 1rem;
+  }
+  .selected-row {
+    background-color: #d1e7fd; /* Color de fondo para la fila seleccionada */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Sombra para resaltar la fila */
+  }

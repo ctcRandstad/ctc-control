@@ -21,13 +21,13 @@ export class LoginService {
  server = 'http://92.54.11.138:3000';
 
 
- isLogged(usuario:Usuario): Observable<any>{
-  return this.http.post(this.url +"login/loginUser.php?id=getUserLogin" , usuario)
+ isLogged(usuario: Usuario): Observable<any> {
+  return this.http.post(this.url + "login/loginUser.php?id=getUserLogin", usuario)
   .pipe(
-    map((e)=> { 
-
-      return e
-    }));
+    map((e) => { 
+      return e;
+    })
+  );
 }
 
 sesionOut(nombreUsuario:string,id:any){

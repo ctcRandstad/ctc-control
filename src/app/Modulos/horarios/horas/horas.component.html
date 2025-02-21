@@ -91,7 +91,13 @@
             </thead>
 
             <tbody *ngIf="!loadingHoras">
-                <tr *ngFor="let item of tableHoras.data; let is = index">
+                <tr *ngFor="let item of tableHoras.data; let is = index" 
+                (contextmenu)="showMenu($event, item)" 
+                [ngClass]="{
+                  'fondo-gris': item.bolsa_paro == 1, 
+                  'resaltado': item.bolsa_paro == 1, 
+                  'selected-row': selectedItem === item
+                }" >
                     <td >{{ item.fechaTrabajo | date : 'dd-M-yyyy ' }} </td>
 
                     <td  class="cursor" *ngIf="!item.justificacion" (dblclick)="func2(item.idPlantilla, item.descripcionPuesto,item.nombre,item.apellidos, item.horario)">{{ item.descripcionPuesto}}</td>
@@ -288,8 +294,35 @@
                     </td>
                 </tr>
             </tfoot>
-
+          
         </table>
+          <!-- Menú Contextual -->
+            <div id="menuContextual" class="dropdown-menu show">
+                <ul class="list-none p-0">
+                    <!-- Opción para enviar a la bolsa de paro -->
+                    <li *ngIf="!bolsa_paroYes" class="mb-3">
+                      <button class="btn-bolsa-paro button" (click)="handleOption('si')">
+                        <span>✅ Enviar a la bolsa de paro </span><br>
+                        <span class="ml-4">{{ selectedItem?.apellidos }}, {{ selectedItem?.nombre }}</span>
+                      </button>
+                    </li>
+                    <!-- Opción para quitar de la bolsa de paro -->
+                    <li *ngIf="!bolsa_paroNo" class="mb-3">
+                      <button class="btn-quitar-bolsa button" (click)="handleOption('no')">
+                        <span class="text-white"> <i class="fas fa-minus-circle"></i> Quitar de la bolsa de paro </span><br>
+                        <span class="ml-4">{{ selectedItem?.apellidos }}, {{ selectedItem?.nombre }}</span>
+                      </button>
+                    </li>
+                  </ul>  
+                 <!-- Botón de salir -->
+                <div class="text-center mt-3">
+                    <button class="btn-salir button" (click)="out()">
+                    <span class="text-white"><i class="fas fa-minus-circle"></i> Salir</span>
+                    </button>
+                </div>                       
+            </div>
+  
+
     <ng-container *ngIf="loadingHoras && datas">
         <div class="datatable-loader bg-light">
           <span class="datatable-loader-inner">

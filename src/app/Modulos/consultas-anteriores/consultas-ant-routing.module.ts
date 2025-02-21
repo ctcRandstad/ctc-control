@@ -11,15 +11,16 @@ import { HorasComiteAntComponent } from './informes-a/horas-comite-ant/horas-com
 import { HorasExtrasBolsaAntComponent } from './informes-a/horas-extras-bolsa-ant/horas-extras-bolsa-ant.component';
 import { AusentismoAntComponent } from './informes-a/ausentismo-ant/ausentismo-ant.component';
 import { AbsentismoAntComponent } from './informes-a/absentismo-ant/absentismo-ant.component';
+import { AuthGuard } from 'src/app/auth.guard';
 
 
 const routes: Routes = [
   {
     path:'',
     children: [
-      { path: 'Consultas-Anteriores' ,  component: ConsultasComponent },
-      { path: 'Consultas-Anteriores-Horarios' ,  component: ConsultaHorarioComponent },
-      { path: 'Consultas-Anteriores-Informes' ,  component: InformesAComponent,
+      { path: 'Consultas-Anteriores' ,  component: ConsultasComponent  , canActivate: [AuthGuard] , data: { roles: ['user', 'manager' , 'admin'] }},
+      { path: 'Consultas-Anteriores-Horarios' ,  component: ConsultaHorarioComponent  , canActivate: [AuthGuard] , data: { roles: ['user', 'manager' , 'admin'] }},
+      { path: 'Consultas-Anteriores-Informes' ,  component: InformesAComponent,  canActivate: [AuthGuard] , data: { roles: ['user', 'manager' , 'admin'] },
         children:[
           { path: 'HS-A' ,  component: HorasSeccionAntComponent },
           { path: 'HNT-A' ,  component: HorasNoTrabajadasAntComponent },

@@ -95,8 +95,7 @@ export class EliminarModalComponent implements OnInit {
       
 
      if (resp== 'si') {
-       // this.demoBasic.show();
-      //  ir a alerta link
+      this.modalRef.close('success');
      }else{
       location.reload();
      }

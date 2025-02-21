@@ -24,6 +24,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "chart.js": "^3.1.1",
     "file-saver": "^2.0.5",
+    "jwt-decode": "^4.0.0",
     "mdb-angular-ui-kit": "git+https://oauth2:x8BnAJsx3LtJZKrnnpY2@git.mdbootstrap.com/mdb/angular/mdb5/prd/mdb5-angular-ui-kit-pro-essential",
     "rxjs": "~7.5.0",
     "socket.io-client": "^4.5.1",

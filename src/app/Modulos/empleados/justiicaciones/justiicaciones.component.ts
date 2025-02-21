@@ -34,14 +34,11 @@ export class JustiicacionesComponent implements OnInit {
   idServicio:any;
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
-    let rol:any = localStorage.getItem('rol');
+   
    
     this.idServicio = atob(ser);
-    this.tipoUsuario = atob(rol);
-    if (this.tipoUsuario == 'E2020') {
-      this.ruta.navigate(['Empleados']);
-      return;
-    }
+  
+   
     this.getJustifEmpleados(this.valor);
     this.getJustificacion();
   }
@@ -298,12 +295,13 @@ export class JustiicacionesComponent implements OnInit {
   fechaInicioJ:any;
   fechaFinJ:any;
   basicModal:any;
+  ubicar:any;
   darAlata(nEmpleado:any,idJE:any,nombre:any,apellidos:any, frame:any){
     this.nEmpleado = nEmpleado;
     this.idJE = idJE;
     this.nombre = nombre;
     this.apellidos = apellidos;
-    this.modalService.open(EliminarModalComponent, {
+    this.ubicar =    this.modalService.open(EliminarModalComponent, {
       containerClass: 'right',
       modalClass: 'modal-side modal-top-right',
       ignoreBackdropClick: true,
@@ -320,6 +318,14 @@ export class JustiicacionesComponent implements OnInit {
        
       },
     });
+    this.ubicar.onClose.subscribe((message: any) => {
+      if(message == 'success'){
+       setTimeout(()=>{
+        this.getJustifEmpleados(1);
+       },500);
+
+      }
+   });
   }
   
 

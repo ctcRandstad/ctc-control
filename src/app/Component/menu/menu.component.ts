@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { ConfigService } from 'src/app/Services/config.service';
 import { LoginService } from 'src/app/Services/login.service';
 import { NotificacionService } from 'src/app/Services/notificacion.service';
+import { TokenService } from 'src/app/Services/token.service';
+const jwt_decode = require('jwt-decode');
+
+
 
 
 @Component({
@@ -13,28 +17,27 @@ import { NotificacionService } from 'src/app/Services/notificacion.service';
 export class MenuComponent implements OnInit {
 
 
-
-  
+  isLoggedIn = false;
+  userRole: string = '';
+  userRuler:boolean=false;
   constructor(
-    private ruta:Router,
+
     private _ser: LoginService,
     private _config: ConfigService,
-    private _alerta: NotificacionService,
-   
+    private authService: TokenService
     ) {
-      let rol:any = localStorage.getItem('rols');
-       this._ser.loginUrl(localStorage.getItem('id') , this.ruta.url, rol)
-       .subscribe(data=>{
-        if (data == 'err') {
-          this._alerta.openToast1('NO TIENE ACCESO A LA SECCIÓN QUE INTENTA ENTRAR.', 'bg-danger text-white', 'ERROR');
-          this.ruta.navigate(['./Main/403'])
-        }
-        
-       }
+     
+      this.isLoggedIn = this.authService.isAuthenticated();
+      // Obtener el rol del usuario (puede venir del JWT almacenado en el localStorage)
+    this.userRole = this.authService.getUserRole();
 
-       )
      }
 
+
+// Función para verificar si el usuario tiene un rol específico
+hasRole(role: string): boolean {
+  return this.userRole === role;
+}
 
 
   tipoUsuario:any;
@@ -45,25 +48,15 @@ export class MenuComponent implements OnInit {
   public href: string = "";
   clase:boolean=false;
   idServicio:any;
-  userRuler:boolean=false;
-  ngOnInit() {
-    let ser:any = localStorage.getItem(btoa('servicio'));
-    let rol:any = localStorage.getItem('rol');
-    this.usuario = localStorage.getItem('usuario');
-    this.ultima = localStorage.getItem('ultima');
-    this.foto = localStorage.getItem('foto');
-    this.idServicio = atob(ser);
-    this.tipoUsuario = atob(rol);
-    
-    this.usuario =  atob(this.usuario);
-    if (this.tipoUsuario == 'A2020') {
-      this.userRuler=true;
-      
-    }else{
-      this.userRuler=false;
-    }
 
-    this.getCaducidadDocumentos();
+  ngOnInit() {
+   
+    let ser:any = localStorage.getItem(btoa('servicio'));
+    this.usuario = localStorage.getItem('usuario');
+    this.idServicio = atob(ser);
+    this.usuario =  atob(this.usuario);
+
+
 
     this._config.getServicio(this.idServicio)
     .subscribe(data=>{
@@ -71,57 +64,28 @@ export class MenuComponent implements OnInit {
         this.servicio =   item[1];
     });
    })
-    this.mueveReloj();
-    this.getCaducidadDocumentos();
-    this.getVacaciones();  
-    this.getAlertas();
-    this.getComentarios();
-    this.getAlertasHoras()
-    // setInterval(()=>{
-    //   this.mueveReloj();
+   if (this.userRole != 'viewer') {
+     this.getCaducidadDocumentos();
+     this.getVacaciones();  
+     this.getAlertas();
+     this.getComentarios();
+     this.getAlertasHoras()
     
-    // },1000)
+   }
+
+    
     this.fecha();
 
 
       
     }
     
-    salir(){
+    logout() {
+      this.authService.logout();
+      this.isLoggedIn = false;
+    }
   
-      this._ser.sesionOut(this.usuario,localStorage.getItem('id'))
-      .subscribe(data=>{
-        if (data == 'success') {
-          localStorage.clear();
-          location.reload();
-        }
-      })
-   
-  }
-  
-  
-  minuto:any;
-  segundo:any;
-  horaImprimible:any;
-  
-  mueveReloj(){
-    let momentoActual = new Date();
-    let hora = momentoActual.getHours();
-    this.minuto = momentoActual.getMinutes();
-    this.segundo = momentoActual.getSeconds();
-    
-    if (this.minuto < 10) {
-      this.minuto = '0' + this.minuto
-    } 
-    if (this.segundo < 10) {
-      this.segundo = '0' + this.segundo
-    } 
-    
-    this.horaImprimible = hora + " : " + this.minuto + " : " + this.segundo
-    
-    // document.form_reloj.reloj.value = horaImprimible
-  }
-  
+
   fechaHoy:any
   fecha(){
     var f = new Date();
@@ -176,8 +140,7 @@ export class MenuComponent implements OnInit {
   getVacaciones(){
     this._ser.verVacaciones(this.idServicio)
     .subscribe(data=>{ 
-      // console.log(data);
-      
+       
     if (data != 'error') {
       this.canty = data;
       this.canti = this.canty.length;
@@ -194,7 +157,6 @@ cantyAlerta:any;
 getAlertasHoras(){
   this._ser.getAlertasBolsa(this.idServicio)
   .subscribe(data=>{ 
- 
   if (data != 'error') {
     this.cantyAlerta = data;
     this.cantiAlerta = this.cantyAlerta.length;
@@ -267,6 +229,8 @@ setColor:any;
   modo(val:any){
    document.body.classList.toggle('dark');
    
-   
   }
+
+
+  
 }

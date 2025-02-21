@@ -39,17 +39,12 @@ export class ConsultasEComponent implements OnInit {
   idServicio:any;
   ngOnInit() {
     let ser:any = localStorage.getItem(btoa('servicio'));
-    let rol:any = localStorage.getItem('rol');
+  
     let usuario:any = localStorage.getItem('usuario');
-    this.tipoUsuario = atob(rol);
     this.usuario = atob(usuario);
     this.idServicio = atob(ser);
 
-    if (this.tipoUsuario != 'E2020') {
-      this.ruta.navigate(['Empleados']);
-      return;
-    }
-    
+  
 
     var today = new Date();
     this.years = today.getFullYear();
@@ -110,6 +105,7 @@ get_t:any=[];
   getEmpleadosActivos(){
    this._empleados.getEmplaedos(this.idServicio)
    .subscribe(resp=>{
+console.log(resp);
 
      if (resp != 'error') {
        this.data = resp;
@@ -128,7 +124,6 @@ get_t:any=[];
   getConvenio(){
    this._empleados.getConvenio(this.idServicio)
    .subscribe(data=>{
-
      if (data != 'error') {
        this.horaConvenios = data[0].horasAnuales;
       

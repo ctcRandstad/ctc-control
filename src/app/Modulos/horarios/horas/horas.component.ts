@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { MdbTableDirective } from 'mdb-angular-ui-kit/table';
@@ -31,6 +31,7 @@ export class HorasComponent implements OnInit {
     private _control : ControlHorasService,
     private excelService:ExcelService,
     private modalService: MdbModalService,
+    private elementRef: ElementRef
 
     ) {
       
@@ -124,9 +125,12 @@ datosConsulta:any;
 loadingHoras:boolean=true;
 mostrarBtn:boolean=false;
   buscar(action:any , alertaSinValidar:any){
+    
     this.mostrarBtn = true;
     this.filterQuery =''
     this.datosConsulta = action.value;
+    
+
     this.horasMostrar = false;
     this.indice = -1;
     this.datas=false;
@@ -135,10 +139,15 @@ mostrarBtn:boolean=false;
     this.getContolHoras();
     this.getJustificaciones();
     this.showAndHideModal();
-    this._empleados.consultaProgramacionAdmin(action.value)
-    .subscribe(data=>{ 
-    console.log(data);
+    this.getAll(this.datosConsulta);
     
+  }
+
+
+  getAll(datosConsulta:any){
+    this._empleados.consultaProgramacionAdmin(datosConsulta)
+    .subscribe(data=>{ 
+  
       if (data == 'no') {
       this.datas=false;
       // this.loading=false;
@@ -147,7 +156,7 @@ mostrarBtn:boolean=false;
       }else{
 
         this.dataSource = data;
-        this._empleados.alertaSinValidar(action.value)
+        this._empleados.alertaSinValidar(datosConsulta)
         .subscribe(resp=>{ 
         if (resp == 'alerta') {
           this.modalM =  this.modalService.open(HorasModalComponent, {
@@ -175,9 +184,7 @@ mostrarBtn:boolean=false;
         },1000);
     }
     });
-    
   }
-
   comentF?:string;
   nombre?:string;
   apellidos?:string;
@@ -222,8 +229,11 @@ mostrarBtn:boolean=false;
 
 
   reload(){
+   this.datosConsulta.turno=undefined;
+    console.log(this.datosConsulta);
+    
    this.datas = false;
-   this.turnos = '';
+   this.turnos = undefined;
   }
 
 
@@ -736,10 +746,11 @@ changeTurno1(item:any  ){
 
 dataExcel:any;
 exportAsXLSX():void {
-  console.log(this.datosConsulta);
+  
   
   this._empleados.consultaProgramacionAdminExcel(this.datosConsulta)
   .subscribe(data=>{ 
+ 
   
   this.dataExcel = data; 
  
@@ -811,8 +822,7 @@ this.modalM =  this.modalService.open(HorasModalComponent, {
   },
 });
 this.modalM.onClose.subscribe((message: any) => {
-  console.log(message);
-  
+ 
   if(message == 'closeMessage' ||  message == 'success'){
     this._empleados.consultaProgramacionAdmin(this.fechas)
     .subscribe(res=>{
@@ -827,5 +837,74 @@ this.modalM.onClose.subscribe((message: any) => {
 
 
 
+  // Método para seleccionar/deseleccionar la fila
+
+
+selectedItem: any;
+bolsa_paroYes!:boolean;
+bolsa_paroNo!:boolean;
+ // Mostrar el menú contextual al hacer clic derecho
+ showMenu(event: MouseEvent, item: any) {
+  event.preventDefault(); // Evita el menú contextual del navegador
+
+  if (item.bolsa_paro == 1) {
+    this.bolsa_paroYes = true;
+    this.bolsa_paroNo = false;
+
+  }else{
+    this.bolsa_paroNo = true;
+    this.bolsa_paroYes = false;
+
+  }
+  if (this.selectedItem === item) {
+    this.selectedItem = null; // Si la fila ya está seleccionada, la deseleccionamos
+  } else {
+    this.selectedItem = item; // Si no está seleccionada, la seleccionamos
+  }
+  // Obtener el menú contextual
+  const menu = document.getElementById('menuContextual');
+  if (!menu) return; // Si no existe, salir
+
+  // Guardar el ítem seleccionado
+  this.selectedItem = item;
+
+  // Posicionar el menú en la ubicación del clic
+  menu.style.left = `${event.pageX}px`;
+  menu.style.top = `${event.pageY}px`;
+  menu.style.display = 'block';
+}
+
+
+// Manejar la selección de Sí o No nueva 19-02-2024
+handleOption(option: string) {
+  const valor = option === 'si' ? 1 : 0;
+  const claseColor = valor ? 'bg-success text-white' : 'bg-danger text-white';
+
+  this._empleados.bolsaParos(this.selectedItem.idPlantilla, valor).subscribe({
+    next: ({ status, message }) => {
+      this._alerta.openToast1(message, claseColor, status === 'success' ? 'OK' : 'ERROR');
+      if (status === 'success') this.getAll(this.datosConsulta);
+    },
+    error: ({ message }) =>
+      this._alerta.openToast1(`❌ Error: ${message}`, 'bg-warning text-dark', 'OK'),
+    complete: () => this.out(),
+  });
+}
+
+
+hideMenu() {
+  const menu = document.getElementById('menuContextual');
+  if (menu) {
+    menu.style.display = 'none';
+  }
+
+}
+
+
+
+  out(){
+    this.hideMenu();
+    this.selectedItem = null;
+  }
 
 }

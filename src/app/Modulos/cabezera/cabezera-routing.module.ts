@@ -4,7 +4,6 @@ import { MensajesComponent } from './mensajes/mensajes.component';
 import { ConfigComponent } from './config/config.component';
 import { HuellaComponent } from './huella/huella.component';
 import { InformesComponent } from './informes/informes.component';
-import { ConsultasComponent } from '../consultas-anteriores/consultas/consultas.component';
 import { HorasSeccinComponent } from './informes/horas-seccin/horas-seccin.component';
 import { HorasNoTrabajadasComponent } from './informes/horas-no-trabajadas/horas-no-trabajadas.component';
 import { FichajeValidacionComponent } from './informes/fichaje-validacion/fichaje-validacion.component';
@@ -13,15 +12,16 @@ import { HorasExtrasBolsaComponent } from './informes/horas-extras-bolsa/horas-e
 import { AusentismoComponent } from './informes/ausentismo/ausentismo.component';
 import { AbsentismoComponent } from './informes/absentismo/absentismo.component';
 import { HorasExtrasComponent } from './informes/horas-extras/horas-extras.component';
+import { AuthGuard } from 'src/app/auth.guard';
 
 const routes: Routes = [
   {
     path:'',
     children: [
-      { path: 'Mensajes' ,  component: MensajesComponent },
-      { path: 'Config' ,  component: ConfigComponent },
-      { path: 'Huellas' ,  component: HuellaComponent },
-      { path: 'Informes' ,  component: InformesComponent,
+      { path: 'Mensajes' ,  component: MensajesComponent , canActivate: [AuthGuard] , data: { roles: ['user', 'manager' , 'admin'] } },
+      { path: 'Config' ,  component: ConfigComponent , canActivate: [AuthGuard] , data: { roles: [ 'admin'] } },
+      { path: 'Huellas' ,  component: HuellaComponent , canActivate: [AuthGuard] , data: { roles: ['user', 'manager' , 'admin'] } },
+      { path: 'Informes' ,  component: InformesComponent , canActivate: [AuthGuard] , data: { roles: ['user', 'manager', 'admin'] },
           children:[
           
             { path: 'HS' ,  component: HorasSeccinComponent },

@@ -1,30 +1,25 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-
-import { Observable } from 'rxjs';
+import { TokenService } from './Services/token.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard  {
-  token:any;
-  constructor(
-    private ruta:Router,
-    ){ }
-   
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      this.token = localStorage.getItem('token');
-     
-         if (!this.token) {
-          localStorage.clear();
-          this.ruta.navigate(['/auth']);
-          return false;
-        }
-        else{
-          return true;
-        }
+  constructor(private authService: TokenService, private router: Router) {}
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    const userRole = this.authService.getUserRole();
+    const allowedRoles = route.data['roles'] as Array<string>; // Obtener roles permitidos desde la ruta
+    
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      // Si estamos en la ruta /403, no hacer la redirección
+      if (state.url !== '/Main/403') {
+        this.router.navigate(['/Main/403']);
+      }
+      return false;
+    }
+    return true
   }
 }

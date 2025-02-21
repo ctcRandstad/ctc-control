@@ -27,10 +27,7 @@
                       <i class="fa fa-lock" aria-hidden="true"></i>
                   </span>
               </div>
-              <div *ngIf="conectado" class="alert alert-danger">
-                  <strong>Este usuario ya se encuentra conectado.</strong>
-              </div>
-
+            
               <div class="container-login100-form-btn">
                   <button *ngIf="!estado" [disabled]="forma.invalid" mdbBtn class="login100-form-btn">
                           <i class="far fa-paper-plane ml-1"> </i>  &nbsp;  ingresar

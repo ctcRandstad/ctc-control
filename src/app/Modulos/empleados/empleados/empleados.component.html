@@ -12,7 +12,7 @@
 
 <section class="top animate__animated animate__fadeIn" id="arriba" *ngIf="!loadingPerfil">
 
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" *ngIf="!verEmpleado && tipoUsuario == 'A2020'">
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" *ngIf="userRole == 'user' ||  userRole == 'admin'">
         <a class="btn text-white btn-lg btn-floating" routerLink="../Add-Empleados" style="background-color: #ac2bac;" href="#!" role="button"  mdbRipple>
             <i class="fas fa-folder-plus"></i>
           </a>
@@ -20,7 +20,7 @@
 
     <div class="main" *ngIf="!verEmpleado">
         <div class="row">
-            <div class="col-md-6 tops" *ngIf="tipoUsuario == 'A2020'">
+            <div class="col-md-6 tops" *ngIf="userRole == 'user' ||  userRole == 'admin'">
                 <app-menu-s></app-menu-s>
             </div>
             <div class="col-md-2 tops">
@@ -34,12 +34,12 @@
             </div>
 
            
-            <div class="col-md-2 tops" *ngIf="tipoUsuario == 'E2020'">
+            <div class="col-md-2 tops" *ngIf="userRole == 'viewer'">
                 <button (click)="exportAsXLSX(encar)" class="btn btn-outline-success" mdbRipple rippleColor="dark">
                     DESCARGAR  LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
                  </button>
             </div>
-            <div class="col-md-4 tops" *ngIf="tipoUsuario == 'A2020'">
+            <div class="col-md-4 tops" *ngIf="userRole == 'user' ||  userRole == 'admin'">
                 <button (click)="exportAsXLSX('admin')" class="btn btn-outline-success" mdbRipple rippleColor="dark">
                  DESCARGAR   LISTADO &nbsp;<i class="far fa-file-excel  fa-lg "></i>
                 </button>
@@ -82,7 +82,7 @@
                     <th>Apellidos </th>
                     <th>Consentimiento</th>
                     <th class="text-center">Info</th>
-                    <th *ngIf="tipoUsuario == 'A2020'">Baja</th>
+                    <th *ngIf="userRole == 'user' ||  userRole == 'admin'">Baja</th>
                     <th>Contraseña</th>
                 </tr>
             </thead>
@@ -98,7 +98,7 @@
                     <td  class=" cursor q text-center text-primary" (click)="empleado(item)">
                         <i class="fas fa-user-plus "></i>
                     </td>
-                    <td  *ngIf="tipoUsuario == 'A2020'" (click)="modal(item)"  class=" cursor q text-danger">
+                    <td  *ngIf="userRole == 'user' ||  userRole == 'admin'" (click)="modal(item)"  class=" cursor q text-danger">
                         <i class="fas fa-trash-alt fa-lg "></i>
                     </td>
                     <td>
@@ -144,12 +144,12 @@
                 </div>
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
                 <div class="col-md-3 top">
-                    <i ngClass="fas fa-edit fa-2x" *ngIf="tipoUsuario == 'A2020'" (click)="edit()"   class="text-warning cursor"></i>
+                    <i ngClass="fas fa-edit fa-2x" *ngIf="userRole == 'user' ||  userRole == 'admin'" (click)="edit()"   class="text-warning cursor"></i>
                     <!-- <mdb-icon *ngIf="tipoUsuario != 'A2020'" fas icon="edit" size="2x" class="text-warning cursor"></mdb-icon> -->
                     <strong class="text">&nbsp; {{ employees.nombre }} {{ employees.apellidos }}</strong>
                     <br>
-                    <small *ngIf="tipoUsuario == 'A2020'" class="bajo">DNI/NIF: {{employees.dni}}</small>
-                    <small *ngIf="tipoUsuario != 'A2020'">DNI/NIF: {{employees.dni}}</small>
+                    <small *ngIf="userRole == 'viewer'" class="bajo">DNI/NIF: {{employees.dni}}</small>
+                    <small *ngIf="userRole != 'viewer'">DNI/NIF: {{employees.dni}}</small>
                     <br>
                     <small class="text" *ngIf="employees.activo == 1">Trabajador  activo</small>
                     <br>
@@ -236,7 +236,7 @@
                                 <tfoot>
                                     <div class="chip" *ngFor="let item of puestosAsignados">
                                         <div class="chip-content" *ngIf="item.descripcionPuesto">{{item.descripcionPuesto}}</div>
-                                        <i class="fas fa-times cursor fa-2x chip-svg" *ngIf="tipoUsuario == 'A2020'"  (click)="borrarAsignacion(item.idEPuesto,item.nEmpleado)"></i>
+                                        <i class="fas fa-times cursor fa-2x chip-svg" *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'"  (click)="borrarAsignacion(item.idEPuesto,item.nEmpleado)"></i>
                                     </div>
         
                                     <div class="chip" *ngIf="puestosAsignados == null">
@@ -269,6 +269,8 @@
                                                 <th [width]="250">Horas trabajadas</th>
                                                 <th [width]="250">Horas téoricas</th>
                                                 <th [width]="250" *ngIf="bolsaHabilitado">Bolsa de horas</th>
+                                                <th [width]="250">Bolsa paros</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -276,7 +278,8 @@
                                                 <td class="text-uppercase">{{ item.mes != null ? item.mes : '------' }}</td>
                                                 <td>{{ item.horasTeoricasValidado > 0 ? item.horasTeoricasValidado : '------' }}</td>
                                                 <td>{{ item.horasTeoricasTotal > 0 ? item.horasTeoricasTotal : '------' }}</td>
-                                                <td *ngIf="bolsaHabilitado">{{ item.totalBolsas > 0 ? item.totalBolsas : '------' }}</td>
+                                                <td *ngIf="bolsaHabilitado">{{ item?.totalBolsas != 0 ? item.totalBolsas : '------' }}</td>
+                                                <td>{{ item?.bolsaParoTotal != 0 ? item.bolsaParoTotal : '------' }}</td>
                                             </tr>
                                         </tbody>
                                    
@@ -285,13 +288,32 @@
                                            <td> <h4> <span class=" badge badge-primary">{{ totalHTrabajadas }}</span> </h4></td>
                                            <td> <h4> <span class=" badge badge-primary">{{ totalHTeoricas }}</span> </h4></td>
                                             <td  *ngIf="!estado"><h4> <span class=" badge badge-success">{{ suma }}</span> </h4> </td>
-
                                             <td class="" *ngIf="estado">
-                                            <br>
                                                  <h4> <span class="badge badge-danger ">{{ suma }}</span> </h4>
-                                                <span class="text-warning" *ngIf="suma < 0 "> hay  {{ suma + maximo }} hs de más</span>
-                                                <span class="text-warning" *ngIf="suma > 0 "> hay  {{ suma - maximo }} hs de más</span>
+                                          <!-- Mensaje de alerta si suma es mayor o menor que 0 -->
+                                                <div *ngIf="suma !== 0" class="custom-alert mt-2">
+                                                    ⚠️ Atención: El valor de bolsa Paro está fuera del rango permitido en 
+                                                    <strong>{{ suma < 0 ? suma + maximo : suma - maximo }}</strong> hs.
+                                                </div>
                                             </td>
+                                            <td>
+                                                <h4>
+                                                  <span class="badge" 
+                                                    [ngClass]="{
+                                                      'badge-danger': bolsaParoTotal > 80 || bolsaParoTotal < -80,
+                                                      'badge-primary': bolsaParoTotal >= -80 && bolsaParoTotal <= 80
+                                                    }">
+                                                    {{ bolsaParoTotal }}
+                                                  </span>
+                                                </h4>
+                                                <!-- Mensaje de alerta si bolsaParoTotal está fuera del rango permitido -->
+                                                <div *ngIf="bolsaParoTotal > 80 || bolsaParoTotal < -80" class="custom-alert mt-2">
+                                                  ⚠️ Atención: El valor de bolsa Paro está fuera del rango permitido en 
+                                                  <br>
+                                                  <!-- Mostrar la diferencia de horas -->
+                                                  <strong> {{ bolsaParoTotal > 80 ? bolsaParoTotal - 80 : bolsaParoTotal < -80 ? bolsaParoTotal + 80 : 0 }} hs.</strong>
+                                                </div>
+                                              </td>                                              
                                         </tfoot>
                                     </table>
                                     <td class="blockquote">
@@ -306,7 +328,7 @@
                         </mdb-tab>
                         <mdb-tab  title="Messages"> <ng-template mdbTabTitle > <span (click)="getDocu(employees.nEmpleado)"><i class="fas fa-file-invoice" > </i> Documentos</span></ng-template>
                                 <span *ngFor="let titul of tit">
-                                        <td colspan="3" *ngIf="tipoUsuario == 'A2020'">
+                                        <td colspan="3" *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
                                             <h6 class="text-warning cursor text-uppercase" (click)="cargarPdf(employees.nEmpleado , titul.idDocumento ,titul.caducidadD)">
                                                 <i class="fas fa-upload"></i> {{titul.titulo}} &nbsp;&nbsp;&nbsp;
                                             </h6>    
@@ -323,8 +345,8 @@
                                             <th> Fecha de carga</th>
                                             <th> Fecha de Caducidad</th>
                                             <th>Restan</th>
-                                            <th *ngIf="tipoUsuario == 'A2020'">Descargar</th>
-                                            <th *ngIf="tipoUsuario == 'A2020'">Borrar</th>
+                                            <th *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">Descargar</th>
+                                            <th *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">Borrar</th>
         
         
                                         </tr>
@@ -340,12 +362,12 @@
                                             <td class="" *ngIf="item.dif >= 60">{{item.dif }} Días</td>
                                             <td class=" text-danger" *ngIf="item.dif < 60 && item.caducidad">{{item.dif }} Días</td>
                                             <td class=" text-danger" *ngIf="item.dif < 60  && !item.caducidad">--------</td>
-                                            <td class="a cursor" *ngIf="tipoUsuario == 'A2020'">
+                                            <td class="a cursor" *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
                                                 <a class="a" [href]="item.ruta" target="_blank" rel="noopener noreferrer">
                                                     <i class="fas fa-cloud-download-alt text-primary fa-2x"></i> 
                                                 </a>
                                             </td>
-                                            <td class="a cursor" (click)="borrar(item)" *ngIf="tipoUsuario == 'A2020'">
+                                            <td class="a cursor" (click)="borrar(item)" *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
                                                 <i class="fas fa-trash-restore-alt  text-danger fa-2x"></i> 
 
                                             </td>

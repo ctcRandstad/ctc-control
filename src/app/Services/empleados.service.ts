@@ -3,14 +3,24 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import {map} from "rxjs/operators";
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ErrorHandlerService } from './error-handler.service';
 
+export interface MenuItem {
+  ruta: string;
+  roles: string[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpleadosService {
 
-  constructor( private http:HttpClient,) {
+  constructor(
+     private http:HttpClient,
+     private errorHandler: ErrorHandlerService // Inyectamos el servicio de manejo de errores
+
+  ) {
 
   }
  url = environment.url;
@@ -795,15 +805,16 @@ export class EmpleadosService {
     }));
   }
 
+  
   eliminarD( idDocumento:any):Observable<any>{
     return this.http.post(this.url +"empleados/empleados.php?id=eliminarD", {'idDocumento' : idDocumento})
     .pipe(
       map((e)=> {  
-     
-      return e;
+        
+        return e;
     }));
   }
-
+  
   addCometario( data:any):Observable<any>{
     return this.http.post(this.url +"empleados/empleados.php?id=addCometario", data)
     .pipe(
@@ -822,31 +833,31 @@ export class EmpleadosService {
   }
 
   
-
   
- getTexto(idServicio:any){
-  return this.http.post(this.url +"config/config.php?id=getTexto" , {'idServicio' : idServicio})
-  .pipe(
-    map((e)=> {
-      return e
+  
+  getTexto(idServicio:any){
+    return this.http.post(this.url +"config/config.php?id=getTexto" , {'idServicio' : idServicio})
+    .pipe(
+      map((e)=> {
+        return e
     }));
   }
-
+  
   setTexto( data:any):Observable<any>{
     return this.http.post(this.url +"config/config.php?id=setTexto", data)
     .pipe(
       map((e)=> {  
-      return e;
-    }));
-  }
-
-  error:boolean=false;
-
-  horasMensualConsulta( mes:any,nEmpleado:number , year:any):Observable<any>{
-    return this.http.post(this.url +"consultas/consultas.php?id=horasMensual", {'mes' : mes,'nEmpleado':nEmpleado , 'year':year})
-    .pipe(
-      map((e)=> { 
-        
+        return e;
+      }));
+    }
+    
+    error:boolean=false;
+    
+    horasMensualConsulta( mes:any,nEmpleado:number , year:any):Observable<any>{
+      return this.http.post(this.url +"consultas/consultas.php?id=horasMensual", {'mes' : mes,'nEmpleado':nEmpleado , 'year':year})
+      .pipe(
+        map((e)=> { 
+          
         if (e == 'error') {
           return this.error;
         } else {
@@ -866,26 +877,26 @@ export class EmpleadosService {
           return e;
         }));
       }
-
-
+      
+      
       horasMensualTrabajadaBolsaConsulta( nEmpleado:number , year:any):Observable<any>{
         return this.http.post(this.url +"consultas/consultas.php?id=horasMensualTrabajadasBolsa", {'nEmpleado':nEmpleado , 'year':year})
         .pipe(
           map((e)=> {  
+            
+            
+            return e;
+          }));
+        }
+        
+        cambiarHorarioConsulta( data:any):Observable<any>{
+          return this.http.post(this.url +"consultas/consultas.php?id=cambiarHorario", data)
+          .pipe(
+            map((e)=> {  
+      return e;
+    }));
+  }
   
-    
-      return e;
-    }));
-  }
-
-  cambiarHorarioConsulta( data:any):Observable<any>{
-    return this.http.post(this.url +"consultas/consultas.php?id=cambiarHorario", data)
-    .pipe(
-      map((e)=> {  
-      return e;
-    }));
-  }
-
   addCometarioConsulta( data:any):Observable<any>{
     return this.http.post(this.url +"consultas/consultas.php?id=addCometario", data)
     .pipe(
@@ -906,7 +917,7 @@ addCoemntarioEmpleado( nEmpleado:number , comentario:any, idServicio:number):Obs
   return this.http.post(this.url +"consultas/consultas.php?id=addComentarioEmpleado", {'nEmpleado':nEmpleado , 'comentario':comentario,'idServicio':idServicio})
   .pipe(
     map((e)=> {  
-
+      
 
 return e;
 }));
@@ -916,10 +927,10 @@ getDiasVacacionesConsultas( nEmpleado:number , anio:any):Observable<any>{
   return this.http.post(this.url +"consultas/consultas.php?id=getDiasVacacionesConsulta", {'nEmpleado' : nEmpleado , 'anio':anio})
   .pipe(
     map((e)=> {  
-    return e;
-  }));
-}
-
+      return e;
+    }));
+  }
+  
 viewTurno(idServicio:number,today:any):Observable<any>{
   return this.http.post(this.url +"consultas/consultas.php?id=viewTurno" , {'idServicio':idServicio, 'today':today})
   .pipe(
@@ -927,29 +938,39 @@ viewTurno(idServicio:number,today:any):Observable<any>{
       return e
     }));
   }
-
+  
   editarComantarioFichaje( idAlertaFichaje:any, comentarioF:any):Observable<any>{
     return this.http.post(this.url +"empleados/empleados.php?id=editarComantarioFichaje", {'idAlertaFichaje' : idAlertaFichaje , 'comentarioF' :comentarioF})
     .pipe(
       map((e)=> {  
-      return e;
-    }));
-  }
-
-  validarComantarioFichaje( idAlertaFichaje:any):Observable<any>{
-    return this.http.post(this.url +"empleados/empleados.php?id=validarComantarioFichaje", {'idAlertaFichaje' : idAlertaFichaje })
-    .pipe(
-      map((e)=> {  
-      return e;
-    }));
-  }
-
-  validarFichaTodo(idServicio:any):Observable<any>{
-    return this.http.post(this.url +"consultas/consultas.php?id=validarFichaTodo" , {'idServicio':idServicio})
-    .pipe(
-      map((e)=> {
-        return e
+        return e;
       }));
     }
     
-}
+    validarComantarioFichaje( idAlertaFichaje:any):Observable<any>{
+      return this.http.post(this.url +"empleados/empleados.php?id=validarComantarioFichaje", {'idAlertaFichaje' : idAlertaFichaje })
+      .pipe(
+        map((e)=> {  
+          return e;
+        }));
+      }
+      
+      validarFichaTodo(idServicio:any):Observable<any>{
+        return this.http.post(this.url +"consultas/consultas.php?id=validarFichaTodo" , {'idServicio':idServicio})
+        .pipe(
+          map((e)=> {
+            return e
+          }));
+        }
+        
+
+
+        bolsaParos(idPlantilla: number, valor: number): Observable<any> {
+          return this.http.post(this.url + 'empleados/empleados.php?id=bolsaParos', { idPlantilla, valor })
+            .pipe(
+              catchError(this.errorHandler.handleError) // Usamos el servicio de manejo de errores aquí
+            );
+        }
+
+       
+  }

@@ -1,40 +1,43 @@
-import { HttpClient } from '@angular/common/http';
+
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
-  constructor( private http:HttpClient) {}
 
-  url = environment.url;
 
-  getToken(token:any): Observable<any>{
-   return this.http.post(this.url +"Config/validadrCorreo.php" , {token:'token'})
-   .pipe(
-     map((e)=> { 
- 
-       return e
-     }));
- }
+  constructor( private router: Router) { }
 
- getSesion(idLog:any,perfil:any){
-  return this.http.post(this.url +"Sesion/sesionController.php?id=getSesion" , {'idLog':idLog, 'perfil':perfil})
-  .pipe(
-    map((e)=> { 
+  // Verificar si el usuario está autenticado
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token; // Devuelve true si el token existe
+  }
 
-      return e
-    }));
-}
+  // Obtener el rol del usuario desde el token (suponiendo que el rol está en el JWT)
+  getUserRole(): string {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.decodeJwt(token);
+      return decodedToken.data.rol; // Aquí debes cambiar 'role' por la propiedad que tenga tu JWT
+    }else{
+      this.router.navigate(['/auth/login']); // Redirige a página prohibida si el rol no está permitido
+    }
+    return '';
+  }
 
-//  getTraba(idServicio:any): Observable<any>{
-//   return this.http.get("http://localhost/ctc/controlHorarioApi/Controller/empleados/empleados.php?id=getEmpleadosWeb12Activos" )
-//   .pipe(
-//     map((e)=> { 
+  // Decodificar el JWT
+  decodeJwt(token: string): any {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  }
 
-//       return e
-//     }));
-// }
+  // Cerrar sesión (eliminar el token)
+  logout() {
+    localStorage.removeItem('token');
+    location.reload();
+  }
 }

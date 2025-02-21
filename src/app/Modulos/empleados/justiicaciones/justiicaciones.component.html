@@ -90,8 +90,8 @@
                         <th class="text-center">Justificación</th>
                         <th class="text-center">Inicio</th>
                         <th class="text-center">Fin</th>
-                        <th *ngIf="tipoUsuario == 'A2020'" class="text-center">Alta</th>
-                        <th *ngIf="tipoUsuario == 'A2020'" class="text-center">Borrar</th>
+                        <th  class="text-center">Alta</th>
+                        <th  class="text-center">Borrar</th>
 
                     </tr>
                 </thead>
@@ -103,16 +103,16 @@
                         <td class="cursor q text-primary" (click)="func2(cambio,  item.nEmpleado,item.nombre,item.apellidos,item.detallesJ,item.fechaInicioJ , item.fechaFinJ,item.idJE)">{{item.detallesJ}} </td>
                         <td>{{item.fechaInicioJ | date: 'fullDate'}}</td>
                         <td>{{item.fechaFinJ | date: 'fullDate'}}</td>
-                        <td *ngIf="tipoUsuario == 'A2020' && item.estadoJ == 0" (click)="darAlata(item.nEmpleado,item.idJE,item.nombre,item.apellidos  ,frame)" class="cursor text-center q  text-primary">
+                        <td *ngIf=" item.estadoJ == 0" (click)="darAlata(item.nEmpleado,item.idJE,item.nombre,item.apellidos  ,frame)" class="cursor text-center q  text-primary">
                             <i class="fas fa-check-square  fa-lg"></i>
                         </td>
-                        <td  *ngIf="tipoUsuario == 'A2020' && item.estadoJ == 1" class=" cursor q  text-danger">
+                        <td  *ngIf=" item.estadoJ == 1" class=" cursor q  text-danger">
                             Alta confirmada
                         </td>
-                        <td (click)="borar1(item.nEmpleado,item.idJE,item.fechaInicioJ , item.fechaFinJ  ,item.nombre, item.apellidos)" *ngIf="tipoUsuario == 'A2020' && item.estadoJ == 1" class=" cursor q  text-danger">
+                        <td (click)="borar1(item.nEmpleado,item.idJE,item.fechaInicioJ , item.fechaFinJ  ,item.nombre, item.apellidos)" *ngIf=" item.estadoJ == 1" class=" cursor q  text-danger">
                             <i class="fas fa-trash-alt  fa-lg"></i>
                         </td>
-                        <td *ngIf="tipoUsuario == 'A2020' && item.estadoJ == 0" (click)="borrar(item.nEmpleado,item.fechaInicioJ , item.fechaFinJ,item.nombre,item.apellidos,item.idJE  ,basicModal)" class="cursor text-center q  text-danger">
+                        <td *ngIf=" item.estadoJ == 0" (click)="borrar(item.nEmpleado,item.fechaInicioJ , item.fechaFinJ,item.nombre,item.apellidos,item.idJE  ,basicModal)" class="cursor text-center q  text-danger">
                             <i class="fas fa-trash-alt  fa-lg"></i>
                         </td>
 

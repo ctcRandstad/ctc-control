@@ -43,33 +43,58 @@ dataTotalE:any;
  dat:any;
  baja:any;
  data:any;
-  getJustifEmpleados(){
-    this._empleados.getEmplaedosActivos(this.idServicio)
-    .subscribe(resp=>{
-      if (resp != 'error') {
-        this.data = resp;
-        this.dataTotalE = this.data.length;
-        this._empleados.getCountJust(this.idServicio)
-        .subscribe(data=>{
-         this.dat = data;
-         if (this.dat == null) {
-          this.dataTotal=0;
-         } else {
-           this.dataTotal = this.dat.length;
-           this.baja= this.dataTotal*100 / this.dataTotalE
+
+ errorMessage: any;  // Para mostrar el mensaje de error
+
+ getJustifEmpleados() {
+   this._empleados.getEmplaedosActivos(this.idServicio)
+     .subscribe({
+       next: (resp) => {
+        this.errorMessage = resp;  // Limpia el mensaje de error
+         if (this.errorMessage.message) {
+           this.data = [];
+           this.dataTotalE = 0;
+           this.dataTotal = 0;
+           this.baja = 0;
+           alert( this.errorMessage.message);
+           return;
+          
          }
-           
-        });
-      } else {
-       this.data = [];
-       this.dataTotalE = 0;
-      }
-      
-    })
-      
-  }
+ 
+         if (resp !== 'error') {
+           this.data = resp;
+           this.dataTotalE = this.data.length;
+           this._empleados.getCountJust(this.idServicio)
+             .subscribe(data => {
+               this.dat = data;
+               if (this.dat == null) {
+                 this.dataTotal = 0;
+               } else {
+                 this.dataTotal = this.dat.length;
+                 this.baja = (this.dataTotal * 100) / this.dataTotalE;
+               }
+             });
+         } else {
+           this.data = [];
+           this.dataTotalE = 0;
+         }
+       },
+       error: (error) => {
+         // Manejo de errores
+         if (error.status === 'error') {  // Verifica si el error es 403
+           const errorMessage = error.error?.message || 'Acceso denegado';
+           this.errorMessage = errorMessage;  // Almacena el mensaje de error
+           alert('Error:'+ errorMessage);
+         } else {
+           // Otro tipo de errores
+           this.errorMessage = 'Ocurrió un error inesperado';
+           alert('Error inesperado:'+ error);
+         }
+       }
+     });
+ }
 
-
+ 
   totalHExtras:any=0;
   totalHExtrasArra:any;
   totalHExtrasP:any;
@@ -77,46 +102,20 @@ dataTotalE:any;
   porcentaje:number=0;
   getHorasExtras(){
    
-    this._control.getInformeExcelConsultaExtras(this.anio,this.idServicio)
+    this._control.getInformeExcelConsultaExtras(1,this.idServicio)
     .subscribe(data=>{ 
      
       if(data == 'nada'){
        this.totalHExtras = 0;
       }else{
        
-        this.totalHExtrasArra = data;
-       
-        for (let i = 0; i < this.totalHExtrasArra.length; i++) {
-          
-          if (this.mes == 1) {
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['ENERO']);
-          }else if(this.mes == 2){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['FEBRERO']);
-          }else if(this.mes == 3){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['MARZO']);
-          }else if(this.mes == 4){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['ABRIL']);
-          }else if(this.mes == 5){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['MAYO']);
-          }else if(this.mes == 6){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['JUNIO']);
-          }else if(this.mes == 7){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['JULIO']);
-          }else if(this.mes == 8){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['AGOSTO']);
-          }else if(this.mes == 9){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['SEPTIEMBRE']);
-          }else if(this.mes == 10){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['OCTUBRE']);
-          }else if(this.mes == 11){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['NOVIEMBRE']);
-          }else if(this.mes == 12){
-            this.totalHExtras = parseFloat (this.totalHExtras + this.totalHExtrasArra[i]['DICIEMBRE']);
-          }
-        }
+        this.totalHExtras = data;
+        this.totalHExtras = this.totalHExtras.total_horas
+  
       }
       this._empleados.getCountHExtrasPorcentaje(this.idServicio)
       .subscribe(data=>{ 
+      
         this.totalHExtrasP = data;
         if ( this.totalHExtrasP  > 0 && this.totalHExtras > 0) {
           this.porcentaje = this.totalHExtras / this.totalHExtrasP *100;
@@ -132,34 +131,14 @@ dataTotalE:any;
   horaEA:number=0;
   porcentajeA:number=0;
   getHorasExtrasA(){
-   
-    this._control.getInformeExcelConsultaExtras(this.anio,this.idServicio)
+    this._control.getInformeExcelConsultaExtras(2,this.idServicio)
     .subscribe(data=>{ 
-
-      
       if(data == 'nada'){
         this.totalHExtrasA = 0;
       }else{
-        // this.totalHExtrasA = data;
-        this.totalHExtrasArr = data;
-  
-        for (let i = 0; i < this.totalHExtrasArr.length; i++) {
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['ENERO']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['FEBRERO']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['MARZO']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['ABRIL']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['MAYO']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['JUNIO']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['JULIO']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['AGOSTO']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['SEPTIEMBRE']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['OCTUBRE']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['NOVIEMBRE']);
-          this.totalHExtrasA = parseFloat (this.totalHExtrasA + this.totalHExtrasArr[i]['DICIEMBRE']);
-        
-          
-        }
-
+      
+        this.totalHExtrasA = data;
+        this.totalHExtrasA = this.totalHExtrasA.total_horas
       }
       this._empleados.getCountHExtrasPorcentajeA(this.idServicio)
       .subscribe(data=>{ 

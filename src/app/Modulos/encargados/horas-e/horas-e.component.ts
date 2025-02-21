@@ -79,9 +79,6 @@ export class HorasEComponent implements OnInit {
     this.tipoUsuario = atob(rol);
     this.usuario = atob(user);
   
-    if (this.tipoUsuario != 'E2020') {
-       this.ruta.navigate(['Main']);
-       }
     this.getContolHoras(); // trae los nombres de las columnas
     // this.getJustificaciones(); // trae las justidficaciones
     this.getContolEmpleados(); // trae los horarios de los empleados
@@ -223,8 +220,6 @@ addEmployee(show:boolean){
   getContolHoras(){
   this._control.configHoras(this.idServicio)
   .subscribe(data=>{
-    console.log(data);
-    
     this.horas = data;
 
     for (let i = 0; i < this.horas.length; i++) {
@@ -324,10 +319,13 @@ loading:boolean = true;
         }else{
           this.getEncargados(this.encargado);
         }
+      }else{
+        this.getEncargados(this.encargado);
       }
     } else {
       // Si no está, lo asignamos con el valor predeterminado y lo guardamos en localStorage
-      localStorage.setItem('encargado', this.data[0].turno_id);
+      const encargado = this.data.find((item:any) => item.turno_id >= 1 && item.turno_id <= 5);
+      localStorage.setItem('encargado', encargado.turno_id);
       // Después de guardar el valor, obtenemos el encargado
       this.encargado = localStorage.getItem('encargado');
       this.getEncargados(this.encargado);
@@ -349,7 +347,6 @@ nameEncargado:any;
 getEncargados(encargado: string) {
   this._control.getEncargados(encargado, this.idServicio)
     .subscribe(encargado => {
-      console.log(encargado);
       this.nameEncargado = encargado; // Asignamos el nombre del encargado a la variable
     });
 }

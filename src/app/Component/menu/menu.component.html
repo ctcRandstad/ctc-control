@@ -2,7 +2,7 @@
 
 <!-- Navbar-->
 <!-- <nav class="navbar navbar-expand-lg {{setColor}}"> -->
-  <nav class="navbar navbar-expand-lg animate__animated animate__fadeIn" style="background-color: #640D6B;">
+  <nav class="navbar navbar-expand-lg animate__animated animate__fadeIn" style="background: linear-gradient(to right, #640D6B, #8A2BE2, #FF69B4);" *ngIf="isLoggedIn">
   <div class="container-fluid justify-content-between">
     <!-- Left elements -->
     <div class="d-flex">
@@ -31,7 +31,7 @@
 
     <!-- Right elements -->
     <ul class="navbar-nav flex-row">
-      <li mdbDropdown class="nav-item dropdown me-3 me-lg-1 ">
+      <li mdbDropdown class="nav-item dropdown me-3 me-lg-1 " *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
         <a
           class="nav-link dropdown-toggle hidden-arrow"
        
@@ -48,41 +48,52 @@
           class="dropdown-menu dropleft"
           aria-labelledby="navbarDropdownMenuLink"
         >
-        <div class="list-group list-group-flush text-muted border-bottom " *ngFor="let item of cantyAlerta">
+        <div class="list-group list-group-flush text-muted border-bottom" *ngFor="let item of cantyAlerta">
           <a [routerLink]="['../../Empleados']" class="list-group-item list-group-item-action flex-column align-items-start ">
               <div class="d-flex w-100 justify-content-between">
                   <h6 class="mb-1 text-uppercase text-primary">{{ item.apellidos}} {{item.nombre}}</h6>
                   <h5 class=" badge badge-secondary">Horas de más {{item.dias_pasados}}</h5>
               </div>
               <p class="text-muted doc">Actualizado el {{item.fecha_alerta | date: 'dd/MM/yyyy'}} </p>
-              <p class="text-muted doc"><button (click)="alarmaHoras(item.id_alerta_bolsa)"  class="btn" style="background-color: hsl(293, 81%, 51%); color:#fff;" size="sm" mdbWavesEffect>ELIMINAR AVISO</button>
+              
+              <!-- Condicional para mostrar el mensaje de Paro o Bolsacuenta corriente -->
+              <p class="text-muted doc">
+                  <span *ngIf="item.bolsa_paro == 1" class="text-danger">
+                    ⚠️ Bolsa de Paros
+                  </span>
+                  <span *ngIf="item.bolsa_paro == 0" class="text-success">
+                    ✅ Bolsa cuenta corriente
+                  </span>
               </p>
-                 
+              
+              <p class="text-muted doc">
+                  <button (click)="alarmaHoras(item.id_alerta_bolsa)"  class="btn" style="background-color: hsl(293, 81%, 51%); color:#fff;" size="sm" mdbWavesEffect>ELIMINAR AVISO</button>
+              </p>
           </a>
-         
       </div>
+      
      </ul>
    </li>
 
 
 
 
-      <li class="nav-item" *ngIf="userRuler">
+      <li class="nav-item"  *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Huellas']" class="nav-link waves-light text-white" mdbWavesEffect>
           <i class="fas fa-fingerprint"></i>
        </a> 
       </li>
-      <li class="nav-item" *ngIf="userRuler">
+      <li class="nav-item"  *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Mensajes']" class="nav-link waves-light text-white" mdbWavesEffect>
           <i class="far fa-envelope"></i>  <span class="badge rounded-pill badge-notification bg-danger animated tada  infinite" alt="Notifications" *ngIf="mensajes > 0 && userRuler">{{mensajes}}</span>
        </a> 
       </li>
-      <li class="nav-item" *ngIf="userRuler">
+      <li class="nav-item"  *ngIf="userRole === 'admin'">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Config']" class="nav-link waves-light text-white" mdbWavesEffect>
         <i class="fas fa-cogs"></i>
        </a> 
       </li>
-      <li mdbDropdown class="nav-item dropdown me-3 me-lg-1 ">
+      <li mdbDropdown class="nav-item dropdown me-3 me-lg-1 " *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
         <a
           class="nav-link dropdown-toggle hidden-arrow"
        
@@ -92,7 +103,7 @@
           aria-expanded="false"
         >
           <i class="fas fa-bell fa-lg text-white"></i>
-          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad && tipoUsuario != 'A2020'">{{cantidad }}</span>
+          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad ">{{cantidad }}</span>
           <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad + canti > 0 && userRuler">{{cantidad + canti}}</span>
         </a>
         <ul
@@ -114,7 +125,7 @@
          
       </div>
      
-      <span *ngIf="userRuler">
+      <span *ngIf="userRole === 'admin'">
         <div class="list-group list-group-flush" *ngFor="let item of canty">
             <a class="list-group-item list-group-item-action flex-column align-items-start ">
                 <div class="d-flex w-100 justify-content-between">
@@ -155,8 +166,8 @@
             </a>
             <ul mdbDropdownMenu class="dropdown-menu dropdown-menu1" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a *ngIf="userRuler" class="dropdown-item cursor" [routerLink]="['../../Consultas/Consultas-Anteriores']"><i class="far fa-folder-open"></i> Consultas</a>
-                <a  class="dropdown-item cursor" (click)="salir()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+                <a *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'" class="dropdown-item cursor" [routerLink]="['../../Consultas/Consultas-Anteriores']"><i class="far fa-folder-open"></i> Consultas</a>
+                <a  class="dropdown-item cursor" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
               </li>
             </ul>
           </li>
@@ -178,27 +189,27 @@
   <div class="col-md-9">
       <ul class="nav text-center">
 
-          <li class="nav-item" routerLinkActive="actives1" [ngClass]="{'actives1': clase == true}">
+          <li class="nav-item" *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager' || userRole === 'viewer'"  routerLinkActive="actives1" [ngClass]="{'actives1': clase == true}" >
               <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Empleados']"> EMPLEADOS <i class="fas fa-user-friends"></i></a>
           </li>
 
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="!userRuler">
-              <a  mdbBtn class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Encargados/Control-horas-total-encargados']">CONTROL HORARIO <i class="fas fa-user-clock"></i></a>
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRole === 'viewer' || userRole === 'admin'">
+              <a  mdbBtn class="nav-link btn btn-outline-secondary" routerLinkActive="actives1"  [routerLink]="['../../Encargados/Control-horas-total-encargados']">CONTROL HORARIO <i class="fas fa-user-clock"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="!userRuler">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRole === 'viewer'">
               <a  mdbBtn class="nav-link btn btn-outline-primary text-uppercase" routerLinkActive="actives1"  [routerLink]="['../../Encargados/Consultas-year-**']">Consultas años anteriores <i class="fas fa-search"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
               <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Horas/Control-horas-total']">CONTROL HORARIO <i class="fas fa-user-clock"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler || tipoUsuario == 'J2020'">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRole === 'admin' || userRole === 'manager'">
               <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Horas/Control-Programacion']">PROGRAMACIÓN <i class="fas fa-tasks"></i></a>
           </li>
           <!-- &nbsp; &nbsp; -->
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRole === 'admin' || userRole === 'user'">
               <a class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Horas/Alertas']">ALERTAS
                       <span pill="true" color="red" class="badge badge-danger alerta animate__animated animate__bounceIn animate__infinite" *ngIf="aler">
                       &nbsp;  <i class="fas fa-bell"></i>  &nbsp;
@@ -208,7 +219,7 @@
                     </span>
                </a>
           </li>
-          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRuler || tipoUsuario == 'J2020'">
+          <li class="nav-item" routerLinkActive="actives1" *ngIf="userRole === 'admin' || userRole === 'user'">
             <a  class="nav-link btn btn-outline-primary" routerLinkActive="actives1"  [routerLink]="['../../Cabezeras/Informes']">INFORMES <i class="fas fa-download"></i></a>
         </li>
 

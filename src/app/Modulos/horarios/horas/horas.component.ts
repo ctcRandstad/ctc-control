@@ -230,7 +230,6 @@ mostrarBtn:boolean=false;
 
   reload(){
    this.datosConsulta.turno=undefined;
-    console.log(this.datosConsulta);
     
    this.datas = false;
    this.turnos = undefined;
@@ -699,8 +698,7 @@ changeTurno(item:any  ){
     },
   });
   this.modalM.onClose.subscribe((message: any) => {
-    console.log(message);
-    
+   
     if(message == 'closeMessage' ||  message == 'success'){
       this._empleados.consultaProgramacionAdmin(this.fechas)
       .subscribe(res=>{

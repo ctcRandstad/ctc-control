@@ -42,7 +42,7 @@
           Este documento no tiene fecha de caducidad
       </div>
       <br>
-      <button [disabled]="for.invalid" *ngIf="!cargar"  type="button"  class="btn btn-secondary" (click)="upload()" mdbWavesEffect>Comenzar la carga </button>
+      <button [disabled]="for.invalid" *ngIf="!cargar"  type="submit"  class="btn btn-secondary"  mdbWavesEffect>Comenzar la carga </button>
       <div *ngIf="cargar" class="alert alert-success">
           Archivo cargado correctamente
       </div>

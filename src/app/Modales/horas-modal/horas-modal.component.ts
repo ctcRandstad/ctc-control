@@ -236,8 +236,7 @@ tu(event:any){
 }
 
 camTurno(changePuesto:any){
-  // console.log(changePuesto.value);
-  
+ 
     this._control.cambioTurno(changePuesto.value)
     .subscribe(data=>{ 
       if (data == 'success') {

@@ -662,7 +662,6 @@ func2(idPalntilla:any,fp:any,puesto:any , nombre:any, apellido:any,horario:any){
   idPlantilla?:number;
 
   validar(item:any ,frame:any,datros:any){
- 
     this.idPlantilla = item.idPlantilla;
     let turno = item.horario.toLowerCase();
     this.tur=item.horario.toLowerCase();
@@ -880,7 +879,6 @@ addEmpl(parametro:any){
    }
 
 });
-console.log(this.data);
 
 }
 

@@ -629,8 +629,7 @@ this.modalM.onClose.subscribe((message: any) => {
 panelRow?:boolean;
 itemT:any;
   vistoInfo5(item:any,j:any){
-    console.log(item);
-    
+   
     this.panelRow=true;
     this.indice = j;
     this.itemT = item;

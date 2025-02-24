@@ -84,8 +84,7 @@ export class HorasSeccinComponent implements OnInit {
   
 this._control.getInforme(this.anio,this.idServicio)
 .subscribe(data=>{ 
-  console.log(data);
-  
+ 
   this.datos = data;
   this.calcularTotales(); // Llamamos a la función para sumar los totales
     setTimeout(()=>{

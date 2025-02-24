@@ -18,9 +18,9 @@ const routes: Routes = [
   {
     path:'',
     children: [
-      { path: 'Mensajes' ,  component: MensajesComponent , canActivate: [AuthGuard] , data: { roles: ['user', 'manager' , 'admin'] } },
+      { path: 'Mensajes' ,  component: MensajesComponent , canActivate: [AuthGuard] , data: { roles: ['user',  'admin'] } },
       { path: 'Config' ,  component: ConfigComponent , canActivate: [AuthGuard] , data: { roles: [ 'admin'] } },
-      { path: 'Huellas' ,  component: HuellaComponent , canActivate: [AuthGuard] , data: { roles: ['user', 'manager' , 'admin'] } },
+      { path: 'Huellas' ,  component: HuellaComponent , canActivate: [AuthGuard] , data: { roles: ['user' , 'admin'] } },
       { path: 'Informes' ,  component: InformesComponent , canActivate: [AuthGuard] , data: { roles: ['user', 'manager', 'admin'] },
           children:[
           

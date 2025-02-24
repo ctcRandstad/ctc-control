@@ -141,7 +141,7 @@ get_t:any=[];
     // this.getConfogHoras();
     this._empleados.getBolsa(this.idServicio)
     .subscribe(data=>{  
-      console.log(data);
+    
       this.bArray = data;
       this.bolsa =  this.bArray.bolsaHoras;
     if ( this.bolsa == 1) {
@@ -296,7 +296,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
      
         this._empleados.horasMensualConsulta(1,this.employees.nEmpleado, this.anio)
         .subscribe(data=>{ 
-          console.log(data);
+        
           
          
               if (data == false) {
@@ -319,7 +319,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
           
         this._empleados.horasMensualConsulta(2,this.employees.nEmpleado , this.anio)
         .subscribe(data=>{ 
-          console.log(data);
+        
 
          if (mes >= data[0].mes) {
              this.mesFeB = true;
@@ -332,7 +332,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
           
         this._empleados.horasMensualConsulta(3,this.employees.nEmpleado , this.anio)
         .subscribe(data=>{ 
-          console.log(data);
+        
 
           if (mes >= data[0].mes) {
             this.mesMarB = true;
@@ -344,7 +344,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
   
         this._empleados.horasMensualConsulta(4,this.employees.nEmpleado , this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           if (mes >= data[0].mes) {
             this.mesAbrB = true;
@@ -356,7 +356,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
   
         this._empleados.horasMensualConsulta(5,this.employees.nEmpleado , this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           if (mes >= data[0].mes) {
             this.mesMayB = true;
@@ -368,7 +368,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
   
         this._empleados.horasMensualConsulta(6,this.employees.nEmpleado , this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           if (mes >= data[0].mes) {
             this.mesJunB = true;
@@ -380,7 +380,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
   
         this._empleados.horasMensualConsulta(7,this.employees.nEmpleado , this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           if (mes >= data[0].mes) {
             this.mesJulB = true;
@@ -392,7 +392,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
   
         this._empleados.horasMensualConsulta(8,this.employees.nEmpleado ,this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           if (mes >= data[0].mes) {
             this.mesAgoB = true;
@@ -404,7 +404,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
   
         this._empleados.horasMensualConsulta(9,this.employees.nEmpleado , this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           if (mes >= data[0].mes) {
             this.mesSetB = true;
@@ -416,7 +416,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
   
         this._empleados.horasMensualConsulta(10,this.employees.nEmpleado, this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
           this.mesOct1=data;
@@ -427,7 +427,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
         
         this._empleados.horasMensualConsulta(11,this.employees.nEmpleado, this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
           
           this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;
@@ -439,7 +439,7 @@ this._empleados.comentarios(item.nEmpleado,this.anio)
         
         this._empleados.horasMensualConsulta(12,this.employees.nEmpleado, this.anio)
         .subscribe(data=>{
-          console.log(data);
+        
 
         
            this.totalHTeoricas=this.totalHTeoricas + data[0].horasTeoricas;

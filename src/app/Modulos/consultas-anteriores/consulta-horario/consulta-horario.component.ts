@@ -149,6 +149,7 @@ loadingHoras:boolean=true;
 mostrarBtn:boolean=false;
 loading?:boolean;
 plantillas:any;
+anioConsulta:any;
   buscar(action:any , alertaSinValidar:any){
     this.datas = true;
     this.mostrarBtn = true;
@@ -173,16 +174,16 @@ plantillas:any;
        
 
         this.fechas = action.value;
-
+        
         this.fechas.filter= fechas[0];
-       this.plantillas =  fechas[0];
+        this.plantillas =  fechas[0];
+
         this.loading = true;
         this.getContolHoras();
         this.getJustificaciones();
         this._empleados.consultaProgramacionAdminAnterior(this.fechas)
         .subscribe(data=>{ 
-          console.log(data);
-          
+        
           if (data == 'error') {
             this.mostrarBtn = false;
             this.loadingHoras = false;
@@ -529,6 +530,8 @@ for (let i = 0; i < this.horas.length; i++) {
 
   datosVN:any;
   hNormal(nNormal:any,idPlantilla:any,i:any,horario:any){
+    // console.log(this.inicio);
+    
 
     let turno = horario.toLowerCase();
     this.datosVN = nNormal.value;
@@ -538,7 +541,7 @@ for (let i = 0; i < this.horas.length; i++) {
      this.datosVN = null;
    }
     
-    this._control.editarHNormales(this.datosVN, idPlantilla,this.usuario)
+    this._control.editarHNormalesAnterior(this.datosVN, idPlantilla, this.fechas.filter)
     .subscribe(res=>{ 
 
        
@@ -566,7 +569,7 @@ for (let i = 0; i < this.horas.length; i++) {
       this.datosVNP = null;
     }
      
-     this._control.editarHAusentes(this.datosVNP, idPlantilla,this.usuario)
+     this._control.editarHAusentesAnteriores(this.datosVNP, idPlantilla,this.fechas.filter)
      .subscribe(res=>{ 
  
         
@@ -596,7 +599,7 @@ for (let i = 0; i < this.horas.length; i++) {
     }
      
     //  alert('dato guardado')
-     this._control.editplantillasColumn(fechaTrabajo , nEmpleado , this.datosV , columna,idPlantilla,this.usuario, this.idServicio)
+     this._control.editplantillasColumnAnterior(fechaTrabajo , nEmpleado , this.datosV , columna,idPlantilla,this.fechas.filter, this.idServicio)
      .subscribe(res=>{ 
       
        if (res == 'success') {

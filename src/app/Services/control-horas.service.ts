@@ -69,6 +69,14 @@ export class ControlHorasService {
                 return e
               }));
             }
+            editarHNormalesAnterior(hora:any , idPlantilla:number,usuario:any){
+              return this.http.post(this.url +"control/control.php?id=editarHNormalesAnterior" , { 'hora' : hora, 'idPlantilla' : idPlantilla, 'usuario':usuario})
+              .pipe(
+                map((e)=> {
+                
+                  return e
+                }));
+              }
 
             editarHAusentes(hora:any , idPlantilla:number,usuario:any){
               return this.http.post(this.url +"control/control.php?id=editarHAusentes" , { 'hora' : hora, 'idPlantilla' : idPlantilla, 'usuario':usuario})
@@ -78,6 +86,14 @@ export class ControlHorasService {
                   return e
                 }));
               }
+              editarHAusentesAnteriores(hora:any , idPlantilla:number,usuario:any){
+                return this.http.post(this.url +"control/control.php?id=editarHAusentesAnteriores" , { 'hora' : hora, 'idPlantilla' : idPlantilla, 'usuario':usuario})
+                .pipe(
+                  map((e)=> {
+                  
+                    return e
+                  }));
+                }
 
             editarJustificante(hora:any , idPlantilla:any , fechaTrabajo:any,nEmpleado:any , horasAusentes:any , horasNormales:any,idServicio:any){
               return this.http.post(this.url +"control/control.php?id=editarJustificante" ,
@@ -106,6 +122,13 @@ export class ControlHorasService {
           return e;
         }));
       }
+      editplantillasColumnAnterior( fechaTrabajo:any , nEmpleado:number , datos:any , columna:any,idPlantilla:number,usuario:any, idServicio:number):Observable<any>{
+        return this.http.post(this.url +"control/control.php?id=editplantillasColumnAnterior", {'fechaTrabajo':fechaTrabajo , 'nEmpleado':nEmpleado  , 'datos':datos , 'columna':columna ,'idPlantilla' :idPlantilla ,'usuario' :usuario , 'idServicio':idServicio})
+        .pipe(
+          map((e)=> {            
+            return e;
+          }));
+        }
 
       validarEmpleado( fechaTrabajo:any , nEmpleado:number, idPlantilla:number ):Observable<any>{
         return this.http.post(this.url +"control/control.php?id=validarEmpleado", {'fechaTrabajo':fechaTrabajo , 'nEmpleado':nEmpleado,'idPlantilla' :idPlantilla })

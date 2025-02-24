@@ -58,7 +58,7 @@ export class UbicarModalComponent implements OnInit {
 
 cargar:boolean=false;
   upload() {
-  
+
     if (this.archivo.nombreArchivo == null || this.archivo.nombreArchivo == undefined) {
       alert ('Archivo vacio.');
     } else {
@@ -71,7 +71,7 @@ cargar:boolean=false;
 
       this._empleados.uploadFile(this.archivo)
       .subscribe(res=> {
-       
+     
         if (res == 'success') {
           this.cargar = true;
           // this.getDocu(this.archivo.nombre);
@@ -103,9 +103,9 @@ cargar:boolean=false;
     var files = event.target.files;
     var file = files[0];
   
-  // return console.log(file.type);
+
   
-    if (!file.type ) {
+    if (file.type !== 'application/pdf' ) {
       alert('Solo se adminten archivos con extensión .PDF');
       location.reload();
     }else{

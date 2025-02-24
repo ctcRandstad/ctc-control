@@ -105,8 +105,6 @@ get_t:any=[];
   getEmpleadosActivos(){
    this._empleados.getEmplaedos(this.idServicio)
    .subscribe(resp=>{
-console.log(resp);
-
      if (resp != 'error') {
        this.data = resp;
        this.dataTotal = this.data.length;
@@ -178,8 +176,6 @@ console.log(resp);
         this.hoy = data.meses / 12 ;
         this._empleados.getDiasVacacionesConsultas(item.nEmpleado, this.anio) 
    .subscribe(resp=>{ 
-console.log(resp);
-
     if (resp > 0) {
       this.vaciones = resp;
     } else {

@@ -30,29 +30,22 @@ export class AuthInterceptorService implements HttpInterceptor {
 
   manejarError(error: HttpErrorResponse) {
     console.log('Error:', error.status);
-
-    // Si el error es 403, redirige a la página de acceso denegado
-    if (error.status === 403) {
-      console.log('Acceso denegado');
-      this.router.navigate(['/Main/403']); // Asegúrate de que la ruta '/Main/403' exista en tu enrutador
-    }
-    
-    // Si el error tiene un mensaje específico "Failed"
-    if (error.error?.text === 'Failed') {
-      console.log('Error "Failed" recibido');
+    console.log('ErrorM:', error.message);
+    if (error.status === 401) {
+      console.log('Acceso denegado, Token vencido!');
       // Aquí puedes hacer un manejo específico, por ejemplo, cerrar sesión o redirigir
       localStorage.clear(); // Limpiar los datos locales
       location.reload(); // Recargar la página
     }
-    
-    // Si el error tiene un mensaje específico "Mal"
-    if (error.error?.text === 'Mal') {
-      console.log('Error "Mal" recibido');
-      // También puedes limpiar el localStorage y recargar la página si es necesario
-      localStorage.clear();
-      location.reload();
-    }
 
+    // Si el error es 403, redirige a la página de acceso denegado
+    if (error.status === 403) {
+      console.log('Acceso denegado');
+      localStorage.clear(); // Limpiar los datos locales
+      location.reload(); // Recargar la página
+      // this.router.navigate(['/Main/403']); // Asegúrate de que la ruta '/Main/403' exista en tu enrutador
+    }
+    
     // Retornar el error para que pueda ser manejado más arriba si es necesario
     return throwError(() => error);
   }

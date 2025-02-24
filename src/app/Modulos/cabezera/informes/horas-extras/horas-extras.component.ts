@@ -132,7 +132,6 @@ agruparPorMes(): void {
   });
 
   // Aquí puedes ver los resultados consolidados por mes
-  console.log(this.result);
 }
 
 calcularTotales() {

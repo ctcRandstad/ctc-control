@@ -78,12 +78,12 @@
 
 
 
-      <li class="nav-item"  *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
+      <li class="nav-item"  *ngIf="userRole === 'admin' || userRole === 'user'">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Huellas']" class="nav-link waves-light text-white" mdbWavesEffect>
           <i class="fas fa-fingerprint"></i>
        </a> 
       </li>
-      <li class="nav-item"  *ngIf="userRole === 'admin' || userRole === 'user' || userRole === 'manager'">
+      <li class="nav-item"  *ngIf="userRole === 'admin' || userRole === 'user' ">
         <a routerLinkActive="actives" [routerLink]="['../../Cabezeras/Mensajes']" class="nav-link waves-light text-white" mdbWavesEffect>
           <i class="far fa-envelope"></i>  <span class="badge rounded-pill badge-notification bg-danger animated tada  infinite" alt="Notifications" *ngIf="mensajes > 0 && userRuler">{{mensajes}}</span>
        </a> 
@@ -104,7 +104,7 @@
         >
           <i class="fas fa-bell fa-lg text-white"></i>
           <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad ">{{cantidad }}</span>
-          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad + canti > 0 && userRuler">{{cantidad + canti}}</span>
+          <span class="badge rounded-pill badge-notification bg-danger" *ngIf="cantidad + canti > 0 ">{{cantidad + canti}}</span>
         </a>
         <ul
           mdbDropdownMenu
